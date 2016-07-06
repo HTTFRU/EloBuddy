@@ -8,6 +8,7 @@ using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
 using SharpDX;
+using System.Linq;
 
 namespace _HTTF_Riven
 {
@@ -17,11 +18,14 @@ namespace _HTTF_Riven
         {
             get { return Player.Instance; }
         }
+
+        private static readonly AIHeroClient _Player = ObjectManager.Player;
         public static Text Text = new Text("", new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold));
         public static Spell.Active Q = new Spell.Active(SpellSlot.Q, 300);
         public static Spell.Active E = new Spell.Active(SpellSlot.E, 325);
         public static Spell.Active R1 = new Spell.Active(SpellSlot.R);
         public static Spell.Skillshot R2 = new Spell.Skillshot(SpellSlot.R, 900, SkillShotType.Cone, 250, 1600, 45)
+
 
         {
             AllowedCollisionCount = int.MaxValue
@@ -29,6 +33,9 @@ namespace _HTTF_Riven
 
         public static Menu Menu, ComboMenu, FarmMenu, MiscMenu;
         private static object targetSelector;
+        private static readonly float _barLength = 104;
+        private static readonly float _xOffset = 2;
+        private static readonly float _yOffset = 9;
 
         public static Spell.Active W
         {
@@ -58,6 +65,7 @@ namespace _HTTF_Riven
         private static void Loading_OnLoadingComplete(EventArgs args)
         {
             if (Player.Instance.Hero != Champion.Riven) return;
+
             Menu = MainMenu.AddMenu("HTTF Riven", "httfRiven");
             Menu.AddLabel("Best Riven Addon Patch +6.13 ");
             Menu.AddLabel("Your comments and questions to the forum ");
@@ -98,8 +106,11 @@ namespace _HTTF_Riven
             FarmMenu.Add("Jungle.E", new CheckBox("Use E"));
 
             MiscMenu = Menu.AddSubMenu("Misc", "Misc");
-            MiscMenu.AddLabel("Draw");
-            MiscMenu.Add("damagein", new CheckBox("Draw Damage"));
+            MiscMenu.AddLabel("• Draw •");
+            MiscMenu.Add("DamageIndicator", new CheckBox("Draw Damage"));
+            MiscMenu.AddLabel("• Misc •");
+            MiscMenu.Add("gapcloser", new CheckBox("W on enemy gapcloser"));
+
 
             ItemLogic.Init();
             EventLogic.Init();
@@ -107,6 +118,7 @@ namespace _HTTF_Riven
             Drawing.OnEndScene += Drawing_OnEndScene;
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnTick += Game_OnTick;
+            Gapcloser.OnGapcloser += Gapcloser_OnGapcloser;
         }
 
         private static void Drawing_OnDraw(EventArgs args)
@@ -118,35 +130,46 @@ namespace _HTTF_Riven
                     (int)pos.Y + 40);
             }
         }
-        private static readonly float _barLength = 104;
-        private static readonly float _xOffset = 2;
-        private static readonly float _yOffset = 9;
+
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            if (myHero.IsDead)
+            if (_Player.IsDead)
                 return;
-            if (!MiscMenu["damagein"].Cast<CheckBox>().CurrentValue) return;
+            if (!MiscMenu["DamageIndicator"].Cast<CheckBox>().CurrentValue) return;
             foreach (var aiHeroClient in EntityManager.Heroes.Enemies)
             {
                 if (!aiHeroClient.IsHPBarRendered || !aiHeroClient.VisibleOnScreen) continue;
+                {
+                    if (aiHeroClient.Distance(_Player) < 1500) 
+                    {
 
-                var pos = new Vector2(aiHeroClient.HPBarPosition.X + _xOffset, aiHeroClient.HPBarPosition.Y + _yOffset);
-                var fullbar = (_barLength) * (aiHeroClient.HealthPercent / 100);
-                var damage = (_barLength) * 
-                                 ((DamageLogic.FastComboDamage(aiHeroClient) / aiHeroClient.MaxHealth) > 1
-                                     ? 1
-                                     : (DamageLogic.FastComboDamage(aiHeroClient) / aiHeroClient.MaxHealth));
-                Line.DrawLine(System.Drawing.Color.Red, 9, new Vector2(pos.X, pos.Y).ScreenToWorld());
-                new Vector2(pos.X + (damage > fullbar ? fullbar : damage), pos.Y);
-                Line.DrawLine(System.Drawing.Color.Green, 9, new Vector2(pos.X + (damage > fullbar ? fullbar : damage) - 2, pos.Y), new Vector2(pos.X + (damage > fullbar ? fullbar : damage) + 2, pos.Y));
+
+
+                        var pos = new Vector2(aiHeroClient.HPBarPosition.X + _xOffset, aiHeroClient.HPBarPosition.Y + _yOffset);
+                        var fullbar = (_barLength) * (aiHeroClient.HealthPercent / 100);
+                        var damage = (_barLength) *
+                                         ((DamageLogic.FastComboDamage(aiHeroClient) / aiHeroClient.MaxHealth) > 1
+                                             ? 1
+                                             : (DamageLogic.FastComboDamage(aiHeroClient) / aiHeroClient.MaxHealth));
+                        Line.DrawLine(System.Drawing.Color.Green, 9f, new Vector2(pos.X, pos.Y),
+                            new Vector2(pos.X + (damage > fullbar ? fullbar : damage), pos.Y));
+                        Line.DrawLine(System.Drawing.Color.Black, 9, new Vector2(pos.X + (damage > fullbar ? fullbar : damage) - 2, pos.Y), new Vector2(pos.X + (damage > fullbar ? fullbar : damage) + 2, pos.Y));
+                    }
+                }
             }
         }
-    
+
+        
+
+        private static void Gapcloser_OnGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
+        {
+            if (myHero.IsDead || !sender.IsEnemy || !sender.IsValidTarget(W.Range) || !W.IsReady() || !MiscMenu["gapcloser"].Cast<CheckBox>().CurrentValue) return;
+
+            W.Cast();
+        }
 
 
-
-
-private static void Game_OnTick(EventArgs args)
+        private static void Game_OnTick(EventArgs args)
         {
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
