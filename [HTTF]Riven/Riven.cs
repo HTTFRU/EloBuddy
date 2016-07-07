@@ -114,9 +114,11 @@ namespace _HTTF_Riven
             MiscMenu.Add("AutoIgnite", new CheckBox("Auto Ignite"));
             MiscMenu.Add("AutoW", new CheckBox("Auto W"));
             MiscMenu.Add("AutoQSS", new CheckBox("Auto QSS"));
+            MiscMenu.Add("Skin", new CheckBox("Skinhack ?", false));
+            MiscMenu.Add("SkinID", new Slider("Skin ID: {0}", 4, 0, 6));
 
             ShieldMenu = Menu.AddSubMenu("AutoShield", "AutoShield");
-            MiscMenu.AddLabel("• Write to me in forum what (so I added them to the database) auto skills Shield •");
+            ShieldMenu.AddLabel("• Write to me in forum what (so I added them to the database) auto skills Shield •");
 
 
 
@@ -130,6 +132,7 @@ namespace _HTTF_Riven
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnTick += Game_OnTick;
             Gapcloser.OnGapcloser += Gapcloser_OnGapcloser;
+            Game.OnUpdate += Game_OnUpdate;
         }
 
         private static void Drawing_OnDraw(EventArgs args)
@@ -171,7 +174,16 @@ namespace _HTTF_Riven
         }
 
 
-        private static void Auto()
+        private static void Game_OnUpdate(EventArgs args)
+        {
+            if (MiscMenu["Skin"].Cast<CheckBox>().CurrentValue)
+            {
+                Player.Instance.SetSkinId(MiscMenu["skinid"].Cast<Slider>().CurrentValue);
+            }
+        }
+
+
+    private static void Auto()
         {
             var w = TargetSelector.GetTarget(W.Range, DamageType.Physical);
             if (w.IsValidTarget(W.Range) && MiscMenu["AutoW"].Cast<CheckBox>().CurrentValue)
