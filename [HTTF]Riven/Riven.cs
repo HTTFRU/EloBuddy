@@ -18,6 +18,7 @@ namespace _HTTF_Riven
         {
             get { return Player.Instance; }
         }
+        private static Spell.Targeted ignite;
 
         private static readonly AIHeroClient _Player = ObjectManager.Player;
         public static Text Text = new Text("", new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold));
@@ -31,7 +32,7 @@ namespace _HTTF_Riven
             AllowedCollisionCount = int.MaxValue
         };
 
-        public static Menu Menu, ComboMenu, FarmMenu, MiscMenu;
+        public static Menu Menu, ComboMenu, FarmMenu, MiscMenu, ShieldMenu;
         private static object targetSelector;
         private static readonly float _barLength = 104;
         private static readonly float _xOffset = 2;
@@ -110,10 +111,20 @@ namespace _HTTF_Riven
             MiscMenu.Add("DamageIndicator", new CheckBox("Draw Damage"));
             MiscMenu.AddLabel("• Misc •");
             MiscMenu.Add("gapcloser", new CheckBox("W on enemy gapcloser"));
+            MiscMenu.Add("AutoIgnite", new CheckBox("Auto Ignite"));
+            MiscMenu.Add("AutoW", new CheckBox("Auto W"));
+            MiscMenu.Add("AutoQSS", new CheckBox("Auto QSS"));
+
+            ShieldMenu = Menu.AddSubMenu("AutoShield", "AutoShield");
+            MiscMenu.AddLabel("• Write to me in forum what (so I added them to the database) auto skills Shield •");
+
 
 
             ItemLogic.Init();
             EventLogic.Init();
+
+            ignite = new Spell.Targeted(ObjectManager.Player.GetSpellSlotFromName("summonerdot"), 600);
+
 
             Drawing.OnEndScene += Drawing_OnEndScene;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -159,7 +170,50 @@ namespace _HTTF_Riven
             }
         }
 
-        
+
+        private static void Auto()
+        {
+            var w = TargetSelector.GetTarget(W.Range, DamageType.Physical);
+            if (w.IsValidTarget(W.Range) && MiscMenu["AutoW"].Cast<CheckBox>().CurrentValue)
+            {
+                W.Cast();
+            }
+            if (_Player.HasBuffOfType(BuffType.Stun) || _Player.HasBuffOfType(BuffType.Taunt) || _Player.HasBuffOfType(BuffType.Polymorph) || _Player.HasBuffOfType(BuffType.Frenzy) || _Player.HasBuffOfType(BuffType.Fear) || _Player.HasBuffOfType(BuffType.Snare) || _Player.HasBuffOfType(BuffType.Suppression))
+            {
+                DoQSS();
+            }
+            {
+                if (MiscMenu["AutoIgnite"].Cast<CheckBox>().CurrentValue)
+                {
+                    if (!ignite.IsReady() || Player.Instance.IsDead) return;
+                    foreach (
+                        var source in
+                            EntityManager.Heroes.Enemies
+                                .Where(
+                                    a => a.IsValidTarget(ignite.Range) &&
+                                        a.Health < 70 + 20 * Player.Instance.Level - (a.HPRegenRate / 5 * 3)))
+                    {
+                        ignite.Cast(source);
+                        return;
+                    }
+                }
+            }
+        }
+
+        private static void DoQSS()
+        {
+            if (!MiscMenu["AutoQSS"].Cast<CheckBox>().CurrentValue) return;
+
+            if (Item.HasItem(3139) && Item.CanUseItem(3139) && ObjectManager.Player.CountEnemiesInRange(1800) > 0)
+            {
+                Core.DelayAction(() => Item.UseItem(3139), 1);
+            }
+
+            if (Item.HasItem(3140) && Item.CanUseItem(3140) && ObjectManager.Player.CountEnemiesInRange(1800) > 0)
+            {
+                Core.DelayAction(() => Item.UseItem(3140), 1);
+            }
+        }
 
         private static void Gapcloser_OnGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
         {
@@ -195,6 +249,7 @@ namespace _HTTF_Riven
             {
                 StateLogic.Flee();
             }
+            Auto();
         }
     }
 }

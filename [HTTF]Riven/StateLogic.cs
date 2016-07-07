@@ -49,7 +49,9 @@ namespace _HTTF_Riven
                     {
                         EnableR = true;
                         ForceR();
+                        
                         Player.CastSpell(SpellSlot.R);
+
                     }
                 }
             }
