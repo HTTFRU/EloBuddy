@@ -37,6 +37,7 @@ namespace _HTTF_Riven
         private static readonly float _barLength = 104;
         private static readonly float _xOffset = 2;
         private static readonly float _yOffset = 9;
+        private static readonly Vector2 Offset = new Vector2(1, 0);
 
         public static Spell.Active W
         {
@@ -76,6 +77,8 @@ namespace _HTTF_Riven
             ComboMenu.Add("Combo.W", new CheckBox("Use W"));
             ComboMenu.Add("Combo.E", new CheckBox("Use E"));
             ComboMenu.Add("Combo.R2", new CheckBox("Use R (Killable)"));
+            ComboMenu.AddLabel("New Option");
+            ComboMenu.Add("Burst", new KeyBind("CrazyCombo(Beta)(Dont Work)", false, KeyBind.BindTypes.HoldActive, '9'));
             ComboMenu.AddLabel("R1 Settings");
             ComboMenu.Add("Combo.R", new CheckBox("Use R"));
             ComboMenu.Add("forcedRKeybind", new KeyBind("Use R in combo?", false, KeyBind.BindTypes.PressToggle, 'T'));
@@ -114,12 +117,41 @@ namespace _HTTF_Riven
             MiscMenu.Add("AutoIgnite", new CheckBox("Auto Ignite"));
             MiscMenu.Add("AutoW", new CheckBox("Auto W"));
             MiscMenu.Add("AutoQSS", new CheckBox("Auto QSS"));
-            MiscMenu.Add("Skin", new CheckBox("Skinhack ?", false));
-            MiscMenu.Add("SkinID", new Slider("Skin ID: {0}", 4, 0, 6));
 
             ShieldMenu = Menu.AddSubMenu("AutoShield", "AutoShield");
-            ShieldMenu.AddLabel("• Write to me in forum what (so I added them to the database) auto skills Shield •");
-
+            ShieldMenu.Add("Shield", new CheckBox("AutoShield"));
+            ShieldMenu.AddLabel("•Auto Shield(beta)•");
+            foreach (var enemy in EntityManager.Heroes.Enemies.Where(a => a.Team != Player.Instance.Team))
+            {
+                foreach (
+                    var spell in
+                        enemy.Spellbook.Spells.Where(
+                            a =>
+                                a.Slot == SpellSlot.Q || a.Slot == SpellSlot.W || a.Slot == SpellSlot.E ||
+                                a.Slot == SpellSlot.R))
+                {
+                    if (spell.Slot == SpellSlot.Q)
+                    {
+                        ShieldMenu.Add(spell.SData.Name,
+                            new CheckBox(enemy.ChampionName + " - Q - " + spell.Name, false));
+                    }
+                    else if (spell.Slot == SpellSlot.W)
+                    {
+                        ShieldMenu.Add(spell.SData.Name,
+                            new CheckBox(enemy.ChampionName + " - W - " + spell.Name, false));
+                    }
+                    else if (spell.Slot == SpellSlot.E)
+                    {
+                        ShieldMenu.Add(spell.SData.Name,
+                            new CheckBox(enemy.ChampionName + " - E - " + spell.Name, false));
+                    }
+                    else if (spell.Slot == SpellSlot.R)
+                    {
+                        ShieldMenu.Add(spell.SData.Name,
+                            new CheckBox(enemy.ChampionName + " - R - " + spell.Name, false));
+                    }
+                }
+            }
 
 
             ItemLogic.Init();
@@ -132,9 +164,9 @@ namespace _HTTF_Riven
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnTick += Game_OnTick;
             Gapcloser.OnGapcloser += Gapcloser_OnGapcloser;
-            Game.OnUpdate += Game_OnUpdate;
-        }
+            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
 
+        }
         private static void Drawing_OnDraw(EventArgs args)
         {
             if (ComboMenu["Combo.R"].Cast<CheckBox>().CurrentValue)
@@ -154,36 +186,96 @@ namespace _HTTF_Riven
             {
                 if (!aiHeroClient.IsHPBarRendered || !aiHeroClient.VisibleOnScreen) continue;
                 {
-                    if (aiHeroClient.Distance(_Player) < 1500) 
+                    if (aiHeroClient.Distance(_Player) < 1500)
                     {
+                        foreach (var enemy in EntityManager.Heroes.Enemies.Where(a => !a.IsDead && a.IsHPBarRendered))
+                        {
+                            var damage = DamageLogic.FastComboDamage(enemy);
+                            var damagepercent = (enemy.TotalShieldHealth() - damage > 0 ? enemy.TotalShieldHealth() - damage : 0) /
+                                                (enemy.MaxHealth + enemy.AllShield + enemy.AttackShield + enemy.MagicShield);
+                            var hppercent = enemy.TotalShieldHealth() /
+                                            (enemy.MaxHealth + enemy.AllShield + enemy.AttackShield + enemy.MagicShield);
+                            var start = new Vector2((int)(enemy.HPBarPosition.X + Offset.X + damagepercent * 104),
+                                (int)(enemy.HPBarPosition.Y + Offset.Y) - -9);
+                            var end = new Vector2((int)(enemy.HPBarPosition.X + Offset.X + hppercent * 104) + 2,
+                                (int)(enemy.HPBarPosition.Y + Offset.Y) - -9);
 
+                            Drawing.DrawLine(start, end, 9, System.Drawing.Color.Chartreuse);
+                        }
+                    }
+                }
+            }
+        }
+        private static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (ShieldMenu["Shield"].Cast<CheckBox>().CurrentValue)
+                if ((args.Slot == SpellSlot.Q || args.Slot == SpellSlot.W || args.Slot == SpellSlot.E ||
+                 args.Slot == SpellSlot.R) && sender.IsEnemy && E.IsReady())
+            {
+                if (args.SData.TargettingType == SpellDataTargetType.Unit ||
+                    args.SData.TargettingType == SpellDataTargetType.SelfAndUnit ||
+                    args.SData.TargettingType == SpellDataTargetType.Self)
+                {
+                    if ((args.Target.NetworkId == Player.Instance.NetworkId && args.Time < 1.5 ||
+                         args.End.Distance(Player.Instance.ServerPosition) <= Player.Instance.BoundingRadius * 3) &&
+                        ShieldMenu[args.SData.Name].Cast<CheckBox>().CurrentValue)
+                    {
+                        E.Cast();
+                    }
+                }
+                else if (args.SData.TargettingType == SpellDataTargetType.LocationAoe)
+                {
+                    var castvector =
+                        new Geometry.Polygon.Circle(args.End, args.SData.CastRadius).IsInside(
+                            Player.Instance.ServerPosition);
 
+                    if (castvector && ShieldMenu[args.SData.Name].Cast<CheckBox>().CurrentValue)
+                    {
+                        E.Cast();
+                    }
+                }
 
-                        var pos = new Vector2(aiHeroClient.HPBarPosition.X + _xOffset, aiHeroClient.HPBarPosition.Y + _yOffset);
-                        var fullbar = (_barLength) * (aiHeroClient.HealthPercent / 100);
-                        var damage = (_barLength) *
-                                         ((DamageLogic.FastComboDamage(aiHeroClient) / aiHeroClient.MaxHealth) > 1
-                                             ? 1
-                                             : (DamageLogic.FastComboDamage(aiHeroClient) / aiHeroClient.MaxHealth));
-                        Line.DrawLine(System.Drawing.Color.Green, 9f, new Vector2(pos.X, pos.Y),
-                            new Vector2(pos.X + (damage > fullbar ? fullbar : damage), pos.Y));
-                        Line.DrawLine(System.Drawing.Color.Black, 9, new Vector2(pos.X + (damage > fullbar ? fullbar : damage) - 2, pos.Y), new Vector2(pos.X + (damage > fullbar ? fullbar : damage) + 2, pos.Y));
+                else if (args.SData.TargettingType == SpellDataTargetType.Cone)
+                {
+                    var castvector =
+                        new Geometry.Polygon.Arc(args.Start, args.End, args.SData.CastConeAngle, args.SData.CastRange)
+                            .IsInside(Player.Instance.ServerPosition);
+
+                    if (castvector && ShieldMenu[args.SData.Name].Cast<CheckBox>().CurrentValue)
+                    {
+                        E.Cast();
+                    }
+                }
+
+                else if (args.SData.TargettingType == SpellDataTargetType.SelfAoe)
+                {
+                    var castvector =
+                        new Geometry.Polygon.Circle(sender.ServerPosition, args.SData.CastRadius).IsInside(
+                            Player.Instance.ServerPosition);
+
+                    if (castvector && ShieldMenu[args.SData.Name].Cast<CheckBox>().CurrentValue)
+                    {
+                        E.Cast();
+                    }
+                }
+                else
+                {
+                    var castvector =
+                        new Geometry.Polygon.Rectangle(args.Start, args.End, args.SData.LineWidth).IsInside(
+                            Player.Instance.ServerPosition);
+
+                    if (castvector && ShieldMenu[args.SData.Name].Cast<CheckBox>().CurrentValue)
+                    {
+                        E.Cast();
                     }
                 }
             }
         }
 
 
-        private static void Game_OnUpdate(EventArgs args)
-        {
-            if (MiscMenu["Skin"].Cast<CheckBox>().CurrentValue)
-            {
-                Player.Instance.SetSkinId(MiscMenu["skinid"].Cast<Slider>().CurrentValue);
-            }
-        }
 
 
-    private static void Auto()
+        private static void Auto()
         {
             var w = TargetSelector.GetTarget(W.Range, DamageType.Physical);
             if (w.IsValidTarget(W.Range) && MiscMenu["AutoW"].Cast<CheckBox>().CurrentValue)
@@ -233,6 +325,7 @@ namespace _HTTF_Riven
 
             W.Cast();
         }
+        //Burst
 
 
         private static void Game_OnTick(EventArgs args)

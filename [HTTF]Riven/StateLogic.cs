@@ -74,6 +74,71 @@ namespace _HTTF_Riven
             }
         }
 
+        public static AIHeroClient FocusTarget;
+
+        public static void Burst()
+        {
+            var target = TargetSelector.SelectedTarget;
+            if (target == null || !target.IsValidTarget()) return;
+            Orbwalker.ForcedTarget = target;
+            Orbwalker.OrbwalkTo(target.ServerPosition);
+            if (target.IsValidTarget() && !target.IsZombie)
+                EnableR = false;
+            
+            if (Riven.ComboMenu["Burst"].Cast<KeyBind>().CurrentValue)
+
+            {
+                if (Riven.E.IsReady())
+                {
+                    Player.CastSpell(SpellSlot.E, FocusTarget.Position);
+                }
+                
+                    if (Riven.R1.IsReady())
+                    {
+                        EnableR = true;
+                        ForceR();
+
+                        Player.CastSpell(SpellSlot.R);
+                    }
+
+                if (ItemLogic.Hydra != null && ItemLogic.Hydra.IsReady())
+                {
+                    ItemLogic.Hydra.Cast();
+                    return;
+                }
+
+                if (Riven.W.IsReady())
+                {
+                    if (FocusTarget.IsValidTarget(Riven.W.Range))
+                    {
+                        Riven.W.Cast();
+                    }
+                    if(Riven.R2.IsReady() && Player.Instance.HasBuff("RivenFengShuiEngine") &&
+                Riven.ComboMenu["Combo.R2"].Cast<CheckBox>().CurrentValue)
+                        {
+                        if (FocusTarget.IsValidTarget(Riven.R2.Range))
+                        {
+                            Riven.R2.Cast();
+                        }
+                        if (Riven.Q.IsReady())
+                        {
+                            if (FocusTarget.IsValidTarget(Riven.Q.Range))
+                            {
+                                Riven.Q.Cast();
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+            
+            
+        
+
+
         public static void Harass()
         {
             if (Orbwalker.IsAutoAttacking) return;
