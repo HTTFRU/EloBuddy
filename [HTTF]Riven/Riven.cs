@@ -69,7 +69,7 @@ namespace _HTTF_Riven
             if (Player.Instance.Hero != Champion.Riven) return;
 
             Menu = MainMenu.AddMenu("HTTF Riven", "httfRiven");
-            Menu.AddLabel("Best Riven Addon Patch +6.13 ");
+            Menu.AddLabel("Best Riven Addon Patch +6.15 ");
             Menu.AddLabel("Your comments and questions to the forum ");
 
             ComboMenu = Menu.AddSubMenu("Combo And Etc", "comboSettings");
@@ -89,6 +89,13 @@ namespace _HTTF_Riven
             ComboMenu.Add("Harass.Q", new CheckBox("Use Q"));
             ComboMenu.Add("Harass.W", new CheckBox("Use W"));
             ComboMenu.Add("Harass.E", new CheckBox("Use E"));
+            var Style = ComboMenu.Add("harassstyle", new Slider("Harass Style(Beta)", 0, 0, 3));
+            Style.OnValueChange += delegate
+            {
+                Style.DisplayName = "Harass Style: " + new[] { "Q,Q,W,Q and E ", "E,H,Q3,W", "E,H,AA,Q,W", "E,Q,H,AA,Q,AA,W,AA,Q,AA" }[Style.CurrentValue];
+            };
+            Style.DisplayName = "Harass Style: " + new[] { "Q,Q,W,Q and E ", "E,H,Q3,W", "E,H,AA,Q,W", "E,Q,H,AA,Q,AA,W,AA,Q,AA" }[Style.CurrentValue];
+            
             ComboMenu.AddLabel("Misc Settings");
             ComboMenu.AddLabel("Keep Alive Settings");
             ComboMenu.Add("Alive.Q", new CheckBox("Keep Q Alive"));
@@ -161,7 +168,7 @@ namespace _HTTF_Riven
 
 
             Drawing.OnEndScene += Drawing_OnEndScene;
-            Drawing.OnDraw += Drawing_OnDraw;
+            
             Game.OnTick += Game_OnTick;
             Gapcloser.OnGapcloser += Gapcloser_OnGapcloser;
             Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
@@ -231,7 +238,8 @@ namespace _HTTF_Riven
 
                     if (castvector && ShieldMenu[args.SData.Name].Cast<CheckBox>().CurrentValue)
                     {
-                        E.Cast();
+                            
+                            E.Cast();
                     }
                 }
 
@@ -354,6 +362,7 @@ namespace _HTTF_Riven
             {
                 StateLogic.Flee();
             }
+       
             Auto();
         }
     }
