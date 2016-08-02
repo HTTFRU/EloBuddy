@@ -75,17 +75,19 @@ namespace _HTTF_Riven
         }
 
         public static AIHeroClient FocusTarget;
+        private static bool forceR;
 
         public static void Burst()
         {
-            var target = TargetSelector.SelectedTarget;
-            if (target == null || !target.IsValidTarget()) return;
-            Orbwalker.ForcedTarget = target;
-            Orbwalker.OrbwalkTo(target.ServerPosition);
-            if (target.IsValidTarget() && !target.IsZombie)
-                EnableR = false;
+            if (Orbwalker.IsAutoAttacking) return;
+
+            var target = TargetSelector.GetTarget(Riven.E.Range + Riven.W.Range, DamageType.Physical);
+
+            if (target == null) return;
+
+            EnableR = false;
             
-            if (Riven.ComboMenu["Burst"].Cast<KeyBind>().CurrentValue)
+            if (Riven.ComboMenu["CrazyBurst"].Cast<KeyBind>().CurrentValue)
 
             {
                 if (Riven.E.IsReady())
@@ -132,11 +134,70 @@ namespace _HTTF_Riven
                 }
             }
         }
-        
-        
-            
-            
-        
+
+        public static AIHeroClient myHero
+        {
+            get { return Player.Instance; }
+        }
+        public static void BurstFlash()
+        {
+            var target = TargetSelector.SelectedTarget;
+            Orbwalker.ForcedTarget = target;
+            Orbwalker.OrbwalkTo(target.ServerPosition);
+            if (target == null || target.IsZombie || target.IsInvulnerable) return;
+            if (target.IsValidTarget(800))
+
+            {
+                if (Riven.E.IsReady())
+                {
+                    
+                    Player.CastSpell(SpellSlot.E, target.ServerPosition);
+                }
+                
+
+                if (Riven.R1.IsReady() && Riven.ComboMenu["burstcombo"].Cast<KeyBind>().CurrentValue && forceR == false)
+                {
+                    Riven.R1.Cast();
+                }
+
+                if (Riven.Flash.IsReady() && (myHero.Distance(target.Position) <= 680))
+                {
+                    Riven.Flash.Cast(target.ServerPosition);
+                }
+
+                
+
+                if (target.IsValidTarget(Riven.W.Range))
+                {
+                    if (Riven.W.IsReady())
+
+                    {
+                        Riven.W.Cast();
+                    }
+
+                    if (Riven.R2.IsReady())
+
+                    {
+                        Riven.R2.Cast(target.ServerPosition);
+                    }
+
+                    if (ItemLogic.Hydra != null && ItemLogic.Hydra.IsReady())
+                    {
+                        ItemLogic.Hydra.Cast();
+                        return;
+                    }
+
+                    if (Riven.Q.IsReady())
+                    {
+                        Riven.Q.Cast();
+                    }
+
+                }
+            }
+        }
+
+
+
 
 
         public static void Harass()

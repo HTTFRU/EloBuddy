@@ -19,7 +19,7 @@ namespace _HTTF_Riven
             get { return Player.Instance; }
         }
         private static Spell.Targeted ignite;
-
+        public static Spell.Skillshot Flash { get; set; }
         private static readonly AIHeroClient _Player = ObjectManager.Player;
         public static Text Text = new Text("", new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold));
         public static Spell.Active Q = new Spell.Active(SpellSlot.Q, 300);
@@ -77,8 +77,11 @@ namespace _HTTF_Riven
             ComboMenu.Add("Combo.W", new CheckBox("Use W"));
             ComboMenu.Add("Combo.E", new CheckBox("Use E"));
             ComboMenu.Add("Combo.R2", new CheckBox("Use R (Killable)"));
-            ComboMenu.AddLabel("New Option");
+            ComboMenu.AddLabel("New Burst Options");
             ComboMenu.Add("Burst", new KeyBind("CrazyCombo(Beta)(Dont Work)", false, KeyBind.BindTypes.HoldActive, '9'));
+            ComboMenu.AddLabel("New Burst Flash");
+            ComboMenu.AddLabel("Dont use Burst If you have no flash and cooldown time your spell");
+            ComboMenu.Add("BurstFlash", new KeyBind("Activate Burst", false, KeyBind.BindTypes.HoldActive, 'G'));
             ComboMenu.AddLabel("R1 Settings");
             ComboMenu.Add("Combo.R", new CheckBox("Use R"));
             ComboMenu.Add("forcedRKeybind", new KeyBind("Use R in combo?", false, KeyBind.BindTypes.PressToggle, 'T'));
@@ -163,6 +166,13 @@ namespace _HTTF_Riven
 
             ItemLogic.Init();
             EventLogic.Init();
+
+            var slot = Player.Instance.GetSpellSlotFromName("summonerflash");
+
+            if (slot != SpellSlot.Unknown)
+            {
+                Flash = new Spell.Skillshot(slot, 680, SkillShotType.Linear);
+            }
 
             ignite = new Spell.Targeted(ObjectManager.Player.GetSpellSlotFromName("summonerdot"), 600);
 
@@ -362,7 +372,7 @@ namespace _HTTF_Riven
             {
                 StateLogic.Flee();
             }
-       
+            if (ComboMenu["BurstFlash"].Cast<KeyBind>().CurrentValue) StateLogic.BurstFlash();
             Auto();
         }
     }
