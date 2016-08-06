@@ -77,63 +77,76 @@ namespace _HTTF_Riven
         public static AIHeroClient FocusTarget;
         private static bool forceR;
 
-        public static void Burst()
+        public static void BurstCrazy()
         {
-            if (Orbwalker.IsAutoAttacking) return;
+            var target = TargetSelector.SelectedTarget;
+            Orbwalker.ForcedTarget = target;
+            Orbwalker.OrbwalkTo(target.ServerPosition);
+            if (target == null || target.IsZombie || target.IsInvulnerable) return;
+            if (target.IsValidTarget(800))
 
-            var target = TargetSelector.GetTarget(Riven.E.Range + Riven.W.Range, DamageType.Physical);
-
-            if (target == null) return;
-
-            EnableR = false;
-            
-            if (Riven.ComboMenu["CrazyBurst"].Cast<KeyBind>().CurrentValue)
-
+            //Cast E
             {
                 if (Riven.E.IsReady())
                 {
-                    Player.CastSpell(SpellSlot.E, FocusTarget.Position);
-                }
-                
-                    if (Riven.R1.IsReady())
-                    {
-                        EnableR = true;
-                        ForceR();
 
-                        Player.CastSpell(SpellSlot.R);
-                    }
-
-                if (ItemLogic.Hydra != null && ItemLogic.Hydra.IsReady())
-                {
-                    ItemLogic.Hydra.Cast();
-                    return;
+                    Player.CastSpell(SpellSlot.E, target.ServerPosition);
                 }
 
-                if (Riven.W.IsReady())
+                //Cast R1
+                if (Riven.R1.IsReady() && Riven.ComboMenu["burstcombo"].Cast<KeyBind>().CurrentValue && forceR == false)
                 {
-                    if (FocusTarget.IsValidTarget(Riven.W.Range))
+                    Riven.R1.Cast();
+                }
+
+                //Cast Q
+                if (target.IsValidTarget(Riven.Q.Range))
+                {
+                    if (Riven.Q.IsReady())
+
                     {
-                        Riven.W.Cast();
+                        Riven.Q.Cast();
                     }
-                    if(Riven.R2.IsReady() && Player.Instance.HasBuff("RivenFengShuiEngine") &&
-                Riven.ComboMenu["Combo.R2"].Cast<CheckBox>().CurrentValue)
+
+                    //Cast Hydra
+                    if (ItemLogic.Hydra != null && ItemLogic.Hydra.IsReady())
+                    {
+                        ItemLogic.Hydra.Cast();
+                        return;
+                    }
+
+
+                    //Cast W
+                    if (target.IsValidTarget(Riven.W.Range))
+                    {
+                        if (Riven.W.IsReady())
+
                         {
-                        if (FocusTarget.IsValidTarget(Riven.R2.Range))
-                        {
-                            Riven.R2.Cast();
+                            Riven.W.Cast();
                         }
-                        if (Riven.Q.IsReady())
+                        //Cast Q
+                        if (target.IsValidTarget(Riven.Q.Range))
                         {
-                            if (FocusTarget.IsValidTarget(Riven.Q.Range))
+                            if (Riven.Q.IsReady())
+
                             {
                                 Riven.Q.Cast();
                             }
+                            //Cast R2
+                            if (Riven.R2.IsReady())
+
+                            {
+                                Riven.R2.Cast(target.ServerPosition);
+                            }
+
+
 
                         }
                     }
                 }
             }
         }
+
 
         public static AIHeroClient myHero
         {

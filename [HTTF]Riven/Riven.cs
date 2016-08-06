@@ -32,7 +32,7 @@ namespace _HTTF_Riven
             AllowedCollisionCount = int.MaxValue
         };
 
-        public static Menu Menu, ComboMenu, FarmMenu, MiscMenu, ShieldMenu;
+        public static Menu Menu, ComboMenu, FarmMenu, MiscMenu, ShieldMenu, LogicMenu;
         private static object targetSelector;
         private static readonly float _barLength = 104;
         private static readonly float _xOffset = 2;
@@ -78,7 +78,8 @@ namespace _HTTF_Riven
             ComboMenu.Add("Combo.E", new CheckBox("Use E"));
             ComboMenu.Add("Combo.R2", new CheckBox("Use R (Killable)"));
             ComboMenu.AddLabel("New Burst Options");
-            ComboMenu.Add("Burst", new KeyBind("CrazyCombo(Beta)(Dont Work)", false, KeyBind.BindTypes.HoldActive, '9'));
+            ComboMenu.AddLabel("Dont use Burst cooldown time your spell");
+            ComboMenu.Add("BurstCrazy", new KeyBind("CrazyCombo(Beta)", false, KeyBind.BindTypes.HoldActive, 'H'));
             ComboMenu.AddLabel("New Burst Flash");
             ComboMenu.AddLabel("Dont use Burst If you have no flash and cooldown time your spell");
             ComboMenu.Add("BurstFlash", new KeyBind("Activate Burst", false, KeyBind.BindTypes.HoldActive, 'G'));
@@ -122,6 +123,7 @@ namespace _HTTF_Riven
             MiscMenu = Menu.AddSubMenu("Misc", "Misc");
             MiscMenu.AddLabel("• Draw •");
             MiscMenu.Add("DamageIndicator", new CheckBox("Draw Damage"));
+            MiscMenu.Add("drawFBurst", new CheckBox("Draw FlashBurst"));
             MiscMenu.AddLabel("• Misc •");
             MiscMenu.Add("gapcloser", new CheckBox("W on enemy gapcloser"));
             MiscMenu.Add("AutoIgnite", new CheckBox("Auto Ignite"));
@@ -130,6 +132,7 @@ namespace _HTTF_Riven
 
             ShieldMenu = Menu.AddSubMenu("AutoShield", "AutoShield");
             ShieldMenu.Add("Shield", new CheckBox("AutoShield"));
+            ShieldMenu.Add("Delay", new Slider("Delay For Shield)", 0, 0, 500));
             ShieldMenu.AddLabel("•Auto Shield(beta)•");
             foreach (var enemy in EntityManager.Heroes.Enemies.Where(a => a.Team != Player.Instance.Team))
             {
@@ -160,6 +163,8 @@ namespace _HTTF_Riven
                         ShieldMenu.Add(spell.SData.Name,
                             new CheckBox(enemy.ChampionName + " - R - " + spell.Name, false));
                     }
+                    LogicMenu = Menu.AddSubMenu("Logic", "Logic");
+                    LogicMenu.AddLabel("•SOON :3•");
                 }
             }
 
@@ -191,6 +196,10 @@ namespace _HTTF_Riven
                 var pos = Drawing.WorldToScreen(Player.Instance.Position);
                 Text.Draw("Use R in combo?: " + IsRActive, System.Drawing.Color.AliceBlue, (int)pos.X - 45,
                     (int)pos.Y + 40);
+            }
+            if (MiscMenu["drawFBurst"].Cast<CheckBox>().CurrentValue)
+            {
+                Drawing.DrawCircle(_Player.Position, 425 + E.Range, System.Drawing.Color.Green);
             }
         }
 
@@ -373,6 +382,7 @@ namespace _HTTF_Riven
                 StateLogic.Flee();
             }
             if (ComboMenu["BurstFlash"].Cast<KeyBind>().CurrentValue) StateLogic.BurstFlash();
+            if (ComboMenu["BurstCrazy"].Cast<KeyBind>().CurrentValue) StateLogic.BurstCrazy();
             Auto();
         }
     }
