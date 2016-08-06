@@ -32,7 +32,7 @@ namespace _HTTF_Riven
             AllowedCollisionCount = int.MaxValue
         };
 
-        public static Menu Menu, ComboMenu, FarmMenu, MiscMenu, ShieldMenu, LogicMenu;
+        public static Menu Menu, ComboMenu, FarmMenu, MiscMenu, ShieldMenu;
         private static object targetSelector;
         private static readonly float _barLength = 104;
         private static readonly float _xOffset = 2;
@@ -163,8 +163,6 @@ namespace _HTTF_Riven
                         ShieldMenu.Add(spell.SData.Name,
                             new CheckBox(enemy.ChampionName + " - R - " + spell.Name, false));
                     }
-                    LogicMenu = Menu.AddSubMenu("Logic", "Logic");
-                    LogicMenu.AddLabel("•SOON :3•");
                 }
             }
 
