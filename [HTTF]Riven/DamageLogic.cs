@@ -122,7 +122,7 @@ namespace _HTTF_Riven
         {
             if (!Riven.R1.IsLearned) return 0;
             var hpPercent = (target.Health - healthMod > 0 ? 1 : target.Health - healthMod) / target.MaxHealth;
-            return (float)((new double[] { 80, 120, 160 }[Riven.R1.Level - 1]
+            return (float)((new double[] { 100, 150, 200 }[Riven.R1.Level - 1]
                              + 0.6 * Player.Instance.FlatPhysicalDamageMod) *
                             (hpPercent < 25 ? 3 : (((100 - hpPercent) * 2.67) / 100) + 1));
         }

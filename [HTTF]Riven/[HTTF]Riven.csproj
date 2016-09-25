@@ -34,22 +34,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EloBuddy">
-      <HintPath>..\..\..\..\..\AppData\Desktop\Elobuddy\EloBuddy.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\EloBuddy\System\EloBuddy.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.Sandbox">
-      <HintPath>..\..\..\..\..\AppData\Desktop\Elobuddy\EloBuddy.Sandbox.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\EloBuddy\System\EloBuddy.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.SDK">
-      <HintPath>..\..\..\..\..\AppData\Desktop\Elobuddy\EloBuddy.SDK.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\EloBuddy\System\EloBuddy.SDK.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\..\AppData\Desktop\Elobuddy\Newtonsoft.Json.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\EloBuddy\System\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\..\..\..\..\AppData\Desktop\Elobuddy\SharpDX.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\EloBuddy\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>..\..\..\..\..\AppData\Desktop\Elobuddy\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\EloBuddy\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

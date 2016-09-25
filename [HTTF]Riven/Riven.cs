@@ -69,20 +69,15 @@ namespace _HTTF_Riven
             if (Player.Instance.Hero != Champion.Riven) return;
 
             Menu = MainMenu.AddMenu("HTTF Riven", "httfRiven");
-            Menu.AddLabel("Best Riven Addon Patch +6.15 ");
+            Menu.AddLabel("Best Riven Addon Patch +6.19 ");
             Menu.AddLabel("Your comments and questions to the forum ");
+            Menu.AddLabel("HELP ME , PM ME. AND MY SKYPE Bynoob_01 ");
 
             ComboMenu = Menu.AddSubMenu("Combo And Etc", "comboSettings");
             ComboMenu.Add("Combo.Q", new CheckBox("Use Q"));
             ComboMenu.Add("Combo.W", new CheckBox("Use W"));
             ComboMenu.Add("Combo.E", new CheckBox("Use E"));
             ComboMenu.Add("Combo.R2", new CheckBox("Use R (Killable)"));
-            ComboMenu.AddLabel("New Burst Options");
-            ComboMenu.AddLabel("Dont use Burst cooldown time your spell");
-            ComboMenu.Add("BurstCrazy", new KeyBind("CrazyCombo(Beta)", false, KeyBind.BindTypes.HoldActive, 'H'));
-            ComboMenu.AddLabel("New Burst Flash");
-            ComboMenu.AddLabel("Dont use Burst If you have no flash and cooldown time your spell");
-            ComboMenu.Add("BurstFlash", new KeyBind("Activate Burst", false, KeyBind.BindTypes.HoldActive, 'G'));
             ComboMenu.AddLabel("R1 Settings");
             ComboMenu.Add("Combo.R", new CheckBox("Use R"));
             ComboMenu.Add("forcedRKeybind", new KeyBind("Use R in combo?", false, KeyBind.BindTypes.PressToggle, 'T'));
@@ -123,7 +118,6 @@ namespace _HTTF_Riven
             MiscMenu = Menu.AddSubMenu("Misc", "Misc");
             MiscMenu.AddLabel("• Draw •");
             MiscMenu.Add("DamageIndicator", new CheckBox("Draw Damage"));
-            MiscMenu.Add("drawFBurst", new CheckBox("Draw FlashBurst"));
             MiscMenu.AddLabel("• Misc •");
             MiscMenu.Add("gapcloser", new CheckBox("W on enemy gapcloser"));
             MiscMenu.Add("AutoIgnite", new CheckBox("Auto Ignite"));
@@ -132,7 +126,7 @@ namespace _HTTF_Riven
 
             ShieldMenu = Menu.AddSubMenu("AutoShield", "AutoShield");
             ShieldMenu.Add("Shield", new CheckBox("AutoShield"));
-            ShieldMenu.Add("Delay", new Slider("Delay For Shield)", 0, 0, 500));
+            ShieldMenu.Add("Delay", new Slider("Delay For Shield", 0, 0, 500));
             ShieldMenu.AddLabel("•Auto Shield(beta)•");
             foreach (var enemy in EntityManager.Heroes.Enemies.Where(a => a.Team != Player.Instance.Team))
             {
@@ -194,11 +188,7 @@ namespace _HTTF_Riven
                 var pos = Drawing.WorldToScreen(Player.Instance.Position);
                 Text.Draw("Use R in combo?: " + IsRActive, System.Drawing.Color.AliceBlue, (int)pos.X - 45,
                     (int)pos.Y + 40);
-            }
-            if (MiscMenu["drawFBurst"].Cast<CheckBox>().CurrentValue)
-            {
-                Drawing.DrawCircle(_Player.Position, 425 + E.Range, System.Drawing.Color.Green);
-            }
+            }            
         }
 
         private static void Drawing_OnEndScene(EventArgs args)
@@ -379,8 +369,6 @@ namespace _HTTF_Riven
             {
                 StateLogic.Flee();
             }
-            if (ComboMenu["BurstFlash"].Cast<KeyBind>().CurrentValue) StateLogic.BurstFlash();
-            if (ComboMenu["BurstCrazy"].Cast<KeyBind>().CurrentValue) StateLogic.BurstCrazy();
             Auto();
         }
     }

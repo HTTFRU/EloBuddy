@@ -30,6 +30,7 @@ namespace _HTTF_Riven
                             Player.Instance.CalculateDamageOnUnit(enemy, DamageType.Physical,
                                 DamageLogic.RDamage(enemy))).Any(enemy => Riven.R2.Cast(enemy)))
                 {
+                    Riven.R2.Cast(target);
                     return;
                 }
             }
@@ -51,6 +52,7 @@ namespace _HTTF_Riven
                         ForceR();
                         
                         Player.CastSpell(SpellSlot.R);
+                        
 
                     }
                 }
@@ -77,139 +79,13 @@ namespace _HTTF_Riven
         public static AIHeroClient FocusTarget;
         private static bool forceR;
 
-        public static void BurstCrazy()
-        {
-            var target = TargetSelector.SelectedTarget;
-            Orbwalker.ForcedTarget = target;
-            Orbwalker.OrbwalkTo(target.ServerPosition);
-            if (target == null || target.IsZombie || target.IsInvulnerable) return;
-            if (target.IsValidTarget(800))
-
-            //Cast E
-            {
-                if (Riven.E.IsReady())
-                {
-
-                    Player.CastSpell(SpellSlot.E, target.ServerPosition);
-                }
-
-                //Cast R1
-                if (Riven.R1.IsReady() && Riven.ComboMenu["burstcombo"].Cast<KeyBind>().CurrentValue && forceR == false)
-                {
-                    Riven.R1.Cast();
-                }
-
-                //Cast Q
-                if (target.IsValidTarget(Riven.Q.Range))
-                {
-                    if (Riven.Q.IsReady())
-
-                    {
-                        Riven.Q.Cast();
-                    }
-
-                    //Cast Hydra
-                    if (ItemLogic.Hydra != null && ItemLogic.Hydra.IsReady())
-                    {
-                        ItemLogic.Hydra.Cast();
-                        return;
-                    }
-
-
-                    //Cast W
-                    if (target.IsValidTarget(Riven.W.Range))
-                    {
-                        if (Riven.W.IsReady())
-
-                        {
-                            Riven.W.Cast();
-                        }
-                        //Cast Q
-                        if (target.IsValidTarget(Riven.Q.Range))
-                        {
-                            if (Riven.Q.IsReady())
-
-                            {
-                                Riven.Q.Cast();
-                            }
-                            //Cast R2
-                            if (Riven.R2.IsReady())
-
-                            {
-                                Riven.R2.Cast(target.ServerPosition);
-                            }
-
-
-
-                        }
-                    }
-                }
-            }
-        }
-
+        
 
         public static AIHeroClient myHero
         {
             get { return Player.Instance; }
         }
-        public static void BurstFlash()
-        {
-            var target = TargetSelector.SelectedTarget;
-            Orbwalker.ForcedTarget = target;
-            Orbwalker.OrbwalkTo(target.ServerPosition);
-            if (target == null || target.IsZombie || target.IsInvulnerable) return;
-            if (target.IsValidTarget(800))
-
-            {
-                if (Riven.E.IsReady())
-                {
-                    
-                    Player.CastSpell(SpellSlot.E, target.ServerPosition);
-                }
-                
-
-                if (Riven.R1.IsReady() && Riven.ComboMenu["burstcombo"].Cast<KeyBind>().CurrentValue && forceR == false)
-                {
-                    Riven.R1.Cast();
-                }
-
-                if (Riven.Flash.IsReady() && (myHero.Distance(target.Position) <= 680))
-                {
-                    Riven.Flash.Cast(target.ServerPosition);
-                }
-
-                
-
-                if (target.IsValidTarget(Riven.W.Range))
-                {
-                    if (Riven.W.IsReady())
-
-                    {
-                        Riven.W.Cast();
-                    }
-
-                    if (Riven.R2.IsReady())
-
-                    {
-                        Riven.R2.Cast(target.ServerPosition);
-                    }
-
-                    if (ItemLogic.Hydra != null && ItemLogic.Hydra.IsReady())
-                    {
-                        ItemLogic.Hydra.Cast();
-                        return;
-                    }
-
-                    if (Riven.Q.IsReady())
-                    {
-                        Riven.Q.Cast();
-                    }
-
-                }
-            }
-        }
-
-
+        
 
 
 

@@ -10,3 +10,15 @@ C:\Users\Костя\Documents\Visual Studio 2015\HTTF Corp\[HTTF]Riven\[HTTF]Riv
 C:\Users\Костя\Documents\Visual Studio 2015\HTTF Corp\[HTTF]Riven\[HTTF]Riven\obj\Release\[HTTF]Riven.exe
 C:\Users\Костя\Documents\Visual Studio 2015\HTTF Corp\[HTTF]Riven\[HTTF]Riven\obj\Release\[HTTF]Riven.pdb
 C:\Users\Костя\Documents\Visual Studio 2015\HTTF Corp\[HTTF]Riven\[HTTF]Riven\obj\Release\[HTTF]Riven.csprojResolveAssemblyReference.cache
+D:\Riot Games\фоточки с рабочего стола\[HTTF]Riven\[HTTF]Riven\bin\Release\[HTTF]Riven.exe.config
+D:\Riot Games\фоточки с рабочего стола\[HTTF]Riven\[HTTF]Riven\bin\Release\[HTTF]Riven.exe
+D:\Riot Games\фоточки с рабочего стола\[HTTF]Riven\[HTTF]Riven\bin\Release\[HTTF]Riven.pdb
+D:\Riot Games\фоточки с рабочего стола\[HTTF]Riven\[HTTF]Riven\bin\Release\EloBuddy.dll
+D:\Riot Games\фоточки с рабочего стола\[HTTF]Riven\[HTTF]Riven\bin\Release\EloBuddy.Sandbox.dll
+D:\Riot Games\фоточки с рабочего стола\[HTTF]Riven\[HTTF]Riven\bin\Release\EloBuddy.SDK.dll
+D:\Riot Games\фоточки с рабочего стола\[HTTF]Riven\[HTTF]Riven\bin\Release\Newtonsoft.Json.dll
+D:\Riot Games\фоточки с рабочего стола\[HTTF]Riven\[HTTF]Riven\bin\Release\SharpDX.Direct3D9.dll
+D:\Riot Games\фоточки с рабочего стола\[HTTF]Riven\[HTTF]Riven\bin\Release\SharpDX.dll
+D:\Riot Games\фоточки с рабочего стола\[HTTF]Riven\[HTTF]Riven\obj\Release\[HTTF]Riven.csprojResolveAssemblyReference.cache
+D:\Riot Games\фоточки с рабочего стола\[HTTF]Riven\[HTTF]Riven\obj\Release\[HTTF]Riven.exe
+D:\Riot Games\фоточки с рабочего стола\[HTTF]Riven\[HTTF]Riven\obj\Release\[HTTF]Riven.pdb
