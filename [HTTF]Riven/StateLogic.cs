@@ -29,8 +29,8 @@ namespace _HTTF_Riven
                             enemy.Health <
                             Player.Instance.CalculateDamageOnUnit(enemy, DamageType.Physical,
                                 DamageLogic.RDamage(enemy))).Any(enemy => Riven.R2.Cast(enemy)))
+                                
                 {
-                    Riven.R2.Cast(target);
                     return;
                 }
             }
@@ -50,10 +50,7 @@ namespace _HTTF_Riven
                     {
                         EnableR = true;
                         ForceR();
-                        
                         Player.CastSpell(SpellSlot.R);
-                        
-
                     }
                 }
             }
@@ -62,6 +59,16 @@ namespace _HTTF_Riven
             {
                 Player.CastSpell(SpellSlot.E, target.Position);
                 return;
+            }
+
+
+            if (Riven.MiscMenu["Youmuu"].Cast<CheckBox>().CurrentValue &&
+                target.Distance(Player.Instance) <= Riven.E.Range && Riven.E.IsReady())
+            {
+                if (target.IsValidTarget(Riven.E.Range))
+                {
+                    Use();
+                }
             }
 
             if (Riven.ComboMenu["Combo.W"].Cast<CheckBox>().CurrentValue &&
@@ -76,18 +83,10 @@ namespace _HTTF_Riven
             }
         }
 
-        public static AIHeroClient FocusTarget;
-        private static bool forceR;
-
-        
-
-        public static AIHeroClient myHero
+        private static void Use()
         {
-            get { return Player.Instance; }
+            throw new NotImplementedException();
         }
-        
-
-
 
         public static void Harass()
         {

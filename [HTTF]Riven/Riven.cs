@@ -20,6 +20,7 @@ namespace _HTTF_Riven
         }
         private static Spell.Targeted ignite;
         public static Spell.Skillshot Flash { get; set; }
+        private static Item Youmu = new Item((int)ItemId.Youmuus_Ghostblade);
         private static readonly AIHeroClient _Player = ObjectManager.Player;
         public static Text Text = new Text("", new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold));
         public static Spell.Active Q = new Spell.Active(SpellSlot.Q, 300);
@@ -62,6 +63,7 @@ namespace _HTTF_Riven
         private static void Main(string[] args)
         {
             Loading.OnLoadingComplete += Loading_OnLoadingComplete;
+            Chat.Print("Riven HTTF Active Version 1.1.7.10(Beta)");
         }
 
         private static void Loading_OnLoadingComplete(EventArgs args)
@@ -78,9 +80,14 @@ namespace _HTTF_Riven
             ComboMenu.Add("Combo.W", new CheckBox("Use W"));
             ComboMenu.Add("Combo.E", new CheckBox("Use E"));
             ComboMenu.Add("Combo.R2", new CheckBox("Use R (Killable)"));
+            ComboMenu.Add("ComboMode", new ComboBox("Combo Mode:", 0, "Normal", "VeryFast(Beta)"));
             ComboMenu.AddLabel("R1 Settings");
             ComboMenu.Add("Combo.R", new CheckBox("Use R"));
             ComboMenu.Add("forcedRKeybind", new KeyBind("Use R in combo?", false, KeyBind.BindTypes.PressToggle, 'T'));
+            ComboMenu.AddLabel("R2 Settings");
+            ComboMenu.Add("BoxBoxLogicR2", new CheckBox("BoxboxLogicR2(Beta)"));
+            ComboMenu.Add("R2Mode", new ComboBox("R2 Mode:", 0, "Kill Only", "Max Damage"));
+
             ComboMenu.AddLabel("When To use R");
             ComboMenu.Add("Combo.RCombo", new CheckBox("Cant Kill with Combo"));
             ComboMenu.Add("Combo.RPeople", new CheckBox("Have more than 1 person near"));
@@ -99,6 +106,7 @@ namespace _HTTF_Riven
             ComboMenu.AddLabel("Keep Alive Settings");
             ComboMenu.Add("Alive.Q", new CheckBox("Keep Q Alive"));
             ComboMenu.Add("Alive.R", new CheckBox("Use R2 Before Expire"));
+            
             ComboMenu.AddLabel("Humanizer Settings(BETA)");
             ComboMenu.Add("HumanizerDelay", new Slider("Humanizer Delay (ms)", 0, 0, 300));
 
@@ -123,6 +131,7 @@ namespace _HTTF_Riven
             MiscMenu.Add("AutoIgnite", new CheckBox("Auto Ignite"));
             MiscMenu.Add("AutoW", new CheckBox("Auto W"));
             MiscMenu.Add("AutoQSS", new CheckBox("Auto QSS"));
+            MiscMenu.Add("Youmuu", new CheckBox("Use Youmuu?(beta)"));
 
             ShieldMenu = Menu.AddSubMenu("AutoShield", "AutoShield");
             ShieldMenu.Add("Shield", new CheckBox("AutoShield"));
