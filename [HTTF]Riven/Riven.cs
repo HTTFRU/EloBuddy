@@ -22,7 +22,6 @@ namespace _HTTF_Riven
         public static Spell.Skillshot Flash { get; set; }
         private static Item Youmu = new Item((int)ItemId.Youmuus_Ghostblade);
         private static readonly AIHeroClient _Player = ObjectManager.Player;
-        public static Text Text = new Text("", new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold));
         public static Spell.Active Q = new Spell.Active(SpellSlot.Q, 300);
         public static Spell.Active E = new Spell.Active(SpellSlot.E, 325);
         public static Spell.Active R1 = new Spell.Active(SpellSlot.R);
@@ -63,7 +62,7 @@ namespace _HTTF_Riven
         private static void Main(string[] args)
         {
             Loading.OnLoadingComplete += Loading_OnLoadingComplete;
-            Chat.Print("Riven HTTF Active Version 1.1.7.10(Beta)");
+            Chat.Print("Riven HTTF Active Version 1.2.1");
         }
 
         private static void Loading_OnLoadingComplete(EventArgs args)
@@ -132,7 +131,9 @@ namespace _HTTF_Riven
             MiscMenu.Add("AutoW", new CheckBox("Auto W"));
             MiscMenu.Add("AutoQSS", new CheckBox("Auto QSS"));
             MiscMenu.Add("Youmuu", new CheckBox("Use Youmuu?(beta)"));
-
+            MiscMenu.AddLabel("• SkinHack •");
+            MiscMenu.Add("checkSkin", new CheckBox("Use Skin Changer"));
+            MiscMenu.Add("Skinid", new Slider("Skin ID", 0, 0, 11));
             ShieldMenu = Menu.AddSubMenu("AutoShield", "AutoShield");
             ShieldMenu.Add("Shield", new CheckBox("AutoShield"));
             ShieldMenu.Add("Delay", new Slider("Delay For Shield", 0, 0, 500));
@@ -183,21 +184,18 @@ namespace _HTTF_Riven
             ignite = new Spell.Targeted(ObjectManager.Player.GetSpellSlotFromName("summonerdot"), 600);
 
 
-            Drawing.OnEndScene += Drawing_OnEndScene;
-            
-            Game.OnTick += Game_OnTick;
-            Gapcloser.OnGapcloser += Gapcloser_OnGapcloser;
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
 
-        }
-        private static void Drawing_OnDraw(EventArgs args)
-        {
-            if (ComboMenu["Combo.R"].Cast<CheckBox>().CurrentValue)
-            {
-                var pos = Drawing.WorldToScreen(Player.Instance.Position);
-                Text.Draw("Use R in combo?: " + IsRActive, System.Drawing.Color.AliceBlue, (int)pos.X - 45,
-                    (int)pos.Y + 40);
-            }            
+            Drawing.OnEndScene += Drawing_OnEndScene;
+
+            Game.OnTick += Game_OnTick;
+            
+            Gapcloser.OnGapcloser += Gapcloser_OnGapcloser;
+
+            Game.OnUpdate += OnGameUpdate;
+
+            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            
+
         }
 
         private static void Drawing_OnEndScene(EventArgs args)
@@ -327,8 +325,26 @@ namespace _HTTF_Riven
                 }
             }
         }
+        private static
+            void OnGameUpdate(EventArgs args)
+        {
+            if (CheckSkin())
+            {
+                EloBuddy.Player.SetSkinId(SkinId());
+            }
+        }
 
-        private static void DoQSS()
+        private static int SkinId()
+        {
+            return MiscMenu["Skinid"].Cast<Slider>().CurrentValue;
+        }
+
+        private static bool CheckSkin()
+        {
+            return MiscMenu["checkSkin"].Cast<CheckBox>().CurrentValue;
+        }
+    
+    private static void DoQSS()
         {
             if (!MiscMenu["AutoQSS"].Cast<CheckBox>().CurrentValue) return;
 

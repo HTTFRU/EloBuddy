@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Color = System.Drawing.Color;
 using EloBuddy;
 using EloBuddy.SDK;
 using SharpDX;

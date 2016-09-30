@@ -40,9 +40,7 @@ namespace _HTTF_Riven
             if (Riven.ComboMenu["Combo.R"].Cast<CheckBox>().CurrentValue && Riven.R1.IsReady() && !Player.Instance.HasBuff("RivenFengShuiEngine"))
             {
                 if (Riven.ComboMenu["Combo.RCombo"].Cast<CheckBox>().CurrentValue &&
-                    target.Health > DamageLogic.ComboDamage(target, true)
-                    && target.Health < DamageLogic.ComboDamage(target)
-                    && target.Health > Player.Instance.GetAutoAttackDamage(target, true) * 2 ||
+                    target.Health > Player.Instance.GetAutoAttackDamage(target, true) * 2 ||
                     Riven.ComboMenu["Combo.RPeople"].Cast<CheckBox>().CurrentValue &&
                     Player.Instance.CountEnemiesInRange(1000) > 1 || Riven.IsRActive)
                 {
@@ -62,14 +60,6 @@ namespace _HTTF_Riven
             }
 
 
-            if (Riven.MiscMenu["Youmuu"].Cast<CheckBox>().CurrentValue &&
-                target.Distance(Player.Instance) <= Riven.E.Range && Riven.E.IsReady())
-            {
-                if (target.IsValidTarget(Riven.E.Range))
-                {
-                    Use();
-                }
-            }
 
             if (Riven.ComboMenu["Combo.W"].Cast<CheckBox>().CurrentValue &&
                 target.Distance(Player.Instance) <= Riven.W.Range && Riven.W.IsReady())
@@ -83,10 +73,7 @@ namespace _HTTF_Riven
             }
         }
 
-        private static void Use()
-        {
-            throw new NotImplementedException();
-        }
+
 
         public static void Harass()
         {
