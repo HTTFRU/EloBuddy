@@ -1,0 +1,12 @@
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Kassadin\HTTF Kassadin\bin\Release\HTTF Kassadin.exe.config
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Kassadin\HTTF Kassadin\bin\Release\HTTF Kassadin.exe
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Kassadin\HTTF Kassadin\bin\Release\HTTF Kassadin.pdb
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Kassadin\HTTF Kassadin\bin\Release\EloBuddy.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Kassadin\HTTF Kassadin\bin\Release\EloBuddy.Sandbox.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Kassadin\HTTF Kassadin\bin\Release\EloBuddy.SDK.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Kassadin\HTTF Kassadin\bin\Release\Newtonsoft.Json.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Kassadin\HTTF Kassadin\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Kassadin\HTTF Kassadin\bin\Release\SharpDX.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Kassadin\HTTF Kassadin\obj\Release\HTTF Kassadin.csprojResolveAssemblyReference.cache
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Kassadin\HTTF Kassadin\obj\Release\HTTF Kassadin.exe
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Kassadin\HTTF Kassadin\obj\Release\HTTF Kassadin.pdb
