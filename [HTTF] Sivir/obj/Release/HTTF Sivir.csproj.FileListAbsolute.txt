@@ -1,0 +1,11 @@
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Sivir\HTTF Sivir\bin\Release\HTTF Sivir.exe.config
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Sivir\HTTF Sivir\bin\Release\HTTF Sivir.exe
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Sivir\HTTF Sivir\bin\Release\HTTF Sivir.pdb
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Sivir\HTTF Sivir\bin\Release\EloBuddy.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Sivir\HTTF Sivir\bin\Release\EloBuddy.Sandbox.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Sivir\HTTF Sivir\bin\Release\EloBuddy.SDK.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Sivir\HTTF Sivir\bin\Release\Newtonsoft.Json.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Sivir\HTTF Sivir\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Sivir\HTTF Sivir\bin\Release\SharpDX.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Sivir\HTTF Sivir\obj\Release\HTTF Sivir.exe
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Sivir\HTTF Sivir\obj\Release\HTTF Sivir.pdb
