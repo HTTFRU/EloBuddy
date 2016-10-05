@@ -3,6 +3,7 @@ using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Constants;
 using EloBuddy.SDK.Menu.Values;
+using System.Linq;
 
 namespace _HTTF_Riven
 { 

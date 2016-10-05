@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Drawing;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
-using EloBuddy.SDK.Rendering;
 using SharpDX;
 using System.Linq;
 
@@ -62,7 +60,7 @@ namespace _HTTF_Riven
         private static void Main(string[] args)
         {
             Loading.OnLoadingComplete += Loading_OnLoadingComplete;
-            Chat.Print("Riven HTTF Active Version 1.2.1");
+            Chat.Print("Riven HTTF Active Version 6.20.2");
         }
 
         private static void Loading_OnLoadingComplete(EventArgs args)
@@ -70,7 +68,7 @@ namespace _HTTF_Riven
             if (Player.Instance.Hero != Champion.Riven) return;
 
             Menu = MainMenu.AddMenu("HTTF Riven", "httfRiven");
-            Menu.AddLabel("Best Riven Addon Patch +6.19 ");
+            Menu.AddLabel("Best Riven Addon Patch +6.20 ");
             Menu.AddLabel("Your comments and questions to the forum ");
             Menu.AddLabel("HELP ME , PM ME. AND MY SKYPE Bynoob_01 ");
 
@@ -136,40 +134,22 @@ namespace _HTTF_Riven
             MiscMenu.Add("Skinid", new Slider("Skin ID", 0, 0, 11));
             ShieldMenu = Menu.AddSubMenu("AutoShield", "AutoShield");
             ShieldMenu.Add("Shield", new CheckBox("AutoShield"));
-            ShieldMenu.Add("Delay", new Slider("Delay For Shield", 0, 0, 500));
+            ShieldMenu.Add("AutoDiels", new CheckBox("AutoDelay(Humanizer)"));
             ShieldMenu.AddLabel("•Auto Shield(beta)•");
-            foreach (var enemy in EntityManager.Heroes.Enemies.Where(a => a.Team != Player.Instance.Team))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy))
             {
-                foreach (
-                    var spell in
-                        enemy.Spellbook.Spells.Where(
-                            a =>
-                                a.Slot == SpellSlot.Q || a.Slot == SpellSlot.W || a.Slot == SpellSlot.E ||
-                                a.Slot == SpellSlot.R))
+                for (var i = 0; i < 4; i++)
                 {
-                    if (spell.Slot == SpellSlot.Q)
+                    var spell = enemy.Spellbook.Spells[i];
+                    if (spell.SData.TargettingType != SpellDataTargetType.Self && spell.SData.TargettingType != SpellDataTargetType.SelfAndUnit)
                     {
-                        ShieldMenu.Add(spell.SData.Name,
-                            new CheckBox(enemy.ChampionName + " - Q - " + spell.Name, false));
-                    }
-                    else if (spell.Slot == SpellSlot.W)
-                    {
-                        ShieldMenu.Add(spell.SData.Name,
-                            new CheckBox(enemy.ChampionName + " - W - " + spell.Name, false));
-                    }
-                    else if (spell.Slot == SpellSlot.E)
-                    {
-                        ShieldMenu.Add(spell.SData.Name,
-                            new CheckBox(enemy.ChampionName + " - E - " + spell.Name, false));
-                    }
-                    else if (spell.Slot == SpellSlot.R)
-                    {
-                        ShieldMenu.Add(spell.SData.Name,
-                            new CheckBox(enemy.ChampionName + " - R - " + spell.Name, false));
+                        if (spell.SData.TargettingType == SpellDataTargetType.Unit)
+                            ShieldMenu.Add("Shield" + spell.SData.Name, new CheckBox(spell.Name, true));
+                        else
+                            ShieldMenu.Add("Shield" + spell.SData.Name, new CheckBox(spell.Name, false));
                     }
                 }
             }
-
 
             ItemLogic.Init();
             EventLogic.Init();
@@ -193,8 +173,8 @@ namespace _HTTF_Riven
 
             Game.OnUpdate += OnGameUpdate;
 
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
-            
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+
 
         }
 
@@ -227,73 +207,69 @@ namespace _HTTF_Riven
                 }
             }
         }
-        private static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        static bool UseE { get { return getCheckBoxItem(ShieldMenu, "Shield"); } }
+        static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (ShieldMenu["Shield"].Cast<CheckBox>().CurrentValue)
-                if ((args.Slot == SpellSlot.Q || args.Slot == SpellSlot.W || args.Slot == SpellSlot.E ||
-                 args.Slot == SpellSlot.R) && sender.IsEnemy && E.IsReady())
+            if (ShieldMenu["Shield" + args.SData.Name] != null && !getCheckBoxItem(ShieldMenu, "Shield" + args.SData.Name))
+                return;
+            if (sender != null && args.Target != null && sender.Type == GameObjectType.AIHeroClient && args.Target.IsMe && sender.IsEnemy && UseE && E.IsReady())
             {
-                if (args.SData.TargettingType == SpellDataTargetType.Unit ||
-                    args.SData.TargettingType == SpellDataTargetType.SelfAndUnit ||
-                    args.SData.TargettingType == SpellDataTargetType.Self)
+                if (!args.SData.ConsideredAsAutoAttack)
                 {
-                    if ((args.Target.NetworkId == Player.Instance.NetworkId && args.Time < 1.5 ||
-                         args.End.Distance(Player.Instance.ServerPosition) <= Player.Instance.BoundingRadius * 3) &&
-                        ShieldMenu[args.SData.Name].Cast<CheckBox>().CurrentValue)
+                    if (!args.SData.Name.Contains("summoner") && !args.SData.Name.Contains("TormentedSoil"))
                     {
                         E.Cast();
                     }
                 }
-                else if (args.SData.TargettingType == SpellDataTargetType.LocationAoe)
+                else if (args.SData.Name == "BlueCardAttack" || args.SData.Name == "RedCardAttack" || args.SData.Name == "GoldCardAttack")
                 {
-                    var castvector =
-                        new Geometry.Polygon.Circle(args.End, args.SData.CastRadius).IsInside(
-                            Player.Instance.ServerPosition);
-
-                    if (castvector && ShieldMenu[args.SData.Name].Cast<CheckBox>().CurrentValue)
-                    {
-                            
-                            E.Cast();
-                    }
+                    E.Cast();
                 }
-
-                else if (args.SData.TargettingType == SpellDataTargetType.Cone)
+            }
+            else if (CanHitSkillShot(ObjectManager.Player, args) && !sender.IsMe && sender.Type == GameObjectType.AIHeroClient && E.IsReady())
+            {
+                E.Cast();
+            }
+        }
+        static bool CanHitSkillShot(Obj_AI_Base target, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (args.Target == null && target.IsValidTarget(float.MaxValue))
+            {
+                int Collide = 0;
+                if (args.SData.LineMissileEndsAtTargetPoint)
                 {
-                    var castvector =
-                        new Geometry.Polygon.Arc(args.Start, args.End, args.SData.CastConeAngle, args.SData.CastRange)
-                            .IsInside(Player.Instance.ServerPosition);
-
-                    if (castvector && ShieldMenu[args.SData.Name].Cast<CheckBox>().CurrentValue)
-                    {
-                        E.Cast();
-                    }
-                }
-
-                else if (args.SData.TargettingType == SpellDataTargetType.SelfAoe)
-                {
-                    var castvector =
-                        new Geometry.Polygon.Circle(sender.ServerPosition, args.SData.CastRadius).IsInside(
-                            Player.Instance.ServerPosition);
-
-                    if (castvector && ShieldMenu[args.SData.Name].Cast<CheckBox>().CurrentValue)
-                    {
-                        E.Cast();
-                    }
+                    Collide = 0;
                 }
                 else
                 {
-                    var castvector =
-                        new Geometry.Polygon.Rectangle(args.Start, args.End, args.SData.LineWidth).IsInside(
-                            Player.Instance.ServerPosition);
+                    Collide = 1;
+                }
+                var pred = Prediction.Position.PredictLinearMissile(target, args.SData.CastRange, (int)args.SData.CastRadius, (int)args.SData.CastTime * 1000, args.SData.MissileSpeed, Collide).CastPosition;
+                if (pred == null)
 
-                    if (castvector && ShieldMenu[args.SData.Name].Cast<CheckBox>().CurrentValue)
+                    return false;
+                if (args.SData.LineWidth > 0)
+                {
+                    var powCalc = Math.Pow(args.SData.LineWidth + target.BoundingRadius, 2);
+                    if (pred.To2D().Distance(args.End.To2D(), args.Start.To2D(), true, true) <= powCalc ||
+                        target.ServerPosition.To2D().Distance(args.End.To2D(), args.Start.To2D(), true, true) <= powCalc)
                     {
-                        E.Cast();
+                        return true;
                     }
                 }
+                else if (target.Distance(args.End) < 50 + target.BoundingRadius ||
+                         pred.Distance(args.End) < 50 + target.BoundingRadius)
+                {
+                    return true;
+                }
             }
+            return false;
         }
 
+        static bool getCheckBoxItem(Menu m, string item)
+        {
+            return m[item].Cast<CheckBox>().CurrentValue;
+        }
 
 
 

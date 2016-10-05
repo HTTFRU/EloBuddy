@@ -44,7 +44,7 @@ namespace _HTTF_Riven
                     Riven.ComboMenu["Combo.RPeople"].Cast<CheckBox>().CurrentValue &&
                     Player.Instance.CountEnemiesInRange(1000) > 1 || Riven.IsRActive)
                 {
-                    if (Riven.E.IsReady())
+                    if (Riven.E.IsReady() && Riven.W.IsReady())
                     {
                         EnableR = true;
                         ForceR();
