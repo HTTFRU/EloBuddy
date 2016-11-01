@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{629DF09E-D7FE-48D4-9AA2-3560CD30674B}</ProjectGuid>
+    <ProjectGuid>{B118D977-0C87-44A7-9FD0-68F9881A1908}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>_HTTF_Riven</RootNamespace>
-    <AssemblyName>[HTTF]Riven</AssemblyName>
+    <RootNamespace>HTTF_Riven_v2</RootNamespace>
+    <AssemblyName>HTTF Riven v2</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -34,22 +34,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EloBuddy">
-      <HintPath>C:\Program Files (x86)\EloBuddy\System\EloBuddy.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\EloBuddy.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.Sandbox">
-      <HintPath>C:\Program Files (x86)\EloBuddy\System\EloBuddy.Sandbox.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\EloBuddy.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.SDK">
-      <HintPath>C:\Program Files (x86)\EloBuddy\System\EloBuddy.SDK.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\EloBuddy.SDK.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>C:\Program Files (x86)\EloBuddy\System\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\Program Files (x86)\EloBuddy\System\SharpDX.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>C:\Program Files (x86)\EloBuddy\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -62,14 +62,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DamageIndicator.cs" />
-    <Compile Include="DamageLogic.cs" />
-    <Compile Include="EventLogic.cs" />
-    <Compile Include="ItemLogic.cs" />
-    <Compile Include="MiscLogic.cs" />
-    <Compile Include="Riven.cs" />
+    <Compile Include="DamageIndicator.cs.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StateLogic.cs" />
+    <Compile Include="Riven.cs" />
+    <Compile Include="RivenMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

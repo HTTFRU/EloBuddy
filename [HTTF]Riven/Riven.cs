@@ -1,377 +1,1297 @@
 ﻿using System;
+using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
 using EloBuddy.SDK.Events;
-using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using SharpDX;
-using System.Linq;
+using EloBuddy.SDK.Rendering;
+using EloBuddy.SDK.Utils;
 
-namespace _HTTF_Riven
+namespace HTTF_Riven_v2
 {
-    internal class Riven
+    class Riven
     {
-        public static AIHeroClient myHero
+
+
+        public static int LastCastW;
+        public static int LastCastQ;
+        public static int CountQ;
+        public static int LastQ;
+        public static int LastW;
+        public static int LastE;
+
+        public static Spell.Skillshot Q;
+        public static Spell.Active W;
+        public static Spell.Skillshot E;
+        public static Spell.Active R;
+        public static Spell.Skillshot R2;
+        public static Spell.Targeted Flash;
+
+        public static Item Hydra;
+        public static Item Tiamat;
+        public static Item Youmu;
+        public static Item Qss;
+        public static Item Mercurial;
+
+        public static AIHeroClient FocusTarget;
+
+        public static void Load()
         {
-            get { return Player.Instance; }
-        }
-        private static Spell.Targeted ignite;
-        public static Spell.Skillshot Flash { get; set; }
-        private static Item Youmu = new Item((int)ItemId.Youmuus_Ghostblade);
-        private static readonly AIHeroClient _Player = ObjectManager.Player;
-        public static Spell.Active Q = new Spell.Active(SpellSlot.Q, 300);
-        public static Spell.Active E = new Spell.Active(SpellSlot.E, 325);
-        public static Spell.Active R1 = new Spell.Active(SpellSlot.R);
-        public static Spell.Skillshot R2 = new Spell.Skillshot(SpellSlot.R, 900, SkillShotType.Cone, 250, 1600, 45)
+            Q = new Spell.Skillshot(SpellSlot.Q, 275, SkillShotType.Circular, 250, 2200, 100);
+            W = new Spell.Active(SpellSlot.W, 250);
+            E = new Spell.Skillshot(SpellSlot.E, 310, SkillShotType.Linear);
+            R = new Spell.Active(SpellSlot.R);
+            R2 = new Spell.Skillshot(SpellSlot.R, 900, SkillShotType.Cone, 250, 1600, 125);
 
-
-        {
-            AllowedCollisionCount = int.MaxValue
-        };
-
-        public static Menu Menu, ComboMenu, FarmMenu, MiscMenu, ShieldMenu;
-        private static object targetSelector;
-        private static readonly float _barLength = 104;
-        private static readonly float _xOffset = 2;
-        private static readonly float _yOffset = 9;
-        private static readonly Vector2 Offset = new Vector2(1, 0);
-
-        public static Spell.Active W
-        {
-            get
+            if (Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner1).Name == "SummonerFlash")
             {
-                return new Spell.Active(SpellSlot.W,
-                    (uint)
-                        (70 + Player.Instance.BoundingRadius +
-                         (Player.Instance.HasBuff("RivenFengShuiEngine") ? 195 : 120)));
+                Flash = new Spell.Targeted(SpellSlot.Summoner1, 425);
             }
-        }
-
-        public static bool IsRActive
-        {
-            get
+            else if (Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner2).Name == "SummonerFlash")
             {
-                return ComboMenu["forcedRKeybind"].Cast<KeyBind>().CurrentValue &&
-                       ComboMenu["Combo.R"].Cast<CheckBox>().CurrentValue;
+                Flash = new Spell.Targeted(SpellSlot.Summoner2, 425);
             }
+
+            Hydra = new Item((int)ItemId.Ravenous_Hydra, 350);
+            Tiamat = new Item((int)ItemId.Tiamat, 350);
+            Youmu = new Item((int)ItemId.Youmuus_Ghostblade, 0);
+            Qss = new Item((int)ItemId.Quicksilver_Sash, 0);
+            Mercurial = new Item((int)ItemId.Mercurial_Scimitar, 0);
+
+
+            DamageIndicator.Initialize(DamageTotal);
+            Game.OnUpdate += Game_OnUpdate;
+            Game.OnWndProc += Game_OnWndProc;
+            Interrupter.OnInterruptableSpell += Interrupter_OnInterruptableSpell;
+            Gapcloser.OnGapcloser += Gapcloser_OnGapcloser;
+            Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+
+            Obj_AI_Turret.OnBasicAttack += Obj_AI_Turret_OnBasicAttack2;
+            Orbwalker.OnPostAttack += Orbwalker_OnPostAttack;
+            Orbwalker.OnPreAttack += BeforeAttack;
+            Drawing.OnDraw += Drawing_OnDraw;
         }
-
-        private static void Main(string[] args)
+        public static void Obj_AI_Turret_OnBasicAttack2(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            Loading.OnLoadingComplete += Loading_OnLoadingComplete;
-            Chat.Print("Riven HTTF Active Version 6.20.2");
-        }
-
-        private static void Loading_OnLoadingComplete(EventArgs args)
-        {
-            if (Player.Instance.Hero != Champion.Riven) return;
-
-            Menu = MainMenu.AddMenu("HTTF Riven", "httfRiven");
-            Menu.AddLabel("Best Riven Addon Patch +6.20 ");
-            Menu.AddLabel("Your comments and questions to the forum ");
-            Menu.AddLabel("HELP ME , PM ME. AND MY SKYPE Bynoob_01 ");
-
-            ComboMenu = Menu.AddSubMenu("Combo And Etc", "comboSettings");
-            ComboMenu.Add("Combo.Q", new CheckBox("Use Q"));
-            ComboMenu.Add("Combo.W", new CheckBox("Use W"));
-            ComboMenu.Add("Combo.E", new CheckBox("Use E"));
-            ComboMenu.Add("Combo.R2", new CheckBox("Use R (Killable)"));
-            ComboMenu.Add("ComboMode", new ComboBox("Combo Mode:", 0, "Normal", "VeryFast(Beta)"));
-            ComboMenu.AddLabel("R1 Settings");
-            ComboMenu.Add("Combo.R", new CheckBox("Use R"));
-            ComboMenu.Add("forcedRKeybind", new KeyBind("Use R in combo?", false, KeyBind.BindTypes.PressToggle, 'T'));
-            ComboMenu.AddLabel("R2 Settings");
-            ComboMenu.Add("BoxBoxLogicR2", new CheckBox("BoxboxLogicR2(Beta)"));
-            ComboMenu.Add("R2Mode", new ComboBox("R2 Mode:", 0, "Kill Only", "Max Damage"));
-
-            ComboMenu.AddLabel("When To use R");
-            ComboMenu.Add("Combo.RCombo", new CheckBox("Cant Kill with Combo"));
-            ComboMenu.Add("Combo.RPeople", new CheckBox("Have more than 1 person near"));
-            ComboMenu.AddLabel("Harass Settings");
-            ComboMenu.Add("Harass.Q", new CheckBox("Use Q"));
-            ComboMenu.Add("Harass.W", new CheckBox("Use W"));
-            ComboMenu.Add("Harass.E", new CheckBox("Use E"));
-            var Style = ComboMenu.Add("harassstyle", new Slider("Harass Style(Beta)", 0, 0, 3));
-            Style.OnValueChange += delegate
+            if (sender is Obj_AI_Turret && sender.Distance(Player.Instance) < 800 && sender.IsAlly)
             {
-                Style.DisplayName = "Harass Style: " + new[] { "Q,Q,W,Q and E ", "E,H,Q3,W", "E,H,AA,Q,W", "E,Q,H,AA,Q,AA,W,AA,Q,AA" }[Style.CurrentValue];
-            };
-            Style.DisplayName = "Harass Style: " + new[] { "Q,Q,W,Q and E ", "E,H,Q3,W", "E,H,AA,Q,W", "E,Q,H,AA,Q,AA,W,AA,Q,AA" }[Style.CurrentValue];
-            
-            ComboMenu.AddLabel("Misc Settings");
-            ComboMenu.AddLabel("Keep Alive Settings");
-            ComboMenu.Add("Alive.Q", new CheckBox("Keep Q Alive"));
-            ComboMenu.Add("Alive.R", new CheckBox("Use R2 Before Expire"));
-            
-            ComboMenu.AddLabel("Humanizer Settings(BETA)");
-            ComboMenu.Add("HumanizerDelay", new Slider("Humanizer Delay (ms)", 0, 0, 300));
-
-
-            FarmMenu = Menu.AddSubMenu("Clear Settings", "farmSettings");
-            FarmMenu.AddLabel("Last Hit");
-            FarmMenu.Add("LastHit.Q", new CheckBox("Use Q"));
-            FarmMenu.Add("LastHit.W", new CheckBox("Use W"));
-            FarmMenu.AddLabel("Wave Clear");
-            FarmMenu.Add("WaveClear.Q", new CheckBox("Use Q"));
-            FarmMenu.Add("WaveClear.W", new CheckBox("Use W"));
-            FarmMenu.AddLabel("Jungle");
-            FarmMenu.Add("Jungle.Q", new CheckBox("Use Q"));
-            FarmMenu.Add("Jungle.W", new CheckBox("Use W"));
-            FarmMenu.Add("Jungle.E", new CheckBox("Use E"));
-
-            MiscMenu = Menu.AddSubMenu("Misc", "Misc");
-            MiscMenu.AddLabel("• Draw •");
-            MiscMenu.Add("DamageIndicator", new CheckBox("Draw Damage"));
-            MiscMenu.AddLabel("• Misc •");
-            MiscMenu.Add("gapcloser", new CheckBox("W on enemy gapcloser"));
-            MiscMenu.Add("AutoIgnite", new CheckBox("Auto Ignite"));
-            MiscMenu.Add("AutoW", new CheckBox("Auto W"));
-            MiscMenu.Add("AutoQSS", new CheckBox("Auto QSS"));
-            MiscMenu.Add("Youmuu", new CheckBox("Use Youmuu?(beta)"));
-            MiscMenu.AddLabel("• SkinHack •");
-            MiscMenu.Add("checkSkin", new CheckBox("Use Skin Changer"));
-            MiscMenu.Add("Skinid", new Slider("Skin ID", 0, 0, 11));
-            ShieldMenu = Menu.AddSubMenu("AutoShield", "AutoShield");
-            ShieldMenu.Add("Shield", new CheckBox("AutoShield"));
-            ShieldMenu.Add("AutoDiels", new CheckBox("AutoDelay(Humanizer)"));
-            ShieldMenu.AddLabel("•Auto Shield(beta)•");
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy))
-            {
-                for (var i = 0; i < 4; i++)
+                if (!(args.Target is AIHeroClient) && args.Target != null)
                 {
-                    var spell = enemy.Spellbook.Spells[i];
-                    if (spell.SData.TargettingType != SpellDataTargetType.Self && spell.SData.TargettingType != SpellDataTargetType.SelfAndUnit)
+
+
+
+                    var Minions = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, Player.Instance.Position, 150);
+                    foreach (var Minion in Minions)
+
+                        if (Minion != null && args.Target == Minion && Orbwalker.CanAutoAttack)
+
+                        {
+                            var AMinions = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Ally, Minion.Position, 300).ToList();
+
+
+
+                            if (Q.IsReady() && Prediction.Health.GetPrediction(Minion, 930 * (int)(Minion.Distance(sender.Position) / 750)) > Player.Instance.TotalAttackDamage && Prediction.Health.GetPrediction(Minion, 930 * (int)(Minion.Distance(sender.Position) / 750)) + (int)(AMinions.Count * -2) <= sender.TotalAttackDamage * 1.25)
+                            {
+
+                                Orbwalker.DisableMovement = true;
+                                Core.DelayAction(() => Player.IssueOrder(GameObjectOrder.AttackUnit, args.Target), 0);
+                                Core.DelayAction(() => Q.Cast(Minion.ServerPosition), 291);
+                                Core.DelayAction(() => Orbwalker.DisableMovement = false, 300);
+
+                                Chat.Print("Last Hitting With AA-Q");
+                            }
+                            else if (W.IsReady() && Prediction.Health.GetPrediction(Minion, 940 * (int)(Minion.Distance(sender.Position) / 750)) > Player.Instance.TotalAttackDamage && Prediction.Health.GetPrediction(Minion, 940 * (int)(Minion.Distance(sender.Position) / 750)) + (int)(AMinions.Count * -2) <= sender.TotalAttackDamage * 1.25)
+                            {
+
+                                Orbwalker.DisableMovement = true;
+                                Core.DelayAction(() => Player.IssueOrder(GameObjectOrder.AttackUnit, args.Target), 0);
+                                Core.DelayAction(() => W.Cast(Minion.ServerPosition), 291);
+                                Core.DelayAction(() => Orbwalker.DisableMovement = false, 300);
+
+                                Chat.Print("Last Hitting With AA-w");
+                            }
+
+
+
+
+
+
+
+                        }
+                }
+            }
+        }
+
+
+        private static void Drawing_OnDraw(EventArgs args)
+        {
+
+
+            if (RivenMenu.Keybind(RivenMenu.Combo, "BurstAllowed"))
+            {
+                if (Riven.FocusTarget != null)
+                {
+                    Circle.Draw(Color.DarkBlue, 150, Riven.FocusTarget.Position);
+                }
+            }
+
+            if (RivenMenu.Keybind(RivenMenu.Combo, "BurstAllowed"))
+            {
+                Circle.Draw(Color.Red, 800, Player.Instance.Position);
+            }
+        }
+
+        private static void BeforeAttack(AttackableUnit target, Orbwalker.PreAttackArgs args)
+        {
+            if (ObjectManager.Player.Level <= 1)
+            {
+
+                var Junglemode = Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear);
+
+                if (!Junglemode || !RivenMenu.CheckBox(RivenMenu.Laneclear, "Level_1 JungleClearing"))
+                {
+                    return;
+                }
+
+
+                else
+                {
                     {
-                        if (spell.SData.TargettingType == SpellDataTargetType.Unit)
-                            ShieldMenu.Add("Shield" + spell.SData.Name, new CheckBox(spell.Name, true));
-                        else
-                            ShieldMenu.Add("Shield" + spell.SData.Name, new CheckBox(spell.Name, false));
+                        args.Process = false;
                     }
                 }
             }
 
-            ItemLogic.Init();
-            EventLogic.Init();
-
-            var slot = Player.Instance.GetSpellSlotFromName("summonerflash");
-
-            if (slot != SpellSlot.Unknown)
-            {
-                Flash = new Spell.Skillshot(slot, 680, SkillShotType.Linear);
-            }
-
-            ignite = new Spell.Targeted(ObjectManager.Player.GetSpellSlotFromName("summonerdot"), 600);
-
-
-
-            Drawing.OnEndScene += Drawing_OnEndScene;
-
-            Game.OnTick += Game_OnTick;
-            
-            Gapcloser.OnGapcloser += Gapcloser_OnGapcloser;
-
-            Game.OnUpdate += OnGameUpdate;
-
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
-
-
         }
 
-        private static void Drawing_OnEndScene(EventArgs args)
-        {
-            if (_Player.IsDead)
-                return;
-            if (!MiscMenu["DamageIndicator"].Cast<CheckBox>().CurrentValue) return;
-            foreach (var aiHeroClient in EntityManager.Heroes.Enemies)
-            {
-                if (!aiHeroClient.IsHPBarRendered || !aiHeroClient.VisibleOnScreen) continue;
-                {
-                    if (aiHeroClient.Distance(_Player) < 1500)
-                    {
-                        foreach (var enemy in EntityManager.Heroes.Enemies.Where(a => !a.IsDead && a.IsHPBarRendered))
-                        {
-                            var damage = DamageLogic.FastComboDamage(enemy);
-                            var damagepercent = (enemy.TotalShieldHealth() - damage > 0 ? enemy.TotalShieldHealth() - damage : 0) /
-                                                (enemy.MaxHealth + enemy.AllShield + enemy.AttackShield + enemy.MagicShield);
-                            var hppercent = enemy.TotalShieldHealth() /
-                                            (enemy.MaxHealth + enemy.AllShield + enemy.AttackShield + enemy.MagicShield);
-                            var start = new Vector2((int)(enemy.HPBarPosition.X + Offset.X + damagepercent * 104),
-                                (int)(enemy.HPBarPosition.Y + Offset.Y) - -9);
-                            var end = new Vector2((int)(enemy.HPBarPosition.X + Offset.X + hppercent * 104) + 2,
-                                (int)(enemy.HPBarPosition.Y + Offset.Y) - -9);
 
-                            Drawing.DrawLine(start, end, 9, System.Drawing.Color.Chartreuse);
+
+
+
+
+        private static bool HasHydra()
+        {
+            if (!Hydra.IsOwned() && !RivenMenu.CheckBox(RivenMenu.Misc, "Hydra"))
+                return false;
+
+            if (Hydra.IsReady())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool HasTiamat()
+        {
+            if (!Tiamat.IsOwned() && !RivenMenu.CheckBox(RivenMenu.Misc, "Tiamat"))
+                return false;
+
+            if (Tiamat.IsReady())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool HasYoumu()
+        {
+            if (!Youmu.IsOwned() && !RivenMenu.CheckBox(RivenMenu.Misc, "Youmu"))
+                return false;
+
+            if (Youmu.IsReady())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool HasQss()
+        {
+            if (!Qss.IsOwned() && !RivenMenu.CheckBox(RivenMenu.Misc, "Qss"))
+                return false;
+
+            if (Qss.IsReady())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool HasMercurial()
+        {
+            if (!Mercurial.IsOwned() && !RivenMenu.CheckBox(RivenMenu.Misc, "Qss"))
+                return false;
+
+            if (Mercurial.IsReady())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool CheckUlt()
+        {
+            if (Player.Instance.HasBuff("RivenFengShuiEngine"))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private static void Burst()
+        {
+            if (FocusTarget.Health == 0)
+                return;
+
+            if (RivenMenu.ComboBox(RivenMenu.Combo, "BurstType") == 0)
+            {
+                if (DamageTotal(FocusTarget) >= FocusTarget.Health)
+                {
+                    if (FocusTarget.IsValidTarget(800))
+                    {
+                        switch (RivenMenu.Slider(RivenMenu.Combo, "BurstStyle"))
+                        {
+                            case 1:
+
+                                if (E.IsReady())
+                                {
+                                    Player.CastSpell(SpellSlot.E, FocusTarget.Position);
+                                }
+
+                                if (Flash.IsReady())
+                                {
+                                    Flash.Cast(FocusTarget.Position);
+                                }
+
+                                if (R.IsReady() && !CheckUlt())
+                                {
+                                    R.Cast();
+                                }
+
+                                if (FocusTarget.IsValidTarget(Hydra.Range))
+                                {
+                                    if (HasTiamat())
+                                    {
+                                        Tiamat.Cast();
+                                    }
+
+                                    if (HasHydra())
+                                    {
+                                        Hydra.Cast();
+                                    }
+                                }
+
+                                if (W.IsReady())
+                                {
+                                    if (FocusTarget.IsValidTarget(W.Range))
+                                    {
+                                        W.Cast();
+                                    }
+                                }
+
+                                break;
+
+                            case 2:
+
+                                if (E.IsReady())
+                                {
+                                    Player.CastSpell(SpellSlot.E, FocusTarget.Position);
+                                }
+
+                                if (R.IsReady() && !CheckUlt())
+                                {
+                                    R.Cast();
+                                }
+
+                                if (Flash.IsReady())
+                                {
+                                    Flash.Cast(FocusTarget.Position);
+                                }
+
+                                if (FocusTarget.IsValidTarget(Hydra.Range))
+                                {
+                                    if (HasTiamat())
+                                    {
+                                        Tiamat.Cast();
+                                    }
+
+                                    if (HasHydra())
+                                    {
+                                        Hydra.Cast();
+                                    }
+                                }
+
+                                if (W.IsReady())
+                                {
+                                    if (FocusTarget.IsValidTarget(W.Range))
+                                    {
+                                        W.Cast();
+                                    }
+                                }
+
+                                break;
                         }
                     }
                 }
             }
         }
-        static bool UseE { get { return getCheckBoxItem(ShieldMenu, "Shield"); } }
-        static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+
+        private static void Flee()
         {
-            if (ShieldMenu["Shield" + args.SData.Name] != null && !getCheckBoxItem(ShieldMenu, "Shield" + args.SData.Name))
+            if (RivenMenu.CheckBox(RivenMenu.Combo, "UseQFlee"))
+            {
+                Q.Cast((Game.CursorPos.Distance(Player.Instance) > Q.Range ? Player.Instance.Position.Extend(Game.CursorPos, Q.Range - 1).To3D() : Game.CursorPos));
+            }
+            var Target = TargetSelector.GetTarget(R2.Range, DamageType.Physical);
+            if (RivenMenu.CheckBox(RivenMenu.Combo, "UseEFlee"))
+            {
+                if (Target == null || !Target.IsValidTarget(W.Range))
+                {
+                    E.Cast((Game.CursorPos.Distance(Player.Instance) > E.Range ? Player.Instance.Position.Extend(Game.CursorPos, E.Range - 1).To3D() : Game.CursorPos));
+                }
+                else if (Target.IsValidTarget(W.Range))
+                {
+                    E.Cast((Game.CursorPos.Distance(Player.Instance) > E.Range ? Player.Instance.Position.Extend(Game.CursorPos, E.Range - 1).To3D() : Game.CursorPos));
+                    Core.DelayAction(() => Player.CastSpell(SpellSlot.W), 40);
+                }
+            }
+        }
+
+        private static void ChooseR(AIHeroClient Target)
+        {
+            switch (RivenMenu.ComboBox(RivenMenu.Combo, "UseRType"))
+            {
+                case 0:
+
+                    if (Target.HealthPercent <= 40)
+                    {
+                        if (RivenMenu.CheckBox(RivenMenu.Combo, "BrokenAnimations"))
+                        {
+                            if (W.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo"))
+                            {
+                                if (Target.IsValidTarget(W.Range))
+                                {
+                                    R.Cast();
+                                    W.Cast();
+                                }
+                            }
+                            else if (E.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
+                            {
+                                if (Target.IsValidTarget(E.Range))
+                                {
+                                    R.Cast();
+                                    Player.CastSpell(SpellSlot.E, Target.Position);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            R.Cast();
+                        }
+                    }
+
+                    break;
+
+                case 1:
+
+                    if (DamageTotal(Target) >= Target.Health)
+                    {
+                        if (RivenMenu.CheckBox(RivenMenu.Combo, "BrokenAnimations"))
+                        {
+                            if (W.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo"))
+                            {
+                                if (Target.IsValidTarget(W.Range))
+                                {
+                                    R.Cast();
+                                    W.Cast();
+                                }
+                            }
+                            else if (E.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
+                            {
+                                if (Target.IsValidTarget(E.Range))
+                                {
+                                    R.Cast();
+                                    Player.CastSpell(SpellSlot.E, Target.Position);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            R.Cast();
+                        }
+                    }
+
+                    break;
+
+                case 2:
+
+                    if (RivenMenu.CheckBox(RivenMenu.Combo, "BrokenAnimations"))
+                    {
+                        if (W.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo"))
+                        {
+                            if (Target.IsValidTarget(W.Range))
+                            {
+                                R.Cast();
+                                W.Cast();
+                            }
+                        }
+                        else if (E.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
+                        {
+                            if (Target.IsValidTarget(E.Range))
+                            {
+                                R.Cast();
+                                Player.CastSpell(SpellSlot.E, Target.Position);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        R.Cast();
+                    }
+
+                    break;
+
+                case 3:
+
+                    if (RivenMenu.Keybind(RivenMenu.Combo, "ForceR"))
+                    {
+                        R.Cast();
+                    }
+
+                    break;
+            }
+        }
+        private static void ChooseR2(AIHeroClient Target)
+        {
+            switch (RivenMenu.ComboBox(RivenMenu.Combo, "UseR2Type"))
+            {
+                case 0:
+
+
+                    if (Target.IsValidTarget(R2.Range))
+                    {
+                        if (RDamage(Target, Target.Health) * 0.95 >= Target.Health)
+                        {
+                            var RPred = R2.GetPrediction(Target);
+
+                            if (RPred.HitChance >= HitChance.High)
+                            {
+                                R2.Cast(RPred.UnitPosition);
+                            }
+                        }
+                    }
+
+                    break;
+
+                case 1:
+
+                    if (Target.IsValidTarget(R2.Range))
+                    {
+                        var RPred = R2.GetPrediction(Target);
+
+                        if (RPred.HitChance >= HitChance.High)
+                        {
+                            R2.Cast(RPred.UnitPosition);
+                        }
+                    }
+
+                    break;
+            }
+        }
+
+        private static void Combo()
+        {
+            var Target = TargetSelector.GetTarget(R2.Range, DamageType.Physical);
+
+            if (Target != null)
+            {
+                if (R.IsReady())
+                {
+                    if (CheckUlt() == false)
+                    {
+                        if (Target.HealthPercent >= RivenMenu.Slider(RivenMenu.Combo, "DontR1"))
+                        {
+                            ChooseR(Target);
+                        }
+                    }
+                }
+
+                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseR2Combo"))
+                {
+                    if (CheckUlt() == true)
+                    {
+                        ChooseR2(Target);
+                    }
+                }
+
+                if (Player.Instance.CountEnemiesInRange(Hydra.Range) > 0)
+                {
+                    if (HasHydra())
+                    {
+                        Hydra.Cast();
+                    }
+
+                    if (HasTiamat())
+                    {
+                        Tiamat.Cast();
+                    }
+                }
+
+                if (HasYoumu())
+                {
+                    if (Target.Health <= RivenMenu.Slider(RivenMenu.Misc, "YoumuHealth"))
+                    {
+                        Youmu.Cast();
+                    }
+                }
+
+                if (CountQ == 2 && Q.IsReady())
+                {
+                    if (Player.Instance.IsFacing(Target) && Target.IsValidTarget(450) && ObjectManager.Player.Position.Distance(Target.ServerPosition) > 400 && Target.CanMove && !Player.HasBuff("Valor"))
+                    {
+                        Player.CastSpell(SpellSlot.Q, Target.Position);
+                    }
+                }
+
+                if (E.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
+                {
+                    if (Target.IsValidTarget(E.Range) && Target.CanMove)
+                    {
+                        Player.CastSpell(SpellSlot.E, Target.Position);
+                    }
+                }
+
+                if (W.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo"))
+                {
+                    if (Target.IsValidTarget(W.Range) && Target.CanMove && !Player.HasBuff("Valor"))
+                    {
+                        Player.CastSpell(SpellSlot.W, Target.Position);
+                    }
+                }
+
+                if (Player.Instance.IsFacing(Target) && ObjectManager.Player.Position.Distance(Target.ServerPosition) > Player.Instance.GetAutoAttackRange(Target) && ObjectManager.Player.Position.Distance(Target.ServerPosition) < 400)
+                {
+                    {
+                        Q.Cast(Player.Instance.Position.Extend(Target.ServerPosition, 250).To3D());
+                    }
+                }
+
+            }
+        }
+
+        private static void Harass()
+        {
+
+            var Target = TargetSelector.GetTarget(R2.Range, DamageType.Physical);
+
+            if (Target != null)
+            {
+                if (Player.Instance.CountEnemiesInRange(Hydra.Range) > 0)
+                {
+                    if (HasHydra())
+                    {
+                        Hydra.Cast();
+                    }
+
+                    if (HasTiamat())
+                    {
+                        Tiamat.Cast();
+                    }
+                }
+
+                if (HasYoumu())
+                {
+                    if (Target.Health <= RivenMenu.Slider(RivenMenu.Misc, "YoumuHealth"))
+                    {
+                        Youmu.Cast();
+                    }
+                }
+                if (Q.IsReady() && CountQ < 2)
+                {
+                    if (Target.IsValidTarget(Q.Range + 300) && !Target.IsDead)
+                    {
+
+                        if (Player.Instance.IsFacing(Target) && ObjectManager.Player.Position.Distance(Target.ServerPosition) > 300)
+                        {
+
+                            Q.Cast(Player.Instance.Position.Extend(Target.ServerPosition, 200).To3D());
+                        }
+                    }
+                }
+                var EPos = Player.Instance.ServerPosition + (Player.Instance.ServerPosition - Target.ServerPosition);
+                if (Player.Instance.IsFacing(Target) && CountQ == 2 && Q.IsReady() && Target.IsValidTarget(Q.Range))
+                {
+
+                    {
+                        Player.CastSpell(SpellSlot.Q, Target.Position);
+                        if (Target.IsValidTarget(W.Range))
+                        {
+                            Core.DelayAction(() => Player.CastSpell(SpellSlot.E, Game.CursorPos), 1200);
+                            Core.DelayAction(() => Player.CastSpell(SpellSlot.W), 1240);
+                        }
+
+                    }
+                }
+
+            }
+        }
+
+        private static void Laneclear()
+        {
+
+        }
+
+
+        private static void LastHit()
+        {
+
+
+            {
+                var mawah = EntityManager.Heroes.Enemies.FirstOrDefault
+                (y => !y.IsDead && y.IsInRange(Player.Instance, 800));
+                var tawah2 = EntityManager.Turrets.Allies.FirstOrDefault
+                (t => !t.IsDead && t.IsInRange(Player.Instance, 800));
+                var Minions2 = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, Player.Instance.Position, Q.Range * 2 + 125);
+
+                foreach (var Minion2 in Minions2)
+                {
+
+                    if (tawah2 == null && Q.IsReady() && ObjectManager.Player.Position.Distance(Minion2.ServerPosition) < ObjectManager.Player.Position.Distance(mawah.ServerPosition))
+                    {
+                        if (Minion2.IsValidTarget(Q.Range * 2 + 125) && !Minion2.IsDead)
+                        {
+
+                            if (Player.Instance.IsFacing(Minion2) && ObjectManager.Player.Position.Distance(Minion2.ServerPosition) > 409 && Minion2.Health - Player.Instance.TotalAttackDamage * 1.2 <= 0)
+                            {
+
+                                Q.Cast(Player.Instance.Position.Extend(Minion2.ServerPosition, 200).To3D());
+                            }
+
+                        }
+                    }
+
+                }
+            }
+        }
+
+
+
+        private static void Jungleclear()
+        {
+            {
+                var Monsters = EntityManager.MinionsAndMonsters.GetJungleMonsters().OrderByDescending(x => x.MaxHealth).FirstOrDefault(x => x.IsValidTarget(E.Range));
+
+                if (Monsters == null)
+                    return;
+
+                if (RivenMenu.CheckBox(RivenMenu.Laneclear, "UseWJG"))
+                {
+                    if (Monsters.IsValidTarget(W.Range))
+                    {
+                        W.Cast();
+                    }
+                }
+
+                if (RivenMenu.CheckBox(RivenMenu.Laneclear, "UseEJG"))
+                {
+                    if (Monsters.IsValidTarget(E.Range))
+                    {
+                        Player.CastSpell(SpellSlot.E, Monsters.Position);
+                    }
+
+                }
+            }
+            {
+                if (ObjectManager.Player.Level <= 1)
+                {
+
+                    var jminions = EntityManager.MinionsAndMonsters.GetJungleMonsters(Player.Instance.ServerPosition, 1000, true);
+                    foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Player.Instance.AttackRange)))
+                    {
+                        if (jungleMobs == null)
+                        {
+
+                            return;
+                        }
+                        if (jungleMobs != null)
+                        {
+                            if (jungleMobs.Name == "SRU_RedMini10.1.3" || jungleMobs.Name == "SRU_BlueMini1.1.2" || jungleMobs.Name == "SRU_BlueMini21.1.3")
+                            {
+
+                                Player.IssueOrder(GameObjectOrder.AttackUnit, jungleMobs);
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                    }
+
+                }
+            }
+
+        }
+
+
+        private static void Game_OnWndProc(WndEventArgs args)
+        {
+            if (args.Msg != 0x202)
                 return;
-            if (sender != null && args.Target != null && sender.Type == GameObjectType.AIHeroClient && args.Target.IsMe && sender.IsEnemy && UseE && E.IsReady())
-            {
-                if (!args.SData.ConsideredAsAutoAttack)
-                {
-                    if (!args.SData.Name.Contains("summoner") && !args.SData.Name.Contains("TormentedSoil"))
-                    {
-                        E.Cast();
-                    }
-                }
-                else if (args.SData.Name == "BlueCardAttack" || args.SData.Name == "RedCardAttack" || args.SData.Name == "GoldCardAttack")
-                {
-                    E.Cast();
-                }
-            }
-            else if (CanHitSkillShot(ObjectManager.Player, args) && !sender.IsMe && sender.Type == GameObjectType.AIHeroClient && E.IsReady())
-            {
-                E.Cast();
-            }
-        }
-        static bool CanHitSkillShot(Obj_AI_Base target, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (args.Target == null && target.IsValidTarget(float.MaxValue))
-            {
-                int Collide = 0;
-                if (args.SData.LineMissileEndsAtTargetPoint)
-                {
-                    Collide = 0;
-                }
-                else
-                {
-                    Collide = 1;
-                }
-                var pred = Prediction.Position.PredictLinearMissile(target, args.SData.CastRange, (int)args.SData.CastRadius, (int)args.SData.CastTime * 1000, args.SData.MissileSpeed, Collide).CastPosition;
-                if (pred == null)
 
-                    return false;
-                if (args.SData.LineWidth > 0)
-                {
-                    var powCalc = Math.Pow(args.SData.LineWidth + target.BoundingRadius, 2);
-                    if (pred.To2D().Distance(args.End.To2D(), args.Start.To2D(), true, true) <= powCalc ||
-                        target.ServerPosition.To2D().Distance(args.End.To2D(), args.Start.To2D(), true, true) <= powCalc)
-                    {
-                        return true;
-                    }
-                }
-                else if (target.Distance(args.End) < 50 + target.BoundingRadius ||
-                         pred.Distance(args.End) < 50 + target.BoundingRadius)
-                {
-                    return true;
-                }
-            }
-            return false;
+            FocusTarget = EntityManager.Heroes.Enemies.FindAll(x => x.IsValid || x.Distance(Game.CursorPos) < 3000 || x.IsVisible || x.Health > 0).OrderBy(x => x.Distance(Game.CursorPos)).FirstOrDefault();
         }
 
-        static bool getCheckBoxItem(Menu m, string item)
-        {
-            return m[item].Cast<CheckBox>().CurrentValue;
-        }
-
-
-
-        private static void Auto()
-        {
-            var w = TargetSelector.GetTarget(W.Range, DamageType.Physical);
-            if (w.IsValidTarget(W.Range) && MiscMenu["AutoW"].Cast<CheckBox>().CurrentValue)
-            {
-                W.Cast();
-            }
-            if (_Player.HasBuffOfType(BuffType.Stun) || _Player.HasBuffOfType(BuffType.Taunt) || _Player.HasBuffOfType(BuffType.Polymorph) || _Player.HasBuffOfType(BuffType.Frenzy) || _Player.HasBuffOfType(BuffType.Fear) || _Player.HasBuffOfType(BuffType.Snare) || _Player.HasBuffOfType(BuffType.Suppression))
-            {
-                DoQSS();
-            }
-            {
-                if (MiscMenu["AutoIgnite"].Cast<CheckBox>().CurrentValue)
-                {
-                    if (!ignite.IsReady() || Player.Instance.IsDead) return;
-                    foreach (
-                        var source in
-                            EntityManager.Heroes.Enemies
-                                .Where(
-                                    a => a.IsValidTarget(ignite.Range) &&
-                                        a.Health < 70 + 20 * Player.Instance.Level - (a.HPRegenRate / 5 * 3)))
-                    {
-                        ignite.Cast(source);
-                        return;
-                    }
-                }
-            }
-        }
-        private static
-            void OnGameUpdate(EventArgs args)
-        {
-            if (CheckSkin())
-            {
-                EloBuddy.Player.SetSkinId(SkinId());
-            }
-        }
-
-        private static int SkinId()
-        {
-            return MiscMenu["Skinid"].Cast<Slider>().CurrentValue;
-        }
-
-        private static bool CheckSkin()
-        {
-            return MiscMenu["checkSkin"].Cast<CheckBox>().CurrentValue;
-        }
-    
-    private static void DoQSS()
-        {
-            if (!MiscMenu["AutoQSS"].Cast<CheckBox>().CurrentValue) return;
-
-            if (Item.HasItem(3139) && Item.CanUseItem(3139) && ObjectManager.Player.CountEnemiesInRange(1800) > 0)
-            {
-                Core.DelayAction(() => Item.UseItem(3139), 1);
-            }
-
-            if (Item.HasItem(3140) && Item.CanUseItem(3140) && ObjectManager.Player.CountEnemiesInRange(1800) > 0)
-            {
-                Core.DelayAction(() => Item.UseItem(3140), 1);
-            }
-        }
-
-        private static void Gapcloser_OnGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
-        {
-            if (myHero.IsDead || !sender.IsEnemy || !sender.IsValidTarget(W.Range) || !W.IsReady() || !MiscMenu["gapcloser"].Cast<CheckBox>().CurrentValue) return;
-
-            W.Cast();
-        }
-        //Burst
-
-
-        private static void Game_OnTick(EventArgs args)
+        private static void Orbwalker_OnPostAttack(AttackableUnit target, EventArgs args)
         {
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
-                StateLogic.Combo();
+                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseQCombo") && Q.IsReady())
+                {
+                    if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
+                    {
+                        Q.Cast(target.Position);
+                    }
+
+                    if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
+                    {
+                        Q.Cast(target.Position);
+                    }
+
+                    if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
+                    {
+                        Q.Cast(target.Position);
+                    }
+                }
             }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass) && target.Type == GameObjectType.AIHeroClient)
             {
-                StateLogic.Harass();
+                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseQCombo") && Q.IsReady())
+                {
+                    if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
+                    {
+                        Q.Cast(target.Position);
+                    }
+
+                    if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
+                    {
+                        Q.Cast(target.Position);
+                    }
+
+                    if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
+                    {
+                        Q.Cast(target.Position);
+                    }
+                }
+            }
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+            {
+                if (RivenMenu.CheckBox(RivenMenu.Laneclear, "UseQLane") && Q.IsReady())
+                {
+                    if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
+                    {
+                        Q.Cast(target.Position);
+                    }
+
+                    if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
+                    {
+                        Q.Cast(target.Position);
+                    }
+
+                    // if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
+                    //{
+                    //   Q.Cast(target.Position);
+                    //}
+                }
+            }
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
+            {
+                if (RivenMenu.CheckBox(RivenMenu.Laneclear, "UseQJG") && Q.IsReady())
+                {
+                    if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
+                    {
+                        Q.Cast(target.Position);
+                    }
+
+                    if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
+                    {
+                        Q.Cast(target.Position);
+                    }
+
+                    if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
+                    {
+                        Q.Cast(target.Position);
+                    }
+                }
+            }
+        }
+
+        private static void Game_OnUpdate(EventArgs args)
+        {
+            if (Player.Instance.IsDead)
+                return;
+
+            if (!Flash.IsReady())
+            {
+                RivenMenu.Combo["BurstAllowed"].Cast<KeyBind>().CurrentValue = false;
+            }
+
+            if (Player.Instance.HasBuffOfType(BuffType.Charm) && RivenMenu.CheckBox(RivenMenu.Misc, "QssCharm"))
+            {
+                if (HasQss())
+                {
+                    Qss.Cast();
+                }
+
+                if (HasMercurial())
+                {
+                    Mercurial.Cast();
+                }
+            }
+            else if (Player.Instance.HasBuffOfType(BuffType.Charm) && RivenMenu.CheckBox(RivenMenu.Misc, "QssFear"))
+            {
+                if (HasQss())
+                {
+                    Qss.Cast();
+                }
+
+                if (HasMercurial())
+                {
+                    Mercurial.Cast();
+                }
+            }
+            else if (Player.Instance.HasBuffOfType(BuffType.Charm) && RivenMenu.CheckBox(RivenMenu.Misc, "QssTaunt"))
+            {
+                if (HasQss())
+                {
+                    Qss.Cast();
+                }
+
+                if (HasMercurial())
+                {
+                    Mercurial.Cast();
+                }
+            }
+            else if (Player.Instance.HasBuffOfType(BuffType.Charm) && RivenMenu.CheckBox(RivenMenu.Misc, "QssSuppression"))
+            {
+                if (HasQss())
+                {
+                    Qss.Cast();
+                }
+
+                if (HasMercurial())
+                {
+                    Mercurial.Cast();
+                }
+            }
+            else if (Player.Instance.HasBuffOfType(BuffType.Snare) && RivenMenu.CheckBox(RivenMenu.Misc, "QssSnare"))
+            {
+                if (HasQss())
+                {
+                    Qss.Cast();
+                }
+
+                if (HasMercurial())
+                {
+                    Mercurial.Cast();
+                }
+            }
+
+            if (RivenMenu.CheckBox(RivenMenu.Misc, "Skin"))
+            {
+                Player.Instance.SetSkinId(RivenMenu.Slider(RivenMenu.Misc, "SkinID"));
+            }
+
+            if (Player.Instance.CountEnemiesInRange(W.Range) >= RivenMenu.Slider(RivenMenu.Combo, "W/Auto"))
+            {
+                W.Cast();
+            }
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+            {
+                if (RivenMenu.Keybind(RivenMenu.Combo, "BurstAllowed"))
+                {
+                    Burst();
+                }
+                else
+                {
+                    Combo();
+                }
+
+                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseR2Combo"))
+                {
+                    if (RivenMenu.Keybind(RivenMenu.Combo, "BurstAllowed"))
+                    {
+                        if (CheckUlt() == true)
+                        {
+                            ChooseR2(FocusTarget);
+                        }
+                    }
+                }
+            }
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
+            {
+                Flee();
+            }
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+            {
+                Laneclear();
             }
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
             {
-                StateLogic.LastHit();
+                LastHit();
             }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
-            {
-                StateLogic.LaneClear();
-            }
+
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
             {
-                StateLogic.Jungle();
+                Jungleclear();
             }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
             {
-                StateLogic.Flee();
+                Harass();
             }
-            Auto();
+
+        }
+
+        private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            {
+                if (!sender.IsMe) return;
+
+                if (args.SData.Name.ToLower().Contains(Riven.W.Name.ToLower()))
+                {
+                    LastCastW = Environment.TickCount;
+                    return;
+                }
+
+                var minions = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, Player.Instance.Position, Q.Range + 126).Where(minion => minion != null && !minion.IsDead).ToList();
+                if (args.SData.Name.ToLower().Contains(Riven.Q.Name.ToLower()))
+                {
+                    LastCastQ = Environment.TickCount;
+
+                    Core.DelayAction(() =>
+                    {
+                        if (!Player.Instance.IsRecalling() && CountQ <= 2 && minions.Count == 0)
+                        {
+                            Player.CastSpell(SpellSlot.Q,
+                                Orbwalker.LastTarget != null && Orbwalker.LastAutoAttack - Environment.TickCount < 3000
+                                    ? Orbwalker.LastTarget.Position
+                                    : Game.CursorPos);
+                        }
+                        else
+                        {
+                            CountQ = 0;
+                        }
+                    }, 3480);
+                    return;
+                }
+            }
+
+            {
+                if (sender.IsMe || sender.IsAlly || sender == null)
+                    return;
+
+                var EPos = Player.Instance.ServerPosition + (Player.Instance.ServerPosition - sender.ServerPosition);
+
+                if (Player.Instance.IsValidTarget(args.SData.CastRange))
+                {
+                    if (args.Slot == SpellSlot.Q)
+                    {
+                        if (RivenMenu.CheckBox(RivenMenu.Shield, "E/" + sender.BaseSkinName + "/Q"))
+                        {
+                            if (args.SData.TargettingType == SpellDataTargetType.Unit)
+                            {
+                                if (Player.Instance.NetworkId == args.Target.NetworkId)
+                                {
+                                    E.Cast(EPos);
+                                }
+                            }
+                            else if (args.SData.TargettingType == SpellDataTargetType.SelfAoe)
+                            {
+                                E.Cast(EPos);
+                            }
+                            else
+                            {
+                                E.Cast(EPos);
+                            }
+                        }
+                    }
+
+                    if (args.Slot == SpellSlot.W)
+                    {
+                        if (RivenMenu.CheckBox(RivenMenu.Shield, "E/" + sender.BaseSkinName + "/W"))
+                        {
+                            if (args.SData.TargettingType == SpellDataTargetType.Unit)
+                            {
+                                if (Player.Instance.NetworkId == args.Target.NetworkId)
+                                {
+                                    E.Cast(EPos);
+                                }
+                            }
+                            else if (args.SData.TargettingType == SpellDataTargetType.SelfAoe)
+                            {
+                                E.Cast(EPos);
+                            }
+                            else
+                            {
+                                E.Cast(EPos);
+                            }
+                        }
+                    }
+
+
+
+                    if (args.Slot == SpellSlot.E)
+                    {
+                        if (RivenMenu.CheckBox(RivenMenu.Shield, "E/" + sender.BaseSkinName + "/E"))
+                        {
+                            if (args.SData.TargettingType == SpellDataTargetType.Unit)
+                            {
+                                if (Player.Instance.NetworkId == args.Target.NetworkId)
+                                {
+                                    E.Cast(EPos);
+                                }
+                            }
+                            else if (args.SData.TargettingType == SpellDataTargetType.SelfAoe)
+                            {
+                                E.Cast(EPos);
+                            }
+                            else
+                            {
+                                E.Cast(EPos);
+                            }
+                        }
+                    }
+
+                    if (args.Slot == SpellSlot.R)
+                    {
+                        if (RivenMenu.CheckBox(RivenMenu.Shield, "E/" + sender.BaseSkinName + "/R"))
+                        {
+                            if (args.SData.TargettingType == SpellDataTargetType.Unit)
+                            {
+                                if (Player.Instance.NetworkId == args.Target.NetworkId)
+                                {
+                                    E.Cast(EPos);
+                                }
+                            }
+                            else if (args.SData.TargettingType == SpellDataTargetType.SelfAoe)
+                            {
+                                E.Cast(EPos);
+                            }
+                            else
+                            {
+                                E.Cast(EPos);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        private static void Gapcloser_OnGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
+        {
+            if (sender.IsMe || sender.IsAlly || sender == null)
+                return;
+
+            if (!RivenMenu.CheckBox(RivenMenu.Misc, "Gapcloser"))
+                return;
+
+            if (RivenMenu.CheckBox(RivenMenu.Misc, "GapcloserW"))
+            {
+                if (sender.IsValidTarget(W.Range))
+                {
+                    if (W.IsReady())
+                    {
+                        W.Cast();
+                    }
+                }
+            }
+        }
+
+        private static void Interrupter_OnInterruptableSpell(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs e)
+        {
+            if (sender.IsMe || sender.IsAlly || sender == null)
+                return;
+
+            if (!RivenMenu.CheckBox(RivenMenu.Misc, "Interrupter"))
+                return;
+
+            if (RivenMenu.CheckBox(RivenMenu.Misc, "InterrupterW"))
+            {
+                if (sender.IsValidTarget(W.Range))
+                {
+                    W.Cast();
+                }
+            }
+        }
+
+        private static void Obj_AI_Base_OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
+        {
+            if (!sender.IsMe)
+                return;
+
+            var T = 0;
+
+            switch (args.Animation)
+            {
+                case "Spell1a":
+
+                    LastQ = Core.GameTickCount;
+                    CountQ = 1;
+                    T = 291;
+
+                    break;
+
+                case "Spell1b":
+
+                    LastQ = Core.GameTickCount;
+                    CountQ = 2;
+                    T = 291;
+
+                    break;
+
+                case "Spell1c":
+
+                    LastQ = 0;
+                    CountQ = 0;
+                    T = 393;
+
+                    break;
+
+                case "Spell2":
+                    T = 170;
+
+                    break;
+
+                case "Spell3":
+
+                    break;
+                case "Spell4a":
+                    T = 0;
+
+                    break;
+                case "Spell4b":
+                    T = 150;
+
+                    break;
+            }
+
+            if (T != 0)
+            {
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                {
+                    Orbwalker.ResetAutoAttack();
+                    Core.DelayAction(CancelAnimation, T - Game.Ping);
+                }
+                else if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+                {
+                    Orbwalker.ResetAutoAttack();
+                    Core.DelayAction(CancelAnimation, T - Game.Ping);
+                }
+            }
+        }
+
+        private static void CancelAnimation()
+        {
+            Player.DoEmote(Emote.Dance);
+            Orbwalker.ResetAutoAttack();
+        }
+
+        public static float DamageTotal(AIHeroClient target)
+        {
+            double dmg = 0;
+            var passiveStacks = 0;
+
+            dmg += Q.IsReady()
+                ? QDamage(!CheckUlt()) * (3 - CountQ)
+                : 0;
+            passiveStacks += Q.IsReady()
+                ? (3 - CountQ)
+                : 0;
+
+            dmg += W.IsReady()
+                ? WDamage()
+                : 0;
+            passiveStacks += W.IsReady()
+                ? 1
+                : 0;
+            passiveStacks += E.IsReady()
+                ? 1
+                : 0;
+
+            dmg += PassiveDamage() * passiveStacks;
+            dmg += (R.IsReady() && !CheckUlt() && !Player.Instance.HasBuff("RivenFengShuiEngine")
+                ? Player.Instance.TotalAttackDamage * 1.2
+                : Player.Instance.TotalAttackDamage) * passiveStacks;
+
+            if (dmg < 10)
+            {
+                return 0 * Player.Instance.TotalAttackDamage;
+            }
+
+            dmg += R.IsReady() && !CheckUlt()
+                ? RDamage(target, Player.Instance.CalculateDamageOnUnit(target, DamageType.Physical, (float)dmg))
+                : 0;
+            return Player.Instance.CalculateDamageOnUnit(target, DamageType.Physical, (float)dmg);
+        }
+
+        public static float QDamage(bool useR = false)
+        {
+            return (float)(new double[] { 10, 30, 50, 70, 90 }[Q.Level - 1] +
+                            ((Riven.R.IsReady() && useR && !Player.Instance.HasBuff("RivenFengShuiEngine")
+                                ? Player.Instance.TotalAttackDamage * 1.2
+                                : Player.Instance.TotalAttackDamage) / 100) *
+                            new double[] { 40, 45, 50, 55, 60 }[Q.Level - 1]);
+        }
+
+        public static float WDamage()
+        {
+            return (float)(new double[] { 50, 80, 110, 140, 170 }[W.Level - 1] +
+                            1 * ObjectManager.Player.FlatPhysicalDamageMod);
+        }
+
+        public static double PassiveDamage()
+        {
+            return ((20 + ((Math.Floor((double)ObjectManager.Player.Level / 3)) * 5)) / 100) *
+                   (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod);
+        }
+
+        public static float RDamage(Obj_AI_Base target, float healthMod = 0f)
+        {
+            if (target != null)
+            {
+                float missinghealth = (target.MaxHealth - healthMod) / target.MaxHealth > 0.75f ? 0.75f : (target.MaxHealth - healthMod) / target.MaxHealth;
+                float pluspercent = missinghealth * (8f / 3f);
+                var rawdmg = new float[] { 100, 150, 200 }[R.Level - 1] + 0.6f * Player.Instance.FlatPhysicalDamageMod;
+                return Player.Instance.CalculateDamageOnUnit(target, DamageType.Physical, rawdmg * (1 + pluspercent));
+            }
+            return 0f;
+        }
+        public static float SpellQDamage(Obj_AI_Base target, float healthMod = 0f)
+        {
+            if (target != null)
+            {
+                float missinghealth = (target.MaxHealth - healthMod) / target.MaxHealth > 0.75f ? 0.75f : (target.MaxHealth - healthMod) / target.MaxHealth;
+                float pluspercent = missinghealth * (8f / 3f);
+                var rawdmg = new float[] { 10, 30, 50, 70, 90 }[Q.Level - 1] + 0.4f * Player.Instance.FlatPhysicalDamageMod;
+                return Player.Instance.CalculateDamageOnUnit(target, DamageType.Physical, rawdmg);
+            }
+            return 0f;
         }
     }
 }
-

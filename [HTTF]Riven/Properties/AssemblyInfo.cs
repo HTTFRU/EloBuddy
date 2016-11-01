@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("[HTTF]Riven")]
+[assembly: AssemblyTitle("HTTF Riven v2")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HTTF")]
-[assembly: AssemblyProduct("[HTTF]Riven")]
+[assembly: AssemblyProduct("HTTF Riven v2")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-[assembly: Guid("629df09e-d7fe-48d4-9aa2-3560cd30674b")]
+[assembly: Guid("b118d977-0c87-44a7-9fd0-68f9881a1908")]
 
 // Сведения о версии сборки состоят из следующих четырех значений:
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // Можно задать все значения или принять номера сборки и редакции по умолчанию 
 // используя "*", как показано ниже:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("6.20.2")]
-[assembly: AssemblyFileVersion("6.20.2")]
+[assembly: AssemblyVersion("6.22.2")]
+[assembly: AssemblyFileVersion("6.22.2")]
