@@ -1,1 +1,12 @@
 c:\users\костя\documents\visual studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\bin\Debug\HTTF Riven v2.exe.config
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\bin\Debug\HTTF Riven v2.exe
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\bin\Debug\HTTF Riven v2.pdb
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\bin\Debug\EloBuddy.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\bin\Debug\EloBuddy.Sandbox.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\bin\Debug\SharpDX.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\obj\Debug\HTTF Riven v2.csprojResolveAssemblyReference.cache
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\obj\Debug\HTTF Riven v2.exe
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\obj\Debug\HTTF Riven v2.pdb

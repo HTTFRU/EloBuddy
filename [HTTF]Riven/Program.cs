@@ -24,6 +24,7 @@ namespace HTTF_Riven_v2
 
             RivenMenu.Load();
             Riven.Load();
+            ItemLogic.Init();
 
         }
 
