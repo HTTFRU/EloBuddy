@@ -71,13 +71,12 @@ namespace HTTF_Riven_v2
             Game.OnWndProc += Game_OnWndProc;
             Interrupter.OnInterruptableSpell += Interrupter_OnInterruptableSpell;
             Gapcloser.OnGapcloser += Gapcloser_OnGapcloser;
-            Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;
+            Obj_AI_Base.OnPlayAnimation += Reset;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
 
             Obj_AI_Turret.OnBasicAttack += Obj_AI_Turret_OnBasicAttack2;
             Orbwalker.OnPostAttack += Orbwalker_OnPostAttack;
-            Orbwalker.OnPreAttack += BeforeAttack;
             Drawing.OnDraw += Drawing_OnDraw;
             
         }
@@ -152,28 +151,6 @@ namespace HTTF_Riven_v2
             }
         }
 
-        private static void BeforeAttack(AttackableUnit target, Orbwalker.PreAttackArgs args)
-        {
-            if (ObjectManager.Player.Level <= 1)
-            {
-
-                var Junglemode = Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear);
-
-                if (!Junglemode || !RivenMenu.CheckBox(RivenMenu.Laneclear, "Level_1 JungleClearing"))
-                {
-                    return;
-                }
-
-
-                else
-                {
-                    {
-                        args.Process = false;
-                    }
-                }
-            }
-
-        }
 
 
 
@@ -774,6 +751,76 @@ namespace HTTF_Riven_v2
 
         }
 
+        private static void AnimateCAnsl()
+        {
+            Player.DoEmote(Emote.Joke);
+            
+        }
+        private static void Reset(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
+        {
+            if (!sender.IsMe)
+                return;
+
+            var T = 0;
+
+            switch (args.Animation)
+            {
+                case "Spell1a":
+
+                    LastQ = Core.GameTickCount;
+                    CountQ = 1;
+                    T = 293;
+
+                    break;
+
+                case "Spell1b":
+
+                    LastQ = Core.GameTickCount;
+                    CountQ = 2;
+                    T = 293;
+
+                    break;
+
+                case "Spell1c":
+
+                    LastQ = 0;
+                    CountQ = 0;
+                    T = 393;
+
+                    break;
+
+                case "Spell2":
+                    T = 170;
+
+                    break;
+
+                case "Spell3":
+
+                    break;
+                case "Spell4a":
+                    T = 0;
+
+                    break;
+                case "Spell4b":
+                    T = 150;
+
+                    break;
+            }
+
+            if (T != 0)
+            {
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                {
+                    Orbwalker.ResetAutoAttack();
+                    Core.DelayAction(CancelAnimation, T - Game.Ping);
+                }
+                else if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+                {
+                    Orbwalker.ResetAutoAttack();
+                    Core.DelayAction(CancelAnimation, T - Game.Ping);
+                }
+            }
+        }
 
         private static void Game_OnWndProc(WndEventArgs args)
         {
@@ -791,17 +838,23 @@ namespace HTTF_Riven_v2
                 {
                     if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
                     {
+                        
                         Q.Cast(target.Position);
+                        
                     }
 
                     if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
                     {
+                        
                         Q.Cast(target.Position);
+                        
                     }
 
                     if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
                     {
+                        
                         Q.Cast(target.Position);
+                        CancelAnimation();
                     }
                 }
             }
@@ -811,17 +864,23 @@ namespace HTTF_Riven_v2
                 {
                     if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
                     {
+                        
                         Q.Cast(target.Position);
+                        
                     }
 
                     if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
                     {
+                        
                         Q.Cast(target.Position);
+                       
                     }
 
                     if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
                     {
+                        
                         Q.Cast(target.Position);
+                        
                     }
                 }
             }
@@ -1171,71 +1230,7 @@ namespace HTTF_Riven_v2
             }
         }
 
-        private static void Obj_AI_Base_OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
-        {
-            if (!sender.IsMe)
-                return;
-
-            var T = 0;
-
-            switch (args.Animation)
-            {
-                case "Spell1a":
-
-                    LastQ = Core.GameTickCount;
-                    CountQ = 1;
-                    T = 291;
-
-                    break;
-
-                case "Spell1b":
-
-                    LastQ = Core.GameTickCount;
-                    CountQ = 2;
-                    T = 291;
-
-                    break;
-
-                case "Spell1c":
-
-                    LastQ = 0;
-                    CountQ = 0;
-                    T = 393;
-
-                    break;
-
-                case "Spell2":
-                    T = 170;
-
-                    break;
-
-                case "Spell3":
-
-                    break;
-                case "Spell4a":
-                    T = 0;
-
-                    break;
-                case "Spell4b":
-                    T = 150;
-
-                    break;
-            }
-
-            if (T != 0)
-            {
-                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
-                {
-                    Orbwalker.ResetAutoAttack();
-                    Core.DelayAction(CancelAnimation, T - Game.Ping);
-                }
-                else if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
-                {
-                    Orbwalker.ResetAutoAttack();
-                    Core.DelayAction(CancelAnimation, T - Game.Ping);
-                }
-            }
-        }
+        
 
         private static void CancelAnimation()
         {

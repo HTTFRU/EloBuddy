@@ -6,7 +6,7 @@ namespace HTTF_Riven_v2
 {
     class RivenMenu
     {
-        public static Menu Principal, Combo, Burst, Shield, Items, Laneclear, Jungleclear, Flee, Misc, Draw, Killsteal;
+        public static Menu Principal, Combo, Burst, Shield, Items, Laneclear, Jungleclear, Flee, Misc, Draw, Killsteal, AnimationCancle;
 
         public static void Load()
         {
@@ -107,7 +107,36 @@ namespace HTTF_Riven_v2
             Draw = Principal.AddSubMenu("Drawing", "Drawing");
             Draw.Add("DrawDamage", new CheckBox("Draw Damage"));
             Draw.Add("DrawOFF", new CheckBox("Draw OFF", false));
+
+            AnimationCancle = Principal.AddSubMenu("AnimationCancle", "CanslAnimatio");
+            AnimationCancle.Add("4", new CheckBox("Q"));
+            AnimationCancle.Add("Spell2", new CheckBox("W"));
+            AnimationCancle.Add("Spell3", new CheckBox("E"));
+            AnimationCancle.Add("Spell4", new CheckBox("R"));
+
+
+
+
         }
+        //Cancler
+        public static bool AnimationCancelQ
+        {
+            get { return (AnimationCancle["Spell1"].Cast<CheckBox>().CurrentValue); }
+        }
+        public static bool AnimationCancelW
+        {
+            get { return (AnimationCancle["Spell2"].Cast<CheckBox>().CurrentValue); }
+        }
+        public static bool AnimationCancelE
+        {
+            get { return (AnimationCancle["Spell3"].Cast<CheckBox>().CurrentValue); }
+        }
+        public static bool AnimationCancelR
+        {
+            get { return (AnimationCancle["Spell4"].Cast<CheckBox>().CurrentValue); }
+        }
+
+
 
         public static bool CheckBox(Menu m, string s)
         {
