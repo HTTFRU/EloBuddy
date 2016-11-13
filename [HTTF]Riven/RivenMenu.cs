@@ -24,9 +24,6 @@ namespace HTTF_Riven_v2
             Combo.Add("UseR2Combo", new CheckBox("Use R2?"));
             Combo.Add("BrokenAnimations", new CheckBox("Broken Animations ?"));
             Combo.AddSeparator(3);
-            Combo.AddLabel("• Spell W");
-            Combo.Add("W/Auto", new Slider("Auto W if {0} Enemies <=", 2, 1, 5));
-            Combo.AddSeparator(3);
             Combo.AddLabel("• Spell R");
             Combo.Add("UseRType", new ComboBox("Use R when", 1, "Target less than 40 % HP", "DamageIndicator greater than 100 %", "Always", "On Keypress"));
             Combo.Add("ForceR", new KeyBind("R On Keypress Key", false, KeyBind.BindTypes.PressToggle, 'U'));
@@ -42,10 +39,11 @@ namespace HTTF_Riven_v2
             Combo.Add("BurstType", new ComboBox("Burst:", 0, "Damage Check", "Always"));
             Combo.AddSeparator(2);
             Combo.AddLabel("Select Burst style");
+            Combo.AddLabel("BURST STYLE №1 BROKEN. USE ONLY 2");
             Combo.AddLabel("Style Burst 1: E > Flash > R > W > Hydra > R2");
             Combo.AddLabel("Style Burst 2: E > R > Flash > W > Hydra > R2");
             Combo.AddSeparator(1);
-            Combo.Add("BurstStyle", new Slider("Burst style", 1, 1, 2));
+            Combo.Add("BurstStyle", new Slider("Burst style", 2, 1, 2));
             Combo.AddLabel(" FLEE");
             Combo.Add("UseQFlee", new CheckBox("Use Q"));
             Combo.Add("UseEFlee", new CheckBox("Use E"));
@@ -103,10 +101,15 @@ namespace HTTF_Riven_v2
             Misc.AddSeparator(3);
             Misc.AddLabel("• Youmu Logic");
             Misc.Add("Youmu", new CheckBox("Use Youmu?"));
+            Misc.AddLabel("• Recommend Use 250•");
+            Misc.Add("YoumuRange", new Slider("Range Cast Youmu", 1, 1, 400));
+            
 
             Draw = Principal.AddSubMenu("Drawing", "Drawing");
             Draw.Add("DrawDamage", new CheckBox("Draw Damage"));
             Draw.Add("DrawOFF", new CheckBox("Draw OFF", false));
+            Draw.Add("DrawKILL", new CheckBox("Draw Kill in combo", false));
+
 
             AnimationCancle = Principal.AddSubMenu("AnimationCancle", "CanslAnimatio");
             AnimationCancle.Add("4", new CheckBox("Q"));

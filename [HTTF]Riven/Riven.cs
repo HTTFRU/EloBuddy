@@ -115,7 +115,6 @@ namespace HTTF_Riven_v2
 
                                 Orbwalker.DisableMovement = true;
                                 Core.DelayAction(() => Player.IssueOrder(GameObjectOrder.AttackUnit, args.Target), 0);
-                                Core.DelayAction(() => W.Cast(Minion.ServerPosition), 291);
                                 Core.DelayAction(() => Orbwalker.DisableMovement = false, 300);
 
                                 Chat.Print("Last Hitting With AA-w");
@@ -153,11 +152,12 @@ namespace HTTF_Riven_v2
 
 
 
+             
 
 
 
 
-        private static bool HasHydra()
+    private static bool HasHydra()
         {
             if (!Hydra.IsOwned() && !RivenMenu.CheckBox(RivenMenu.Misc, "Hydra"))
                 return false;
@@ -517,12 +517,20 @@ namespace HTTF_Riven_v2
 
             if (Target != null)
             {
+                if (E.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
+                    {
+                        if (Target.IsValidTarget(E.Range) && Target.CanMove)
+                        {
+                            Player.CastSpell(SpellSlot.E, Target.Position);
+                        }
+                    }
                 if (R.IsReady())
                 {
                     if (CheckUlt() == false)
                     {
                         if (Target.HealthPercent >= RivenMenu.Slider(RivenMenu.Combo, "DontR1"))
                         {
+                            Player.CastSpell(SpellSlot.E,Target.Position);
                             ChooseR(Target);
                         }
                     }
@@ -543,7 +551,7 @@ namespace HTTF_Riven_v2
 
                     if (HasYoumu())
                     {
-                        if (Target.Health <= RivenMenu.Slider(RivenMenu.Misc, "Youmu"))
+                        if (RivenMenu.CheckBox(RivenMenu.Misc, "Youmu"))
                         {
                             Youmu.Cast();
                         }
@@ -558,31 +566,25 @@ namespace HTTF_Riven_v2
                         }
                     }
 
-                    if (E.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
                     {
-                        if (Target.IsValidTarget(E.Range) && Target.CanMove)
+                        if (HasHydra())
                         {
-                            Player.CastSpell(SpellSlot.E, Target.Position);
+                            Hydra.Cast();
+                        }
+
+                        if (HasTiamat())
+                        {
+                            Tiamat.Cast();
                         }
                     }
 
                     if (Target.Distance(Player.Instance) <= W.Range && W.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo"))
-                        
-                    {
-                        {
-                            if (HasHydra())
-                            {
-                                Hydra.Cast();
-                            }
 
-                            if (HasTiamat())
-                            {
-                                Tiamat.Cast();
-                            }
-                        }
+                    {
+                        { 
 
                         Player.CastSpell(SpellSlot.W);
-
+                    }
 
                         return;
                     }
@@ -620,7 +622,7 @@ namespace HTTF_Riven_v2
 
                 if (HasYoumu())
                 {
-                    if (Target.Health <= RivenMenu.Slider(RivenMenu.Misc, "YoumuHealth"))
+                    if (RivenMenu.CheckBox(RivenMenu.Misc, "YoumuHealth"))
                     {
                         Youmu.Cast();
                     }
@@ -1004,10 +1006,7 @@ namespace HTTF_Riven_v2
                 Player.Instance.SetSkinId(RivenMenu.Slider(RivenMenu.Misc, "SkinID"));
             }
 
-            if (Player.Instance.CountEnemiesInRange(W.Range) >= RivenMenu.Slider(RivenMenu.Combo, "W/Auto"))
-            {
-                W.Cast();
-            }
+
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
