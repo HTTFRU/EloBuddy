@@ -2,11 +2,12 @@
 using EloBuddy.SDK;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
+using System.Drawing;
 namespace HTTF_Riven_v2
 {
     class RivenMenu
     {
-        public static Menu Principal, Combo, Burst, Shield, Items, Laneclear, Jungleclear, Flee, Misc, Draw, Killsteal, AnimationCancle;
+        public static Menu Principal, Combo, Burst, Shield, Items, Laneclear, Jungleclear, Flee, Misc, Draw, Killsteal, AnimationCancle, ComboLogic;
 
         public static void Load()
         {
@@ -72,7 +73,7 @@ namespace HTTF_Riven_v2
             Laneclear.Add("UseQJG", new CheckBox("Use Q"));
             Laneclear.Add("UseWJG", new CheckBox("Use W"));
             Laneclear.Add("UseEJG", new CheckBox("Use E"));
-           
+
 
 
             Misc = Principal.AddSubMenu("Misc", "Misc");
@@ -103,12 +104,12 @@ namespace HTTF_Riven_v2
             Misc.Add("Youmu", new CheckBox("Use Youmu?"));
             Misc.AddLabel("• Recommend Use 250•");
             Misc.Add("YoumuRange", new Slider("Range Cast Youmu", 1, 1, 400));
-            
+
 
             Draw = Principal.AddSubMenu("Drawing", "Drawing");
             Draw.Add("DrawDamage", new CheckBox("Draw Damage"));
             Draw.Add("DrawOFF", new CheckBox("Draw OFF", false));
-            Draw.Add("DrawKILL", new CheckBox("Draw Kill in combo", false));
+            Draw.Add("drawjump", new CheckBox("Draw jump(beta)", false));
 
 
             AnimationCancle = Principal.AddSubMenu("AnimationCancle", "CanslAnimatio");
@@ -116,6 +117,30 @@ namespace HTTF_Riven_v2
             AnimationCancle.Add("Spell2", new CheckBox("W"));
             AnimationCancle.Add("Spell3", new CheckBox("E"));
             AnimationCancle.Add("Spell4", new CheckBox("R"));
+
+
+            ComboLogic = Principal.AddSubMenu("ComboLogic", "ComboLogics");
+            ComboLogic.AddLabel("Q1");
+            ComboLogic.Add("Q1Hydra", new CheckBox("Q1>Hydra"));
+
+            ComboLogic.AddLabel("Q2");
+            ComboLogic.Add("Q1Hydra", new CheckBox("Q2>Hydra"));
+            ComboLogic.AddLabel("Q3");
+            ComboLogic.Add("Q1Hydra", new CheckBox("Q3>Hydra"));
+            ComboLogic.AddLabel("W");
+
+            ComboLogic.AddLabel("E");
+            ComboLogic.Add("EQall", new CheckBox("E>Q"));
+            ComboLogic.Add("EW", new CheckBox("E>W"));
+            ComboLogic.AddLabel("R1");
+
+
+            ComboLogic.AddLabel("R2");
+
+
+            ComboLogic.AddLabel("VERY SOON UPDATE MORE ANIMATION. WAIT.");
+
+
 
 
 

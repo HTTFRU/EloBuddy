@@ -40,7 +40,7 @@ namespace HTTF_Riven_v2
         public static Item Mercurial;
 
         public static AIHeroClient FocusTarget;
-       
+
         public static void Load()
         {
             Q = new Spell.Skillshot(SpellSlot.Q, 275, SkillShotType.Circular, 250, 2200, 100);
@@ -59,8 +59,8 @@ namespace HTTF_Riven_v2
             }
             var target = TargetSelector.GetTarget(Riven.E.Range + Riven.W.Range + 200, DamageType.Physical);
 
-            Hydra = new Item((int)ItemId.Ravenous_Hydra, 350);
-            Tiamat = new Item((int)ItemId.Tiamat, 350);
+            Hydra = new Item((int)ItemId.Ravenous_Hydra, 300);
+            Tiamat = new Item((int)ItemId.Tiamat, 300);
             Youmu = new Item((int)ItemId.Youmuus_Ghostblade, 0);
             Qss = new Item((int)ItemId.Quicksilver_Sash, 0);
             Mercurial = new Item((int)ItemId.Mercurial_Scimitar, 0);
@@ -78,7 +78,7 @@ namespace HTTF_Riven_v2
             Obj_AI_Turret.OnBasicAttack += Obj_AI_Turret_OnBasicAttack2;
             Orbwalker.OnPostAttack += Orbwalker_OnPostAttack;
             Drawing.OnDraw += Drawing_OnDraw;
-            
+
         }
 
         public static void Obj_AI_Turret_OnBasicAttack2(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -148,16 +148,23 @@ namespace HTTF_Riven_v2
             {
                 Circle.Draw(Color.Green, 800, Player.Instance.Position);
             }
+            if (RivenMenu.CheckBox(RivenMenu.Draw, "drawjump"))
+            {
+                foreach (var spot in WallJump.JumpSpots.Where(s => Player.Instance.Distance(s[0]) <= 1500))
+                {
+                    Circle.Draw(Color.Green, 60f, spot[0]);
+                }
+            }
         }
 
 
 
-             
 
 
 
 
-    private static bool HasHydra()
+
+        private static bool HasHydra()
         {
             if (!Hydra.IsOwned() && !RivenMenu.CheckBox(RivenMenu.Misc, "Hydra"))
                 return false;
@@ -365,6 +372,23 @@ namespace HTTF_Riven_v2
             }
         }
 
+        private static void JumpWall()
+        {
+            if (RivenMenu.CheckBox(RivenMenu.Misc, ("JumpFlee")) && Game.MapId == GameMapId.SummonersRift)
+            {
+                var spot = WallJump.GetJumpSpot();
+                if (spot != null && Riven.CountQ == 2 || Q.IsReady())
+                {
+                    Orbwalker.DisableAttacking = true;
+                    Orbwalker.DisableMovement = true;
+
+                    WallJump.JumpWall();
+                    return;
+                }
+            }
+        }
+
+
         private static void ChooseR(AIHeroClient Target)
         {
             switch (RivenMenu.ComboBox(RivenMenu.Combo, "UseRType"))
@@ -389,7 +413,7 @@ namespace HTTF_Riven_v2
                                 {
                                     Player.CastSpell(SpellSlot.E, Target.Position);
                                     R.Cast();
-                                    
+
                                 }
                             }
                         }
@@ -421,7 +445,7 @@ namespace HTTF_Riven_v2
                                 {
                                     Player.CastSpell(SpellSlot.E, Target.Position);
                                     R.Cast();
-                                    
+
                                 }
                             }
                         }
@@ -451,7 +475,7 @@ namespace HTTF_Riven_v2
                             {
                                 Player.CastSpell(SpellSlot.E, Target.Position);
                                 R.Cast();
-                                
+
                             }
                         }
                     }
@@ -472,7 +496,7 @@ namespace HTTF_Riven_v2
                     break;
             }
         }
-        
+
         private static void ChooseR2(AIHeroClient Target)
         {
             switch (RivenMenu.ComboBox(RivenMenu.Combo, "UseR2Type"))
@@ -518,19 +542,19 @@ namespace HTTF_Riven_v2
             if (Target != null)
             {
                 if (E.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
+                {
+                    if (Target.IsValidTarget(E.Range) && Target.CanMove)
                     {
-                        if (Target.IsValidTarget(E.Range) && Target.CanMove)
-                        {
-                            Player.CastSpell(SpellSlot.E, Target.Position);
-                        }
+                        Player.CastSpell(SpellSlot.E, Target.Position);
                     }
+                }
                 if (R.IsReady())
                 {
                     if (CheckUlt() == false)
                     {
                         if (Target.HealthPercent >= RivenMenu.Slider(RivenMenu.Combo, "DontR1"))
                         {
-                            Player.CastSpell(SpellSlot.E,Target.Position);
+                            Player.CastSpell(SpellSlot.E, Target.Position);
                             ChooseR(Target);
                         }
                     }
@@ -566,25 +590,19 @@ namespace HTTF_Riven_v2
                         }
                     }
 
+                    if (ItemLogic.Hydra != null && ItemLogic.Hydra.IsReady())
                     {
-                        if (HasHydra())
-                        {
-                            Hydra.Cast();
-                        }
-
-                        if (HasTiamat())
-                        {
-                            Tiamat.Cast();
-                        }
+                        ItemLogic.Hydra.Cast();
+                        return;
                     }
 
                     if (Target.Distance(Player.Instance) <= W.Range && W.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo"))
 
                     {
-                        { 
+                        {
 
-                        Player.CastSpell(SpellSlot.W);
-                    }
+                            Player.CastSpell(SpellSlot.W);
+                        }
 
                         return;
                     }
@@ -599,6 +617,50 @@ namespace HTTF_Riven_v2
                 }
             }
         }
+
+
+
+        //New Animation Cansel Function.
+        private static void NewComboAnimation()
+        {
+            var Target = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
+
+            if (Target != null)
+
+                if (Q.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseQCombo")) 
+                {
+                    if (ItemLogic.Hydra != null && ItemLogic.Hydra.IsReady())
+                    {
+
+                        ItemLogic.Hydra.Cast();
+                        Q.Cast();
+                        return;
+                    }
+                }
+            if (E.IsReady() || Q.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseQCombo"))
+
+                E.Cast();
+                Q.Cast();
+            return;
+        }
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private static void Harass()
         {
@@ -659,9 +721,20 @@ namespace HTTF_Riven_v2
 
         private static void Laneclear()
         {
+            Orbwalker.ForcedTarget = null;
+            if (Orbwalker.IsAutoAttacking)
 
+                if (ItemLogic.Hydra != null && ItemLogic.Hydra.IsReady())
+                {
+                    ItemLogic.Hydra.Cast();
+                    return;
+                }
+            return;
+
+             
+                
+            
         }
-
 
         private static void LastHit()
         {
@@ -756,7 +829,7 @@ namespace HTTF_Riven_v2
         private static void AnimateCAnsl()
         {
             Player.DoEmote(Emote.Joke);
-            
+
         }
         private static void Reset(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
         {
@@ -840,21 +913,21 @@ namespace HTTF_Riven_v2
                 {
                     if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
                     {
-                        
+
                         Q.Cast(target.Position);
-                        
+
                     }
 
                     if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
                     {
-                        
+
                         Q.Cast(target.Position);
-                        
+
                     }
 
                     if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
                     {
-                        
+
                         Q.Cast(target.Position);
                         CancelAnimation();
                     }
@@ -866,23 +939,23 @@ namespace HTTF_Riven_v2
                 {
                     if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
                     {
-                        
+
                         Q.Cast(target.Position);
-                        
+
                     }
 
                     if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
                     {
-                        
+
                         Q.Cast(target.Position);
-                       
+
                     }
 
                     if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
                     {
-                        
+
                         Q.Cast(target.Position);
-                        
+
                     }
                 }
             }
@@ -1229,7 +1302,7 @@ namespace HTTF_Riven_v2
             }
         }
 
-        
+
 
         private static void CancelAnimation()
         {
@@ -1292,7 +1365,13 @@ namespace HTTF_Riven_v2
 
             {
                 Orbwalker.ResetAutoAttack();
-                if (W.IsReady())
+                return;
+            }
+
+            if (args.SData.Name.ToLower().Contains("itemtiamatcleave"))
+            {
+                Orbwalker.ResetAutoAttack();
+                if (Riven.W.IsReady())
                 {
                     var target2 = TargetSelector.GetTarget(Riven.W.Range, DamageType.Physical);
                     if (target2 != null || Orbwalker.ActiveModesFlags != Orbwalker.ActiveModes.None)
@@ -1303,7 +1382,6 @@ namespace HTTF_Riven_v2
                 return;
             }
         }
-
 
         public static float WDamage()
         {

@@ -2,7 +2,6 @@
 using EloBuddy;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Rendering;
-using SharpDX;
 
 namespace HTTF_Riven_v2
 {
@@ -25,6 +24,7 @@ namespace HTTF_Riven_v2
             RivenMenu.Load();
             Riven.Load();
             ItemLogic.Init();
+            if (Game.MapId == GameMapId.SummonersRift) WallJump.InitSpots();
 
         }
 
