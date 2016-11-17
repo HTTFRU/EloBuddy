@@ -62,13 +62,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="StateLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpellDataBase.cs" />
     <Compile Include="Utils\DamageInfo.cs" />
     <Compile Include="Utils\ForDash.cs" />
     <Compile Include="Utils\ForSpell.cs" />
-    <Compile Include="YasuoMenu.cs" />
+    <Compile Include="Yasuo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

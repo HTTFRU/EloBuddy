@@ -12,11 +12,11 @@ namespace HTTF_Yasuo
     {
         public static Spell.Targeted E = new Spell.Targeted(SpellSlot.E, 475);
         public static Spell.Active R = new Spell.Active(SpellSlot.R, 1200);
-        private static readonly Spell.Skillshot Q1 = new Spell.Skillshot(SpellSlot.Q, 450, SkillShotType.Linear, 250, GetNewQSpeed(), 1)
+        public static readonly Spell.Skillshot Q1 = new Spell.Skillshot(SpellSlot.Q, 450, SkillShotType.Linear, 250, GetNewQSpeed(), 1)
         {
             AllowedCollisionCount = int.MaxValue
         };
-        private static readonly Spell.Skillshot Q2 = new Spell.Skillshot(SpellSlot.Q, 900, SkillShotType.Linear, 300, 1200, 50)
+       public static readonly Spell.Skillshot Q2 = new Spell.Skillshot(SpellSlot.Q, 900, SkillShotType.Linear, 300, 1200, 50)
         {
             AllowedCollisionCount = int.MaxValue
         };
