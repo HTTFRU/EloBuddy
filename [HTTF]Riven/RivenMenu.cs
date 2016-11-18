@@ -23,7 +23,7 @@ namespace HTTF_Riven_v2
             Combo.Add("UseECombo", new CheckBox("Use E"));
             Combo.Add("UseRCombo", new CheckBox("Use R?"));
             Combo.Add("UseR2Combo", new CheckBox("Use R2?"));
-            Combo.Add("BrokenAnimations", new CheckBox("Broken Animations ?"));
+            Combo.Add("BrokenAnimations", new CheckBox("Broken Animations ?",false));
             Combo.AddSeparator(3);
             Combo.AddLabel("• Spell R");
             Combo.Add("UseRType", new ComboBox("Use R when", 1, "Target less than 40 % HP", "DamageIndicator greater than 100 %", "Always", "On Keypress"));
@@ -40,7 +40,7 @@ namespace HTTF_Riven_v2
             Combo.Add("BurstType", new ComboBox("Burst:", 0, "Damage Check", "Always"));
             Combo.AddSeparator(2);
             Combo.AddLabel("Select Burst style");
-            Combo.AddLabel("BURST STYLE №1 BROKEN. USE ONLY 2");
+            Combo.AddLabel("BURST STYLE: ");
             Combo.AddLabel("Style Burst 1: E > Flash > R > W > Hydra > R2");
             Combo.AddLabel("Style Burst 2: E > R > Flash > W > Hydra > R2");
             Combo.AddSeparator(1);
@@ -83,6 +83,7 @@ namespace HTTF_Riven_v2
             Misc.Add("InterrupterW", new CheckBox("Interrupter with W ?"));
             Misc.Add("Gapcloser", new CheckBox("Gapcloser ?"));
             Misc.Add("GapcloserW", new CheckBox("Use W on Gapcloser ?"));
+            Misc.Add("AliveQ", new CheckBox("Use Q Keep Alive ?"));
             Misc.AddLabel("• ItemLogic");
             Misc.AddLabel("• Hydra Logic");
             Misc.Add("Hydra", new CheckBox("Use Hydra?"));
@@ -103,7 +104,7 @@ namespace HTTF_Riven_v2
             Misc.AddLabel("• Youmu Logic");
             Misc.Add("Youmu", new CheckBox("Use Youmu?"));
             Misc.AddLabel("• Recommend Use 250•");
-            Misc.Add("YoumuRange", new Slider("Range Cast Youmu", 1, 1, 400));
+            Misc.Add("YoumuRange", new Slider("Range Cast Youmu", 1, 1, 325));
 
 
             Draw = Principal.AddSubMenu("Drawing", "Drawing");
@@ -120,25 +121,47 @@ namespace HTTF_Riven_v2
 
 
             ComboLogic = Principal.AddSubMenu("ComboLogic", "ComboLogics");
-            ComboLogic.AddLabel("Q1");
-            ComboLogic.Add("Q1Hydra", new CheckBox("Q1>Hydra"));
+            ComboLogic.Add("BrokenAnimon", new CheckBox("Use features?"));
 
-            ComboLogic.AddLabel("Q2");
-            ComboLogic.Add("Q1Hydra", new CheckBox("Q2>Hydra"));
-            ComboLogic.AddLabel("Q3");
-            ComboLogic.Add("Q1Hydra", new CheckBox("Q3>Hydra"));
+            ComboLogic.AddLabel("Q1,Q2,Q3");
+            ComboLogic.Add("Q1Hydra", new CheckBox("Q>Hydra"));
+            ComboLogic.Add("HydraQ", new CheckBox("Hydra>Q"));
+            ComboLogic.Add("QW", new CheckBox("Q>W"));
+
+            
+
             ComboLogic.AddLabel("W");
+            ComboLogic.Add("HydraW", new CheckBox("Hydra>W"));
+
+
 
             ComboLogic.AddLabel("E");
             ComboLogic.Add("EQall", new CheckBox("E>Q"));
             ComboLogic.Add("EW", new CheckBox("E>W"));
+            ComboLogic.Add("EH", new CheckBox("E>Hydra or Tiamat"));
+            ComboLogic.Add("ER1", new CheckBox("E>R1"));
+            ComboLogic.Add("ER2", new CheckBox("E>R2"));
+
+
             ComboLogic.AddLabel("R1");
+            ComboLogic.Add("R1W", new CheckBox("R1>W"));
+            ComboLogic.Add("R1Q", new CheckBox("R1>Q"));
+            ComboLogic.Add("R1Hydra", new CheckBox("R1>Hydra or Tiamat"));
 
 
             ComboLogic.AddLabel("R2");
+            ComboLogic.Add("R2W", new CheckBox("R2>W"));
+            ComboLogic.Add("R2Q", new CheckBox("R2>Q"));
+            ComboLogic.Add("R2E", new CheckBox("R2>E"));
 
 
-            ComboLogic.AddLabel("VERY SOON UPDATE MORE ANIMATION. WAIT.");
+            ComboLogic.AddLabel("Combo Logic V2 SOON");
+
+
+
+
+
+
 
 
 
@@ -179,7 +202,10 @@ namespace HTTF_Riven_v2
         public static bool Keybind(Menu m, string s)
         {
             return m[s].Cast<KeyBind>().CurrentValue;
+
         }
+
+
 
         public static int ComboBox(Menu m, string s)
         {

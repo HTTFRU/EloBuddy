@@ -247,7 +247,6 @@ namespace HTTF_Riven_v2
             {
                 if (DamageTotal(FocusTarget) >= FocusTarget.Health)
                 {
-                    if (FocusTarget.IsValidTarget(800))
                     {
                         switch (RivenMenu.Slider(RivenMenu.Combo, "BurstStyle"))
                         {
@@ -350,6 +349,9 @@ namespace HTTF_Riven_v2
                 }
             }
         }
+
+
+
 
         private static void Flee()
         {
@@ -535,9 +537,30 @@ namespace HTTF_Riven_v2
             }
         }
 
+
+        private static void DpsBurst()
+        {
+            var target = TargetSelector.GetTarget(W.Range, DamageType.Physical);
+            if (target != null)
+            {
+                E.Cast();
+                ItemLogic.Hydra.Cast();
+                W.Cast();
+                Q.Cast();
+                AnimateCAnsl();
+                Q.Cast();
+                AnimateCAnsl();
+                Q.Cast();
+
+                {
+                    
+                }
+            }
+        }
+
         private static void Combo()
         {
-            var Target = TargetSelector.GetTarget(R2.Range, DamageType.Physical);
+            var Target = TargetSelector.GetTarget(E.Range, DamageType.Physical);
 
             if (Target != null)
             {
@@ -623,27 +646,138 @@ namespace HTTF_Riven_v2
         //New Animation Cansel Function.
         private static void NewComboAnimation()
         {
-            var Target = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
+            if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "BrokenAnimon"))
+            {
+                var Target = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
+                //q1Hydra
+                if (Target != null)
+                    if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "Q1Hydra"))
 
-            if (Target != null)
+                        if (Q.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseQCombo"))
+                        {
+                            if (ItemLogic.Hydra != null && ItemLogic.Hydra.IsReady())
 
-                if (Q.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseQCombo")) 
+                            {
+
+                                ItemLogic.Hydra.Cast();
+                                Q.Cast();
+                                return;
+                            }
+                        }
                 {
-                    if (ItemLogic.Hydra != null && ItemLogic.Hydra.IsReady())
+                    if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "EQall"))
+                        if (E.IsReady() || Q.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseQCombo"))
+                        {
+                            E.Cast();
+                            Q.Cast();
+                            return;
+                        }
                     {
+                        if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "EH"))
+                            if (E.IsReady() || ItemLogic.Hydra.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
 
-                        ItemLogic.Hydra.Cast();
-                        Q.Cast();
+                            {
+                                E.Cast();
+                                ItemLogic.Hydra.Cast();
+                                return;
+                            }
+                        if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "HydraQ"))
+                            if (Q.IsReady() || ItemLogic.Hydra.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseQCombo"))
+
+                            {
+                                ItemLogic.Hydra.Cast();
+                                Q.Cast();
+                                return;
+                            }
+                        if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "HydraW"))
+                            if (W.IsReady() || ItemLogic.Hydra.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo"))
+
+                            {
+                                ItemLogic.Hydra.Cast();
+                                W.Cast();
+                                return;
+                            }
+                    }
+                    if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "QW"))
+                        if (Q.IsReady() || W.IsReady())
+
+                        {
+                            Q.Cast();
+                            W.Cast();
+                            return;
+                        }
+                }
+                if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "ER1"))
+                    if (R.IsReady() || E.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseRCombo"))
+
+                    {
+                        E.Cast();
+                        R.Cast();
                         return;
                     }
-                }
-            if (E.IsReady() || Q.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseQCombo"))
+            }
+            if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "R1W"))
+                if (R.IsReady() || W.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseRCombo"))
 
-                E.Cast();
-                Q.Cast();
-            return;
+                {
+                    R.Cast();
+                    W.Cast();
+                    return;
+                }
+            if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "R1Q"))
+                if (R.IsReady() || Q.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseRCombo"))
+
+                {
+                    R.Cast();
+                    Q.Cast();
+                    return;
+                }
+            if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "R1Hydra"))
+                if (R.IsReady() || ItemLogic.Hydra.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseRCombo"))
+
+                {
+                    R.Cast();
+                    ItemLogic.Hydra.Cast();
+                    return;
+                }
+            if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "ER2"))
+                if (E.IsReady() || R2.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseR2Combo"))
+
+                {
+                    E.Cast();
+                    R2.Cast();
+                    return;
+                }
+            if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "R2W"))
+                if (W.IsReady() || R2.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseR2Combo"))
+
+                {
+
+                    R2.Cast();
+                    W.Cast();
+                    return;
+                }
+            if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "R2Q"))
+                if (Q.IsReady() || R2.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseR2Combo"))
+
+                {
+
+                    R2.Cast();
+                    Q.Cast();
+                    return;
+                }
+            if (RivenMenu.CheckBox(RivenMenu.ComboLogic, "R2E"))
+                if (Q.IsReady() || R2.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseR2Combo"))
+
+                {
+
+                    R2.Cast();
+                    E.Cast();
+                    return;
+                }
         }
-    
+
+
 
 
 
@@ -1140,28 +1274,25 @@ namespace HTTF_Riven_v2
                     return;
                 }
 
-                var minions = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, Player.Instance.Position, Q.Range + 126).Where(minion => minion != null && !minion.IsDead).ToList();
                 if (args.SData.Name.ToLower().Contains(Riven.Q.Name.ToLower()))
                 {
                     LastCastQ = Environment.TickCount;
-
+                    if (RivenMenu.CheckBox(RivenMenu.Misc, "AliveQ")) return;
                     Core.DelayAction(() =>
                     {
-                        if (!Player.Instance.IsRecalling() && CountQ <= 2 && minions.Count == 0)
+                        if (!Player.Instance.IsRecalling() && CountQ < 2)
                         {
                             Player.CastSpell(SpellSlot.Q,
                                 Orbwalker.LastTarget != null && Orbwalker.LastAutoAttack - Environment.TickCount < 3000
                                     ? Orbwalker.LastTarget.Position
                                     : Game.CursorPos);
                         }
-                        else
-                        {
-                            CountQ = 0;
-                        }
                     }, 3480);
                     return;
                 }
-            }
+            
+
+        }
 
             {
                 if (sender.IsMe || sender.IsAlly || sender == null)
