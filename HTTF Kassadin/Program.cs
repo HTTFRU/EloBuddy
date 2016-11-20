@@ -10,6 +10,7 @@ using EloBuddy.SDK.Rendering;
 using Color = System.Drawing.Color;
 using SharpDX;
 
+
 namespace HTTF_Kassadin
 {
     internal class Program
@@ -26,6 +27,8 @@ namespace HTTF_Kassadin
         private static readonly float _xOffset = 2;
         private static readonly float _yOffset = 9;
         private static readonly Vector2 Offset = new Vector2(1, 0);
+        public static Item ZhonyaHourglass;
+
         public static AIHeroClient PlayerInstance
         {
             get { return Player.Instance; }
@@ -47,6 +50,7 @@ namespace HTTF_Kassadin
         {
             get { return _Player.Spellbook.GetSpell(SpellSlot.R).SData.Mana; }
         }
+
 
         static void Main(string[] args)
         {
@@ -78,9 +82,10 @@ namespace HTTF_Kassadin
                 
                 Q = new Spell.Targeted(SpellSlot.Q, 650);
                 W = new Spell.Active(SpellSlot.W);
-                E = new Spell.Skillshot(SpellSlot.E, 650, SkillShotType.Cone, (int)0.5f, int.MaxValue, 10);
+                E = new Spell.Skillshot(SpellSlot.E, 600, SkillShotType.Cone, (int)0.5f, int.MaxValue, 10);
                 R = new Spell.Skillshot(SpellSlot.R, 500, SkillShotType.Circular, (int)0.5f, int.MaxValue, 190);
                          if (_Player.GetSpellSlotFromName("summonerdot") != SpellSlot.Unknown)
+                    ZhonyaHourglass = new Item(ItemId.Zhonyas_Hourglass);
 
 
                 Menu = MainMenu.AddMenu("HTTF Kassadin", "kassadin");
@@ -137,6 +142,11 @@ namespace HTTF_Kassadin
                 Misc.AddLabel("• SkinHack •");
                 Misc.Add("checkSkin", new CheckBox("Use Skin Changer"));
                 Misc.Add("Skinid", new Slider("Skin ID", 0, 0, 11));
+                Misc.AddLabel("• Activator •");
+                Misc.Add("Zhonyas", new CheckBox("Use Zhonyas"));
+                Misc.Add("ZhonyasHp", new Slider("Use Zhonyas If Your HP%", 20));
+
+
 
 
 
@@ -159,6 +169,16 @@ namespace HTTF_Kassadin
 
         }
 
+        private static void AutoHourglass()
+        {
+            var zhonyas = Misc["Zhonyas"].Cast<CheckBox>().CurrentValue;
+            var zhonyasHp = Misc["ZhonyasHp"].Cast<Slider>().CurrentValue;
+
+            if (zhonyas && _Player.HealthPercent <= zhonyasHp && ZhonyaHourglass.IsReady())
+            {
+                ZhonyaHourglass.Cast();
+            }
+        }
 
         static void KGapCloser(Obj_AI_Base sender, Gapcloser.GapcloserEventArgs args)
         {
