@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
@@ -176,9 +175,10 @@ namespace HTTF_Yasuo
                 SpellDataBase.E.Cast(minion);
                 return;
             }
-            if (Yasuo.Clean["LastQ"].Cast<CheckBox>().CurrentValue && SpellDataBase.Q.IsReady() && DamageInfo.QDamage(minion) > minion.Health)
+            if (Yasuo.Clean["WC.Q"].Cast<CheckBox>().CurrentValue && SpellDataBase.Q.IsReady() && DamageInfo.QDamage(minion) > minion.Health)
             {
                 SpellDataBase.Q.Cast(minion);
+                return;
             }
         }
 

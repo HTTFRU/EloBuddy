@@ -7,7 +7,6 @@ using System;
 using EloBuddy;
 using EloBuddy.SDK.Events;
 using HTTF_Yasuo.Utils;
-using EloBuddy.SDK.Rendering;
 
 namespace HTTF_Yasuo
     {
