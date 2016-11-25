@@ -24,6 +24,7 @@ namespace HTTF_Riven_v2
             Combo.Add("UseRCombo", new CheckBox("Use R?"));
             Combo.Add("UseR2Combo", new CheckBox("Use R2?"));
             Combo.Add("BrokenAnimations", new CheckBox("Broken Animations ?",false));
+            Combo.Add("moveback", new CheckBox("Move back in combo ?", false));
             Combo.AddSeparator(3);
             Combo.AddLabel("• Spell R");
             Combo.Add("UseRType", new ComboBox("Use R when", 1, "Target less than 40 % HP", "DamageIndicator greater than 100 %", "Always", "On Keypress"));
@@ -32,19 +33,6 @@ namespace HTTF_Riven_v2
             Combo.AddSeparator(3);
             Combo.AddLabel("• Spell R2");
             Combo.Add("UseR2Type", new ComboBox("Use R2 when", 0, "Kill only", "Max damage when target less than 25 %"));
-            Combo.AddLabel("• Burst");
-            Combo.AddLabel("The combo burst key is the Combo !");
-            Combo.AddLabel("This 'Burst allowed' option is just to confirm that you want to use the Burst");
-            Combo.AddSeparator(2);
-            Combo.Add("BurstAllowed", new KeyBind("Burst Allowed ?", false, KeyBind.BindTypes.PressToggle, 'T'));
-            Combo.Add("BurstType", new ComboBox("Burst:", 0, "Damage Check", "Always"));
-            Combo.AddSeparator(2);
-            Combo.AddLabel("Select Burst style");
-            Combo.AddLabel("BURST STYLE: ");
-            Combo.AddLabel("Style Burst 1: E > Flash > R > W > Hydra > R2");
-            Combo.AddLabel("Style Burst 2: E > R > Flash > W > Hydra > R2");
-            Combo.AddSeparator(1);
-            Combo.Add("BurstStyle", new Slider("Burst style", 2, 1, 2));
             Combo.AddLabel(" FLEE");
             Combo.Add("UseQFlee", new CheckBox("Use Q"));
             Combo.Add("UseEFlee", new CheckBox("Use E"));

@@ -136,18 +136,6 @@ namespace HTTF_Riven_v2
         {
 
 
-            if (RivenMenu.Keybind(RivenMenu.Combo, "BurstAllowed"))
-            {
-                if (Riven.FocusTarget != null)
-                {
-                    Circle.Draw(Color.DarkBlue, 150, Riven.FocusTarget.Position);
-                }
-            }
-
-            if (RivenMenu.Keybind(RivenMenu.Combo, "BurstAllowed"))
-            {
-                Circle.Draw(Color.Green, 800, Player.Instance.Position);
-            }
             if (RivenMenu.CheckBox(RivenMenu.Draw, "drawjump"))
             {
                 foreach (var spot in WallJump.JumpSpots.Where(s => Player.Instance.Distance(s[0]) <= 1500))
@@ -240,57 +228,12 @@ namespace HTTF_Riven_v2
 
         private static void Burst()
         {
-            if (FocusTarget.Health == 0)
-                return;
-
-            if (RivenMenu.ComboBox(RivenMenu.Combo, "BurstType") == 0)
+            var target = TargetSelector.GetTarget(600, DamageType.Physical);
+                if (RivenMenu.Keybind(RivenMenu.Combo, "burstKey")) return;
+            if (FocusTarget.IsValidTarget(600))
             {
-                if (DamageTotal(FocusTarget) >= FocusTarget.Health)
-                {
                     {
-                        switch (RivenMenu.Slider(RivenMenu.Combo, "BurstStyle"))
-                        {
-                            case 1:
-
-                                if (E.IsReady())
-                                {
-                                    Player.CastSpell(SpellSlot.E, FocusTarget.Position);
-                                }
-
-                                if (Flash.IsReady())
-                                {
-                                    Flash.Cast(FocusTarget.Position);
-                                }
-
-                                if (R.IsReady() && !CheckUlt())
-                                {
-                                    R.Cast();
-                                }
-
-                                if (FocusTarget.IsValidTarget(Hydra.Range))
-                                {
-                                    if (HasTiamat())
-                                    {
-                                        Tiamat.Cast();
-                                    }
-
-                                    if (HasHydra())
-                                    {
-                                        Hydra.Cast();
-                                    }
-                                }
-
-                                if (W.IsReady())
-                                {
-                                    if (FocusTarget.IsValidTarget(W.Range))
-                                    {
-                                        W.Cast();
-                                    }
-                                }
-
-                                break;
-
-                            case 2:
+                      
 
                                 if (E.IsReady())
                                 {
@@ -343,12 +286,12 @@ namespace HTTF_Riven_v2
                                     }
                                 }
 
-                                break;
+
                         }
                     }
                 }
-            }
-        }
+            
+        
 
 
 
@@ -553,33 +496,29 @@ namespace HTTF_Riven_v2
                 Q.Cast();
 
                 {
-                    
+
                 }
             }
         }
 
         private static void Combo()
         {
-            var Target = TargetSelector.GetTarget(E.Range, DamageType.Physical);
+            
 
-            if (Target != null)
+            var target = TargetSelector.GetTarget(Riven.E.Range + Riven.W.Range + 200, DamageType.Physical);
+            if (target != null)
             {
-                if (E.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
-                {
-                    if (Target.IsValidTarget(E.Range) && Target.CanMove)
-                    {
-                        Player.CastSpell(SpellSlot.E, Target.Position);
-                    }
-                }
                 if (R.IsReady())
                 {
                     if (CheckUlt() == false)
                     {
-                        if (Target.HealthPercent >= RivenMenu.Slider(RivenMenu.Combo, "DontR1"))
-                        {
-                            Player.CastSpell(SpellSlot.E, Target.Position);
-                            ChooseR(Target);
-                        }
+                        if (target.HealthPercent >= RivenMenu.Slider(RivenMenu.Combo, "DontR1"))
+                        
+                            {
+                                Player.CastSpell(SpellSlot.E, target.Position);
+                                ChooseR(target);
+                            }
+                        
                     }
                 }
 
@@ -587,11 +526,15 @@ namespace HTTF_Riven_v2
                 {
                     if (CheckUlt() == true)
                     {
-                        ChooseR2(Target);
+                        ChooseR2(target);
                     }
                 }
 
-
+                if (target.Distance(Player.Instance) <= E.Range && E.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
+                {
+                    Player.CastSpell(SpellSlot.E, target.Position);
+                    return;
+                }
 
                 {
 
@@ -605,41 +548,25 @@ namespace HTTF_Riven_v2
                     }
 
 
-                    if (CountQ == 2 && Q.IsReady())
+                    if (target.Distance(Player.Instance) <= W.Range && W.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo"))
                     {
-                        if (Player.Instance.IsFacing(Target) && Target.IsValidTarget(450) && ObjectManager.Player.Position.Distance(Target.ServerPosition) > 400 && Target.CanMove && !Player.HasBuff("Valor"))
+                        if (ItemLogic.Hydra != null && ItemLogic.Hydra.IsReady())
                         {
-                            Player.CastSpell(SpellSlot.Q, Target.Position);
+                            ItemLogic.Hydra.Cast();
+                            return;
                         }
+                        Player.CastSpell(SpellSlot.W);
                     }
 
-                    if (ItemLogic.Hydra != null && ItemLogic.Hydra.IsReady())
-                    {
-                        ItemLogic.Hydra.Cast();
-                        return;
-                    }
 
-                    if (Target.Distance(Player.Instance) <= W.Range && W.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo"))
 
-                    {
-                        {
 
-                            Player.CastSpell(SpellSlot.W);
-                        }
-
-                        return;
-                    }
-
-                    if (Player.Instance.IsFacing(Target) && ObjectManager.Player.Position.Distance(Target.ServerPosition) > Player.Instance.GetAutoAttackRange(Target) && ObjectManager.Player.Position.Distance(Target.ServerPosition) < 400)
-                    {
-                        {
-                            Q.Cast(Player.Instance.Position.Extend(Target.ServerPosition, 250).To3D());
-                        }
-                    }
 
                 }
+
             }
-        }
+          }
+        
 
 
 
@@ -1142,10 +1069,7 @@ namespace HTTF_Riven_v2
             if (Player.Instance.IsDead)
                 return;
 
-            if (!Flash.IsReady())
-            {
-                RivenMenu.Combo["BurstAllowed"].Cast<KeyBind>().CurrentValue = false;
-            }
+        
 
             if (Player.Instance.HasBuffOfType(BuffType.Charm) && RivenMenu.CheckBox(RivenMenu.Misc, "QssCharm"))
             {
@@ -1216,51 +1140,35 @@ namespace HTTF_Riven_v2
 
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
-            {
-                if (RivenMenu.Keybind(RivenMenu.Combo, "BurstAllowed"))
-                {
-                    Burst();
-                }
-                else
+            
                 {
                     Combo();
                 }
 
-                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseR2Combo"))
+
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
                 {
-                    if (RivenMenu.Keybind(RivenMenu.Combo, "BurstAllowed"))
-                    {
-                        if (CheckUlt() == true)
-                        {
-                            ChooseR2(FocusTarget);
-                        }
-                    }
+                    Flee();
                 }
-            }
 
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
-            {
-                Flee();
-            }
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+                {
+                    Laneclear();
+                }
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
+                {
+                    LastHit();
+                }
 
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
-            {
-                Laneclear();
-            }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
-            {
-                LastHit();
-            }
-
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
-            {
-                Jungleclear();
-            }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
-            {
-                Harass();
-            }
-
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
+                {
+                    Jungleclear();
+                }
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
+                {
+                    Harass();
+                }
+            
         }
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
