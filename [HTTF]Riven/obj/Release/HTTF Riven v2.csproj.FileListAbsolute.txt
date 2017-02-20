@@ -10,3 +10,15 @@ C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riv
 C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\bin\Release\SharpDX.dll
 C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\obj\Release\HTTF Riven v2.exe
 C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\obj\Release\HTTF Riven v2.pdb
+F:\22\Legend\game\EB\addon\[HTTF]Riven\bin\Release\HTTF Riven v2.exe.config
+F:\22\Legend\game\EB\addon\[HTTF]Riven\bin\Release\HTTF Riven v2.exe
+F:\22\Legend\game\EB\addon\[HTTF]Riven\bin\Release\HTTF Riven v2.pdb
+F:\22\Legend\game\EB\addon\[HTTF]Riven\bin\Release\EloBuddy.dll
+F:\22\Legend\game\EB\addon\[HTTF]Riven\bin\Release\EloBuddy.Sandbox.dll
+F:\22\Legend\game\EB\addon\[HTTF]Riven\bin\Release\EloBuddy.SDK.dll
+F:\22\Legend\game\EB\addon\[HTTF]Riven\bin\Release\Newtonsoft.Json.dll
+F:\22\Legend\game\EB\addon\[HTTF]Riven\bin\Release\SharpDX.Direct3D9.dll
+F:\22\Legend\game\EB\addon\[HTTF]Riven\bin\Release\SharpDX.dll
+F:\22\Legend\game\EB\addon\[HTTF]Riven\obj\Release\HTTF Riven v2.csprojResolveAssemblyReference.cache
+F:\22\Legend\game\EB\addon\[HTTF]Riven\obj\Release\HTTF Riven v2.exe
+F:\22\Legend\game\EB\addon\[HTTF]Riven\obj\Release\HTTF Riven v2.pdb

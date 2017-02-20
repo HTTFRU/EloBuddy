@@ -3,6 +3,8 @@ using EloBuddy.SDK;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 using System.Drawing;
+using System;
+
 namespace HTTF_Riven_v2
 {
     class RivenMenu
@@ -24,8 +26,12 @@ namespace HTTF_Riven_v2
             Combo.Add("UseRCombo", new CheckBox("Use R?"));
             Combo.Add("UseR2Combo", new CheckBox("Use R2?"));
             Combo.Add("BrokenAnimations", new CheckBox("Broken Animations ?",false));
-            Combo.Add("moveback", new CheckBox("Move back in combo ?", false));
+            Combo.Add("logic1x1", new CheckBox("Use logic 1x1"));
+            Combo.Add("UseHT", new CheckBox("Use Hydra-Tiamat in combo?"));
+
             Combo.AddSeparator(3);
+
+
             Combo.AddLabel("• Spell R");
             Combo.Add("UseRType", new ComboBox("Use R when", 1, "Target less than 40 % HP", "DamageIndicator greater than 100 %", "Always", "On Keypress"));
             Combo.Add("ForceR", new KeyBind("R On Keypress Key", false, KeyBind.BindTypes.PressToggle, 'U'));
@@ -110,6 +116,7 @@ namespace HTTF_Riven_v2
 
             ComboLogic = Principal.AddSubMenu("ComboLogic", "ComboLogics");
             ComboLogic.Add("BrokenAnimon", new CheckBox("Use features?"));
+            ComboLogic.Add("moveback", new CheckBox("Use Combo HTTF Logic?", false));
 
             ComboLogic.AddLabel("Q1,Q2,Q3");
             ComboLogic.Add("Q1Hydra", new CheckBox("Q>Hydra"));
@@ -187,10 +194,20 @@ namespace HTTF_Riven_v2
             return m[s].Cast<Slider>().CurrentValue;
         }
 
+        internal static bool getKeyBindItem(Action combo, string v)
+        {
+            throw new NotImplementedException();
+        }
+
         public static bool Keybind(Menu m, string s)
         {
             return m[s].Cast<KeyBind>().CurrentValue;
 
+        }
+
+        public static bool getKeyBindItem(Menu m, string item)
+        {
+            return m[item].Cast<KeyBind>().CurrentValue;
         }
 
 

@@ -10,3 +10,6 @@ C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riv
 C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\obj\Debug\HTTF Riven v2.csprojResolveAssemblyReference.cache
 C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\obj\Debug\HTTF Riven v2.exe
 C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Riven v2\HTTF Riven v2\obj\Debug\HTTF Riven v2.pdb
+F:\22\Legend\game\EB\addon\[HTTF]Riven\bin\Debug\HTTF Riven v2.exe.config
+F:\22\Legend\game\EB\addon\[HTTF]Riven\obj\Debug\HTTF Riven v2.exe
+F:\22\Legend\game\EB\addon\[HTTF]Riven\obj\Debug\HTTF Riven v2.pdb

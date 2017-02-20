@@ -57,7 +57,7 @@ namespace HTTF_Riven_v2
             {
                 Flash = new Spell.Targeted(SpellSlot.Summoner2, 425);
             }
-            var target = TargetSelector.GetTarget(Riven.E.Range + Riven.W.Range + 200, DamageType.Physical);
+            var target = TargetSelector.GetTarget(Riven.E.Range + 200, DamageType.Physical);
 
             Hydra = new Item((int)ItemId.Ravenous_Hydra, 300);
             Tiamat = new Item((int)ItemId.Tiamat, 300);
@@ -81,6 +81,10 @@ namespace HTTF_Riven_v2
 
         }
 
+        private static Vector3 MousePos
+        {
+            get { return Game.CursorPos; }
+        }
         public static void Obj_AI_Turret_OnBasicAttack2(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender is Obj_AI_Turret && sender.Distance(Player.Instance) < 800 && sender.IsAlly)
@@ -144,7 +148,6 @@ namespace HTTF_Riven_v2
                 }
             }
         }
-
 
 
 
@@ -226,11 +229,21 @@ namespace HTTF_Riven_v2
             return false;
         }
 
+
+
         private static void Burst()
         {
-            var target = TargetSelector.GetTarget(600, DamageType.Physical);
-                if (RivenMenu.Keybind(RivenMenu.Combo, "burstKey")) return;
-            if (FocusTarget.IsValidTarget(600))
+
+            Player.IssueOrder(GameObjectOrder.MoveTo, MousePos);
+            var etarget = TargetSelector.GetTarget(625, DamageType.Physical);
+            if (etarget == null) return;
+            if (!E.IsReady()) return;
+            if (!R.IsReady()) return;
+
+
+                if (etarget.IsValidTarget(600))
+                if (!E.IsReady() || !Flash.IsReady() || !R.IsReady());
+            if (TargetSelector.SelectedTarget.IsValid);
             {
                     {
                       
@@ -505,7 +518,7 @@ namespace HTTF_Riven_v2
         {
             
 
-            var target = TargetSelector.GetTarget(Riven.E.Range + Riven.W.Range + 200, DamageType.Physical);
+            var target = TargetSelector.GetTarget(Riven.E.Range  + 200, DamageType.Physical);
             if (target != null)
             {
                 if (R.IsReady())
@@ -535,7 +548,12 @@ namespace HTTF_Riven_v2
                     Player.CastSpell(SpellSlot.E, target.Position);
                     return;
                 }
+                if (target.Distance(Player.Instance) <= Hydra.Range && Hydra.IsReady() && RivenMenu.CheckBox(RivenMenu.Combo, "UseHT"))
+                {
+                    ItemLogic.Hydra.Cast();
+                    return;                        
 
+                }
                 {
 
 
@@ -905,7 +923,7 @@ namespace HTTF_Riven_v2
 
                     LastQ = Core.GameTickCount;
                     CountQ = 1;
-                    T = 293;
+                    T = 291;
 
                     break;
 
@@ -913,7 +931,7 @@ namespace HTTF_Riven_v2
 
                     LastQ = Core.GameTickCount;
                     CountQ = 2;
-                    T = 293;
+                    T = 291;
 
                     break;
 
