@@ -36,7 +36,7 @@ namespace HTTF_TopLane_Series
 
                 if (LocalVersion != NoticeList[1])
                 {
-                    Chat.Print("<font color = '#ffffff'>[ Notice ] </font><font color = '#ebfd00'>HTTF Riven has been Update </font><font color = '#ffffff'>" + NoticeList[1] + "</font>");
+                    Chat.Print("<font color = '#ffffff'>[ Notice ] </font><font color = '#ebfd00'>HTTF TopLineSeries has been Update </font><font color = '#ffffff'>" + NoticeList[1] + "</font>");
 
                     Main.M_NVer = Main.Principial.AddSubMenu(NoticeList[0]);
                     Main.M_NVer.AddGroupLabel(NoticeList[1]);

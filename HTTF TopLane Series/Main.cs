@@ -19,9 +19,9 @@ namespace HTTF_TopLane_Series
 
         public static void Load()
         {
-            Chat.Print("<font color = '#20b2aa'>Welcome to </font><font color = '#ffffff'>[ HTTF ] " + "Riven" + "</font><font color = '#20b2aa'>. Addon is ready.</font>");
+            Chat.Print("<font color = '#20b2aa'>Welcome to </font><font color = '#ffffff'>[ HTTF ] " + "HTTF Top Series" + "</font><font color = '#20b2aa'>. Addon is ready.</font>");
             CheckVersion.CheckUpdate();
-            Principial = MainMenu.AddMenu("HTTF Riven v2", "Riven");
+            Principial = MainMenu.AddMenu("Activator HTTF", "Activator");
 
             ActivatorMenu = MainMenu.AddMenu("Activator HTTF", "HTTF Top");
             ActivatorMenu.AddLabel("Hey, this is series for top lane, soon mid lane jung and bot lane.");
