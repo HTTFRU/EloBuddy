@@ -4,17 +4,20 @@ using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 using System.Drawing;
 using System;
+using EloBuddy;
 
 namespace HTTF_Riven_v2
 {
     class RivenMenu
     {
-        public static Menu Principal, Combo, Burst, Shield, Items, Laneclear, Jungleclear, Flee, Misc, Draw, Killsteal, AnimationCancle, ComboLogic;
+        public static Menu Principal, Combo, Burst, Shield, Items, Laneclear, Jungleclear, Flee, Misc, Draw, Killsteal, AnimationCancle, ComboLogic, M_NVer;
 
         public static void Load()
         {
+            Chat.Print("<font color = '#20b2aa'>Welcome to </font><font color = '#ffffff'>[ HTTF ] " + "Riven" + "</font><font color = '#20b2aa'>. Addon is ready.</font>");
+            CheckVersion.CheckUpdate();
+
             Principal = MainMenu.AddMenu("HTTF Riven v2", "Riven");
-            Principal.AddLabel("HTTF Riven v" + Assembly.GetExecutingAssembly().GetName().Version);
 
 
             Combo = Principal.AddSubMenu("Combo", "Combo");
