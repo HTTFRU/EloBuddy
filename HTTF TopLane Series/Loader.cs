@@ -57,7 +57,7 @@ namespace HTTF_TopLane_Series
             }
 
             HTTF_TopLane_Series.Main.Load();
-            Chat.Print("HTTF Top Lane Series ", Color.LightSkyBlue);
+            Chat.Print("HTTF Top Line Series ", Color.LightSkyBlue);
             Chat.Print("Have Fun And Dont Feed :3 ", Color.DarkSeaGreen);
             return;
     }

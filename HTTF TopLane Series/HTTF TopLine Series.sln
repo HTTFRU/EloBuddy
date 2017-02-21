@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTTF TopLane Series", "HTTF TopLane Series.csproj", "{953DDBC4-56FF-4D1C-AE8F-2B52C282B809}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTTF TopLine Series", "HTTF TopLine Series.csproj", "{953DDBC4-56FF-4D1C-AE8F-2B52C282B809}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
