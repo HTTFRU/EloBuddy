@@ -16,7 +16,8 @@ namespace HTTF_TopLane_Series
     }
     static void Loading(EventArgs args)
     {
-        if (Player.Instance.ChampionName == "Irelia")
+
+            if (Player.Instance.ChampionName == "Irelia")
         {
                 DataChapmion.Irelia.IreliaLoading();
         }
@@ -41,6 +42,18 @@ namespace HTTF_TopLane_Series
             if (Player.Instance.ChampionName == "Renekton")
             {
                 DataChampion.Renekton.RenektonLoading();
+            }
+            if (Player.Instance.ChampionName == "Olaf")
+            {
+                DataChampion.Olaf.OlafLoading();
+            }
+            if (Player.Instance.ChampionName == "Jax")
+            {
+                DataChampion.Jax.JaxLoading();
+            }
+            if (Player.Instance.ChampionName == "Nautilus")
+            {
+                DataChampion.Nautilus.NautilusLoad();
             }
 
             HTTF_TopLane_Series.Main.Load();

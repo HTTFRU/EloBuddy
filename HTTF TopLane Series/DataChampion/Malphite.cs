@@ -55,8 +55,8 @@ namespace HTTF_TopLane_Series.DataChapmion
             ComboMenu.Add("ComboE", new CheckBox("Use E Combo"));
             ComboMenu.AddGroupLabel("Ultimate Settings");
             ComboMenu.Add("ComboFQ", new KeyBind("Use R Selected Target", false, KeyBind.BindTypes.HoldActive, 'G'));
-            ComboMenu.Add("ComboR", new CheckBox("Use R Aoe"));
-            ComboMenu.Add("MinR", new Slider("Min Hit Enemies Use R Aoe:", 3, 1, 5));
+            ComboMenu.Add("ComboR", new CheckBox("Use R in multitarget"));
+            ComboMenu.Add("MinR", new Slider("Min Hit Enemies Use R :", 3, 1, 5));
 
 
             ComboMenu.AddGroupLabel("Harass Settings");

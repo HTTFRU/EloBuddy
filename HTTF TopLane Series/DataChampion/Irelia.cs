@@ -57,7 +57,6 @@ namespace HTTF_TopLane_Series.DataChapmion
             Sheen = new Item(ItemId.Sheen);
             Tryn = new Item(ItemId.Trinity_Force);
             Bil = new Item(3144, 475f);
-            Ignite = new Spell.Targeted(_Player.GetSpellSlotFromName("summonerdot"), 600);
             Menu = MainMenu.AddMenu("HTTF Irelia", "Irelia");
             ComboMenu = Menu.AddSubMenu("Combo Settings", "Combo");
             ComboMenu.AddGroupLabel("Combo Settings");
@@ -93,7 +92,6 @@ namespace HTTF_TopLane_Series.DataChapmion
             ComboMenu.AddGroupLabel("KillSteal Settings");
             ComboMenu.Add("KsQ", new CheckBox("Use Q KillSteal"));
             ComboMenu.Add("KsE", new CheckBox("Use E KillSteal"));
-            ComboMenu.Add("ign", new CheckBox("Use Ignite KillSteal"));
             ComboMenu.Add("KsR", new CheckBox("Use R KillSteal"));
 
 
@@ -119,10 +117,6 @@ namespace HTTF_TopLane_Series.DataChapmion
 
 
             Misc = Menu.AddSubMenu("Misc Changer", "Misc");
-            Misc.AddGroupLabel("Items Settings");
-            Misc.Add("BOTRK", new CheckBox("Use [Botrk]"));
-            Misc.Add("ihp", new Slider("My HP Use BOTRK <=", 50));
-            Misc.Add("ihpp", new Slider("Enemy HP Use BOTRK <=", 50));
             Misc.AddGroupLabel("Flee Settings");
             Misc.Add("FleeQ", new CheckBox("Only Use [Q] Flee If Killalble Minion"));
             Misc.AddGroupLabel("Drawing Settings");
@@ -612,13 +606,7 @@ namespace HTTF_TopLane_Series.DataChapmion
                     }
                 }
 
-                if (Ignite != null && ComboMenu["ign"].Cast<CheckBox>().CurrentValue && Ignite.IsReady())
-                {
-                    if (target.Health < _Player.GetSummonerSpellDamage(target, DamageLibrary.SummonerSpells.Ignite))
-                    {
-                        Ignite.Cast(target);
-                    }
-                }
+
             }
         }
     }

@@ -1,1 +1,3 @@
 c:\users\костя\documents\visual studio 2015\Projects\HTTF TopLane Series\HTTF TopLane Series\bin\Debug\HTTF TopLane Series.exe.config
+C:\EloBuddy\HTTF TopLane Series\bin\Debug\HTTF TopLane Series.exe.config
+C:\EloBuddy\HTTF TopLane Series\obj\Debug\HTTF TopLane Series.csprojResolveAssemblyReference.cache

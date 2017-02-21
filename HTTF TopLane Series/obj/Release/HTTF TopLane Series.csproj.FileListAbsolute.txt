@@ -10,3 +10,14 @@ C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF TopLane Series\HT
 C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF TopLane Series\HTTF TopLane Series\bin\Release\SharpDX.dll
 C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF TopLane Series\HTTF TopLane Series\obj\Release\HTTF TopLane Series.exe
 C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF TopLane Series\HTTF TopLane Series\obj\Release\HTTF TopLane Series.pdb
+C:\EloBuddy\HTTF TopLane Series\obj\Release\HTTF TopLane Series.csprojResolveAssemblyReference.cache
+C:\EloBuddy\HTTF TopLane Series\obj\Release\HTTF TopLane Series.exe
+C:\EloBuddy\HTTF TopLane Series\obj\Release\HTTF TopLane Series.pdb
+C:\EloBuddy\HTTF TopLane Series\bin\Release\HTTF TopLane Series.exe.config
+C:\EloBuddy\HTTF TopLane Series\bin\Release\HTTF TopLane Series.exe
+C:\EloBuddy\HTTF TopLane Series\bin\Release\HTTF TopLane Series.pdb
+C:\EloBuddy\HTTF TopLane Series\bin\Release\EloBuddy.Sandbox.dll
+C:\EloBuddy\HTTF TopLane Series\bin\Release\EloBuddy.SDK.dll
+C:\EloBuddy\HTTF TopLane Series\bin\Release\Newtonsoft.Json.dll
+C:\EloBuddy\HTTF TopLane Series\bin\Release\SharpDX.Direct3D9.dll
+C:\EloBuddy\HTTF TopLane Series\bin\Release\SharpDX.dll
