@@ -16,7 +16,7 @@ namespace HTTF_Riven_v2
 
         public static void CheckUpdate()
         {
-            WebRequest Request_GitHubVer = WebRequest.Create("https://github.com/GoldFiish/Elobuddy/blob/master/CheckVersion/NasusVersion.txt");
+            WebRequest Request_GitHubVer = WebRequest.Create("https://github.com/HTTFRU/EloBuddy/blob/master/CheckVersion/RivenVersion.txt");
             using (var Version_Response = (HttpWebResponse)Request_GitHubVer.GetResponse())
             {
                 Stream Version_Stream = Version_Response.GetResponseStream();
