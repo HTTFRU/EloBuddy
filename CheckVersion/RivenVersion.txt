@@ -1,4 +1,4 @@
 New Version,
-7.4.0.0,
+7.4.0.1,
 [ 1 ] Update For new patch,
 [ 2 ] Fix 1x1 add autoupdate,
