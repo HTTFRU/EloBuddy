@@ -1,3 +1,15 @@
 c:\users\костя\documents\visual studio 2015\Projects\HTTF TopLane Series\HTTF TopLane Series\bin\Debug\HTTF TopLane Series.exe.config
 C:\EloBuddy\HTTF TopLane Series\bin\Debug\HTTF TopLane Series.exe.config
 C:\EloBuddy\HTTF TopLane Series\obj\Debug\HTTF TopLane Series.csprojResolveAssemblyReference.cache
+F:\22\Legend\game\EB\EloBuddy\HTTF TopLane Series\bin\Debug\HTTF TopLane Series.exe.config
+F:\22\Legend\game\EB\EloBuddy\HTTF TopLane Series\bin\Debug\HTTF TopLane Series.exe
+F:\22\Legend\game\EB\EloBuddy\HTTF TopLane Series\bin\Debug\HTTF TopLane Series.pdb
+F:\22\Legend\game\EB\EloBuddy\HTTF TopLane Series\bin\Debug\EloBuddy.dll
+F:\22\Legend\game\EB\EloBuddy\HTTF TopLane Series\bin\Debug\EloBuddy.Sandbox.dll
+F:\22\Legend\game\EB\EloBuddy\HTTF TopLane Series\bin\Debug\EloBuddy.SDK.dll
+F:\22\Legend\game\EB\EloBuddy\HTTF TopLane Series\bin\Debug\Newtonsoft.Json.dll
+F:\22\Legend\game\EB\EloBuddy\HTTF TopLane Series\bin\Debug\SharpDX.Direct3D9.dll
+F:\22\Legend\game\EB\EloBuddy\HTTF TopLane Series\bin\Debug\SharpDX.dll
+F:\22\Legend\game\EB\EloBuddy\HTTF TopLane Series\obj\Debug\HTTF TopLane Series.csprojResolveAssemblyReference.cache
+F:\22\Legend\game\EB\EloBuddy\HTTF TopLane Series\obj\Debug\HTTF TopLane Series.exe
+F:\22\Legend\game\EB\EloBuddy\HTTF TopLane Series\obj\Debug\HTTF TopLane Series.pdb

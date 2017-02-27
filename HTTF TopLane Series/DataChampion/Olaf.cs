@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
@@ -11,8 +8,6 @@ using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
 using SharpDX;
-using Font = SharpDX.Direct3D9.Font;
-using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
 
 namespace HTTF_TopLane_Series.DataChampion

@@ -8,6 +8,7 @@ using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
+using HTTF_TopLane_Series;
 
 namespace HTTF_TopLane_Series.DataChampion
 {
