@@ -63,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnimationFix.cs" />
-    <Compile Include="CheckVersion.cs" />
     <Compile Include="DamageIndicator.cs" />
     <Compile Include="IModule.cs" />
     <Compile Include="ItemLogic.cs" />

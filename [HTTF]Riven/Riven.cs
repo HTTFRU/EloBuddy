@@ -923,7 +923,7 @@ namespace HTTF_Riven_v2
 
                     LastQ = Core.GameTickCount;
                     CountQ = 1;
-                    T = 291;
+                    T = 293;
 
                     break;
 
@@ -931,7 +931,7 @@ namespace HTTF_Riven_v2
 
                     LastQ = Core.GameTickCount;
                     CountQ = 2;
-                    T = 291;
+                    T = 293;
 
                     break;
 
