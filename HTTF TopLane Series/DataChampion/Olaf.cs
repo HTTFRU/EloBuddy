@@ -128,6 +128,7 @@ namespace HTTF_TopLane_Series.DataChampion
             var target = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
             if (Rstun && Q.IsReady())
             {
+
                 if (target != null)
                 {
                     if (target.HasBuffOfType(BuffType.Taunt) || target.HasBuffOfType(BuffType.Stun) || target.HasBuffOfType(BuffType.Snare) || target.HasBuffOfType(BuffType.Knockup))
@@ -177,7 +178,7 @@ namespace HTTF_TopLane_Series.DataChampion
             }
             if (comboMenu["RCast"].Cast<CheckBox>().CurrentValue)
             {
-                if (R.IsReady() && Player.HasBuffOfType(BuffType.Knockback) || Player.HasBuffOfType(BuffType.Blind) || Player.HasBuffOfType(BuffType.Charm) || Player.HasBuffOfType(BuffType.Silence) || Player.HasBuffOfType(BuffType.Suppression) || Player.HasBuffOfType(BuffType.Sleep) || Player.HasBuffOfType(BuffType.Polymorph) || Player.HasBuffOfType(BuffType.Frenzy) || Player.HasBuffOfType(BuffType.Disarm) || Player.HasBuffOfType(BuffType.Poison) || Player.HasBuffOfType(BuffType.Stun) || Player.HasBuffOfType(BuffType.Taunt) || Player.HasBuffOfType(BuffType.Fear) || Player.HasBuffOfType(BuffType.Slow) || Player.HasBuffOfType(BuffType.Knockup) || Player.HasBuffOfType(BuffType.NearSight) || User.IsRooted && Player.Instance.HealthPercent <= dangerHP)
+                if (R.IsReady() && Player.HasBuffOfType(BuffType.Knockback) || Player.HasBuffOfType(BuffType.Blind) || Player.HasBuffOfType(BuffType.Charm) || Player.HasBuffOfType(BuffType.Silence) || Player.HasBuffOfType(BuffType.Suppression)  || Player.HasBuffOfType(BuffType.Polymorph) || Player.HasBuffOfType(BuffType.Disarm) || Player.HasBuffOfType(BuffType.Poison) || Player.HasBuffOfType(BuffType.Stun) || Player.HasBuffOfType(BuffType.Taunt) || Player.HasBuffOfType(BuffType.Fear) || Player.HasBuffOfType(BuffType.Slow) || Player.HasBuffOfType(BuffType.Knockup) || Player.HasBuffOfType(BuffType.NearSight) || User.IsRooted && Player.Instance.HealthPercent <= dangerHP)
                 {
                     R.Cast();
                 }
