@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Net;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;

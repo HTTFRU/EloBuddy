@@ -4,6 +4,7 @@ using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Events;
 using SharpDX;
+using EloBuddy.Networking;
 
 namespace HTTF_Yasuo.Utils
 {

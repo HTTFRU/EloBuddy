@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using EloBuddy;
 using EloBuddy.SDK;
+using EloBuddy.SDK.Enumerations;
 using EloBuddy.SDK.Events;
+using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
-using HTTF_Yasuo.Utils;
 using SharpDX;
+using HTTF_Yasuo.Utils;
+
 
 namespace HTTF_Yasuo
 {
@@ -35,7 +41,7 @@ namespace HTTF_Yasuo
             if (target.IsValidTarget(SpellDataBase.Q.Range) && Yasuo.Combo["UseQCombo"].Cast<CheckBox>().CurrentValue)
             {
                 if (Player.Instance.IsDashing())
-                {       
+                {
                     var pos = ForDash.GetPlayerPosition(300);
                     if (SpellDataBase.Q.IsReady() && (target.Distance(pos) < 400))
                     {
@@ -127,12 +133,44 @@ namespace HTTF_Yasuo
             if (Yasuo.Flee["Flee.stack"].Cast<CheckBox>().CurrentValue) SpellDataBase.StackQ();
         }
 
+        public static void LineClearn()
+        {
+            ForcedMinion = null;
+            var minion = EntityManager.MinionsAndMonsters.GetLaneMinions().Where(a => a.Distance(Player.Instance) < SpellDataBase.Q.Range).OrderBy(a => a.Health).FirstOrDefault();
+            if (minion == null) return;
+            if (Yasuo.Clean["WCQ"].Cast<CheckBox>().CurrentValue && SpellDataBase.Q.IsReady())
+            {
+                SpellDataBase.Q.Cast(minion);
+                return;
+            }
+            if (Yasuo.Clean["WCQ"].Cast<CheckBox>().CurrentValue && Yasuo.Clean["WC.E"].Cast<CheckBox>().CurrentValue && SpellDataBase.E.IsReady() && SpellDataBase.Q.IsReady() && DamageInfo.EDamage(minion) + DamageInfo.QDamage(minion) > minion.Health && !minion.GetDashPos().IsUnderTower())
+            {
+                SpellDataBase.Q.Cast(minion);
+                return;
+            }
+            if (Yasuo.Clean["WCE"].Cast<CheckBox>().CurrentValue && SpellDataBase.E.IsReady() && (!minion.GetDashPos().IsUnderTower() || Yasuo.Clean["LaseEUT"].Cast<CheckBox>().CurrentValue))
+            {
+                if (DamageInfo.EDamage(minion) > minion.Health)
+                {
+                    SpellDataBase.E.Cast(minion);
+                    return;
+                }
+                if (DamageInfo.EDamage(minion) + Player.Instance.GetAutoAttackDamage(minion) > minion.Health)
+                {
+                    Orbwalker.ForcedTarget = minion;
+                    ForcedMinion = minion;
+                }
+
+            }
+            }
+
+
         public static void WaveClear()
         {
             ForcedMinion = null;
             var minion = EntityManager.MinionsAndMonsters.GetLaneMinions().Where(a => a.Distance(Player.Instance) < SpellDataBase.Q.Range).OrderBy(a => a.Health).FirstOrDefault();
             if (minion == null) return;
-            if (Yasuo.Clean["WC.Q"].Cast<CheckBox>().CurrentValue && Player.Instance.IsDashing())
+            if (Yasuo.Clean["WCQ"].Cast<CheckBox>().CurrentValue && Player.Instance.IsDashing())
             {
                 var pos = ForDash.GetPlayerPosition(300);
                 if (SpellDataBase.Q.IsReady() && (minion.Distance(pos) < 475 &&
@@ -141,7 +179,7 @@ namespace HTTF_Yasuo
                     Player.CastSpell(SpellSlot.Q);
                 }
             }
-            if (Yasuo.Clean["WC.E"].Cast<CheckBox>().CurrentValue && SpellDataBase.E.IsReady() && (!minion.GetDashPos().IsUnderTower() || Yasuo.Clean["LaseEUT"].Cast<CheckBox>().CurrentValue))
+            if (Yasuo.Clean["WCE"].Cast<CheckBox>().CurrentValue && SpellDataBase.E.IsReady() && (!minion.GetDashPos().IsUnderTower() || Yasuo.Clean["LaseEUT"].Cast<CheckBox>().CurrentValue))
             {
                 if (DamageInfo.EDamage(minion) > minion.Health)
                 {
@@ -154,17 +192,20 @@ namespace HTTF_Yasuo
                     ForcedMinion = minion;
                 }
             }
-            if (Yasuo.Clean["WC.Q"].Cast<CheckBox>().CurrentValue && SpellDataBase.Q.IsReady() && DamageInfo.QDamage(minion) > minion.Health)
+            if (Yasuo.Clean["WCQ"].Cast<CheckBox>().CurrentValue && SpellDataBase.Q.IsReady() && DamageInfo.QDamage(minion) > minion.Health)
             {
                 SpellDataBase.Q.Cast(minion);
                 return;
             }
-            if (Yasuo.Clean["WC.Q"].Cast<CheckBox>().CurrentValue && Yasuo.Clean["WC.E"].Cast<CheckBox>().CurrentValue && SpellDataBase.E.IsReady() && SpellDataBase.Q.IsReady() && DamageInfo.EDamage(minion) + DamageInfo.QDamage(minion) > minion.Health && !minion.GetDashPos().IsUnderTower())
+            if (Yasuo.Clean["WCQ"].Cast<CheckBox>().CurrentValue && Yasuo.Clean["WC.E"].Cast<CheckBox>().CurrentValue && SpellDataBase.E.IsReady() && SpellDataBase.Q.IsReady() && DamageInfo.EDamage(minion) + DamageInfo.QDamage(minion) > minion.Health && !minion.GetDashPos().IsUnderTower())
             {
                 SpellDataBase.Q.Cast(minion);
                 return;
             }
         }
+
+
+        
 
         public static void LastHit()
         {
@@ -190,10 +231,14 @@ namespace HTTF_Yasuo
                     return;
                 if (SpellDataBase.Q.IsReady() && SpellDataBase.Q.IsInRange(enemy))
                 {
-                    SpellDataBase.Q.Cast(enemy);              
+                    SpellDataBase.Q.Cast(enemy);
                 }
             }
         }
+
+
+
+
         public static bool CastQ()
         {
             var besttarget = TargetSelector.GetTarget(SpellDataBase.Q.Range, DamageType.Physical);

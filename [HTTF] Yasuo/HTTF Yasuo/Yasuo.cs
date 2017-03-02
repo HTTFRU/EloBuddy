@@ -7,12 +7,15 @@ using System;
 using EloBuddy;
 using EloBuddy.SDK.Events;
 using HTTF_Yasuo.Utils;
+using SharpDX;
+using System.Linq;
 
 namespace HTTF_Yasuo
     {
     class Yasuo
     {
         public static Menu Principal, Combo, Misc, Flee, Clean, Draw, Evadee;
+        private static bool IsDead;
 
         private static void Main(string[] args)
         {
@@ -20,8 +23,9 @@ namespace HTTF_Yasuo
             Chat.Print("Yasuo HTTF (Beta)");
             Game.OnTick += Game_OnTick;
             Game.OnUpdate += OnGameUpdate;
+            
 
-        }       
+        }
 
         private static void Loading_OnLoadingComplete(EventArgs args)
         {
@@ -58,8 +62,8 @@ namespace HTTF_Yasuo
             Clean.Add("LastQ", new CheckBox("Use Q"));
             Clean.Add("LaseEUT", new CheckBox("Use E Under Tower"));
             Clean.AddLabel("•Wave Clean•");
-            Clean.Add("WC.Q", new CheckBox("Use Q"));
-            Clean.Add("WC.E", new CheckBox("Use E"));
+            Clean.Add("WCQ", new CheckBox("Use Q"));
+            Clean.Add("WCE", new CheckBox("Use E"));
             Clean.AddLabel("•Jung Clean•");
             Clean.Add("JungQ", new CheckBox("Use Q"));
             Clean.Add("JungE", new CheckBox("Use E"));
@@ -76,6 +80,7 @@ namespace HTTF_Yasuo
             Draw.Add("DrawE", new CheckBox("Draw E range"));
             Draw.Add("DrawQ", new CheckBox("Draw Q range"));
             Draw.Add("DrawR", new CheckBox("Draw R range"));
+            Draw.Add("DrawDmg", new CheckBox("Draw Damage?"));
             //Misc
             Misc = Principal.AddSubMenu("Misc", "Misc Setting");
             Misc.AddSeparator(3);
@@ -116,39 +121,39 @@ namespace HTTF_Yasuo
         {
             return Misc["checkSkin"].Cast<CheckBox>().CurrentValue;
         }
-    
+
         private static void Game_OnTick(EventArgs args)
-        {
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
             {
-                StateLogic.Flee();
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
+                {
+                    StateLogic.Flee();
+                }
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
+                {
+                    StateLogic.Harass();
+                }
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                {
+                    StateLogic.Combo();
+                }
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
+                {
+                    StateLogic.LastHit();
+                }
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+                {
+                    StateLogic.LineClearn();
+                }
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
+                {
+                    StateLogic.Jungle();
+                }
             }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
-            {
-                StateLogic.Harass();
-            }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
-            {
-                StateLogic.Combo();
-            }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
-            {
-                StateLogic.LastHit();
-            }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
-            {
-                StateLogic.WaveClear();
-            }
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
-            {
-                StateLogic.Jungle();
-            }
-        }
         
 
 
 
-            public static bool CheckBox(Menu m, string s)
+        public static bool CheckBox(Menu m, string s)
             {
                 return m[s].Cast<CheckBox>().CurrentValue;
             }

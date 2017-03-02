@@ -2,6 +2,7 @@
 using EloBuddy;
 using EloBuddy.SDK;
 using SharpDX;
+using EloBuddy.Networking;
 
 namespace HTTF_Yasuo.Utils
 {

@@ -10,3 +10,15 @@ C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Yasuo\HTTF Yasuo\
 C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Yasuo\HTTF Yasuo\obj\Release\HTTF Yasuo.csprojResolveAssemblyReference.cache
 C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Yasuo\HTTF Yasuo\obj\Release\HTTF Yasuo.exe
 C:\Users\Костя\Documents\Visual Studio 2015\Projects\HTTF Yasuo\HTTF Yasuo\obj\Release\HTTF Yasuo.pdb
+C:\EloBuddy\[HTTF] Yasuo\HTTF Yasuo\bin\Release\HTTF Yasuo.exe.config
+C:\EloBuddy\[HTTF] Yasuo\HTTF Yasuo\bin\Release\HTTF Yasuo.exe
+C:\EloBuddy\[HTTF] Yasuo\HTTF Yasuo\bin\Release\HTTF Yasuo.pdb
+C:\EloBuddy\[HTTF] Yasuo\HTTF Yasuo\bin\Release\EloBuddy.dll
+C:\EloBuddy\[HTTF] Yasuo\HTTF Yasuo\bin\Release\EloBuddy.Sandbox.dll
+C:\EloBuddy\[HTTF] Yasuo\HTTF Yasuo\bin\Release\EloBuddy.SDK.dll
+C:\EloBuddy\[HTTF] Yasuo\HTTF Yasuo\bin\Release\Newtonsoft.Json.dll
+C:\EloBuddy\[HTTF] Yasuo\HTTF Yasuo\bin\Release\SharpDX.Direct3D9.dll
+C:\EloBuddy\[HTTF] Yasuo\HTTF Yasuo\bin\Release\SharpDX.dll
+C:\EloBuddy\[HTTF] Yasuo\HTTF Yasuo\obj\Release\HTTF Yasuo.csprojResolveAssemblyReference.cache
+C:\EloBuddy\[HTTF] Yasuo\HTTF Yasuo\obj\Release\HTTF Yasuo.exe
+C:\EloBuddy\[HTTF] Yasuo\HTTF Yasuo\obj\Release\HTTF Yasuo.pdb
