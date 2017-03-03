@@ -33,3 +33,15 @@ C:\EloBuddy\[HTTF]Riven\bin\Release\SharpDX.dll
 C:\EloBuddy\[HTTF]Riven\obj\Release\HTTF Riven v2.csprojResolveAssemblyReference.cache
 C:\EloBuddy\[HTTF]Riven\obj\Release\HTTF Riven v2.exe
 C:\EloBuddy\[HTTF]Riven\obj\Release\HTTF Riven v2.pdb
+C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\bin\Release\HTTF Riven v2.exe.config
+C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\bin\Release\HTTF Riven v2.exe
+C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\bin\Release\HTTF Riven v2.pdb
+C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\bin\Release\EloBuddy.dll
+C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\bin\Release\EloBuddy.Sandbox.dll
+C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\bin\Release\EloBuddy.SDK.dll
+C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\bin\Release\Newtonsoft.Json.dll
+C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\bin\Release\SharpDX.dll
+C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\obj\Release\HTTF Riven v2.csprojResolveAssemblyReference.cache
+C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\obj\Release\HTTF Riven v2.exe
+C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\obj\Release\HTTF Riven v2.pdb

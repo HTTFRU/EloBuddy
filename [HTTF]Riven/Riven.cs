@@ -923,7 +923,7 @@ namespace HTTF_Riven_v2
 
                     LastQ = Core.GameTickCount;
                     CountQ = 1;
-                    T = 293;
+                    T = 291;
 
                     break;
 
@@ -931,7 +931,7 @@ namespace HTTF_Riven_v2
 
                     LastQ = Core.GameTickCount;
                     CountQ = 2;
-                    T = 293;
+                    T = 290;
 
                     break;
 
@@ -939,7 +939,7 @@ namespace HTTF_Riven_v2
 
                     LastQ = 0;
                     CountQ = 0;
-                    T = 393;
+                    T = 343;
 
                     break;
 
@@ -967,11 +967,13 @@ namespace HTTF_Riven_v2
                 {
                     Orbwalker.ResetAutoAttack();
                     Core.DelayAction(CancelAnimation, T - Game.Ping);
+                    Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                 }
                 else if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
                 {
                     Orbwalker.ResetAutoAttack();
                     Core.DelayAction(CancelAnimation, T - Game.Ping);
+                    Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                 }
             }
         }
@@ -994,6 +996,7 @@ namespace HTTF_Riven_v2
                     {
 
                         Q.Cast(target.Position);
+                        Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
                     }
 
@@ -1001,6 +1004,7 @@ namespace HTTF_Riven_v2
                     {
 
                         Q.Cast(target.Position);
+                        Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
                     }
 
