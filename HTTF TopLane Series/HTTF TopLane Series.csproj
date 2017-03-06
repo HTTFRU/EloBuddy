@@ -62,7 +62,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckVersion.cs" />
     <Compile Include="DataChampion\Irelia.cs" />
     <Compile Include="DataChampion\Jax.cs" />
     <Compile Include="DataChampion\Malphite.cs" />
@@ -72,6 +71,7 @@
     <Compile Include="DataChampion\Poppy.cs" />
     <Compile Include="DataChampion\Renekton.cs" />
     <Compile Include="DataChampion\Shen.cs" />
+    <Compile Include="DataChampion\sion.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -21,3 +21,15 @@ C:\EloBuddy\HTTF TopLane Series\bin\Release\EloBuddy.SDK.dll
 C:\EloBuddy\HTTF TopLane Series\bin\Release\Newtonsoft.Json.dll
 C:\EloBuddy\HTTF TopLane Series\bin\Release\SharpDX.Direct3D9.dll
 C:\EloBuddy\HTTF TopLane Series\bin\Release\SharpDX.dll
+D:\Новая папка\EloBuddy-master\HTTF TopLane Series\obj\Release\HTTF TopLane Series.csprojResolveAssemblyReference.cache
+D:\Новая папка\EloBuddy-master\HTTF TopLane Series\obj\Release\HTTF TopLane Series.exe
+D:\Новая папка\EloBuddy-master\HTTF TopLane Series\obj\Release\HTTF TopLane Series.pdb
+D:\Новая папка\EloBuddy-master\HTTF TopLane Series\bin\Release\HTTF TopLane Series.exe.config
+D:\Новая папка\EloBuddy-master\HTTF TopLane Series\bin\Release\HTTF TopLane Series.exe
+D:\Новая папка\EloBuddy-master\HTTF TopLane Series\bin\Release\HTTF TopLane Series.pdb
+D:\Новая папка\EloBuddy-master\HTTF TopLane Series\bin\Release\EloBuddy.dll
+D:\Новая папка\EloBuddy-master\HTTF TopLane Series\bin\Release\EloBuddy.Sandbox.dll
+D:\Новая папка\EloBuddy-master\HTTF TopLane Series\bin\Release\EloBuddy.SDK.dll
+D:\Новая папка\EloBuddy-master\HTTF TopLane Series\bin\Release\Newtonsoft.Json.dll
+D:\Новая папка\EloBuddy-master\HTTF TopLane Series\bin\Release\SharpDX.Direct3D9.dll
+D:\Новая папка\EloBuddy-master\HTTF TopLane Series\bin\Release\SharpDX.dll

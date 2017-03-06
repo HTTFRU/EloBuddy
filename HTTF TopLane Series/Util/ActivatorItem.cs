@@ -22,13 +22,13 @@ namespace HTTF_TopLane_Series.Util
             if (Player.Instance.IsDead) return; 
             if (Player.Instance.CountEnemiesInRange(1500) == 0) return;
 
-            if (Main.Status_CheckBox(Main.ActivatorMenu, "Item.BK") && (Bilgewater.IsOwned() || BladeKing.IsOwned()))
+            if (Main.Status_CheckBox(Main.Principial, "Item.BK") && (Bilgewater.IsOwned() || BladeKing.IsOwned()))
             {
                 var Botrk_Target = TargetSelector.GetTarget(550, DamageType.Physical);
 
                 if (Botrk_Target != null)
                 { 
-                    if (Bilgewater.IsReady() || (BladeKing.IsReady() && Player.Instance.HealthPercent <= Main.Status_Slider(Main.ActivatorMenu, "Item.BK.Hp")))
+                    if (Bilgewater.IsReady() || (BladeKing.IsReady() && Player.Instance.HealthPercent <= Main.Status_Slider(Main.Principial, "Item.BK.Hp")))
                     {
                         Bilgewater.Cast(Botrk_Target);
                     }
@@ -44,7 +44,7 @@ namespace HTTF_TopLane_Series.Util
 
         public static void Active_Redemption()
         {
-            if (Redemption.IsOwned() && Redemption.IsReady() && Main.Status_CheckBox(Main.ActivatorMenu, "Item.Redemption"))
+            if (Redemption.IsOwned() && Redemption.IsReady() && Main.Status_CheckBox(Main.Principial, "Item.Redemption"))
             {
                 var Redemption_Target = TargetSelector.GetTarget(5500, DamageType.Physical);
 
@@ -54,7 +54,7 @@ namespace HTTF_TopLane_Series.Util
 
                 if (Redemption_Target.IsAttackingPlayer)
                 {
-                    if (Player.Instance.HealthPercent <= Main.Status_Slider(Main.ActivatorMenu, "Item.Redemption.MyHp"))
+                    if (Player.Instance.HealthPercent <= Main.Status_Slider(Main.Principial, "Item.Redemption.MyHp"))
                     {
                         if (ipRedemption.HitChancePercent >= 50)
                         {
@@ -78,77 +78,77 @@ namespace HTTF_TopLane_Series.Util
 
         private static void Active_Item()
         {
-            var Delay_Time = Main.Status_Slider(Main.ActivatorMenu, "CastDelay");
+            var Delay_Time = Main.Status_Slider(Main.Principial, "CastDelay");
 
-            if (Quicksilver.IsOwned() && Quicksilver.IsReady() && Main.Status_CheckBox(Main.ActivatorMenu, "QSS"))
+            if (Quicksilver.IsOwned() && Quicksilver.IsReady() && Main.Status_CheckBox(Main.Principial, "QSS"))
             {
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Poisons") && Player.Instance.HasBuffOfType(BuffType.Poison))
+                if (Main.Status_CheckBox(Main.Principial, "Poisons") && Player.Instance.HasBuffOfType(BuffType.Poison))
                 { Core.DelayAction(() => Quicksilver.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Supression") && Player.Instance.HasBuffOfType(BuffType.Suppression))
+                if (Main.Status_CheckBox(Main.Principial, "Supression") && Player.Instance.HasBuffOfType(BuffType.Suppression))
                 { Core.DelayAction(() => Quicksilver.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Blind") && Player.Instance.HasBuffOfType(BuffType.Blind))
+                if (Main.Status_CheckBox(Main.Principial, "Blind") && Player.Instance.HasBuffOfType(BuffType.Blind))
                 { Core.DelayAction(() => Quicksilver.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Charm") && Player.Instance.HasBuffOfType(BuffType.Charm))
+                if (Main.Status_CheckBox(Main.Principial, "Charm") && Player.Instance.HasBuffOfType(BuffType.Charm))
                 { Core.DelayAction(() => Quicksilver.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Fear") && Player.Instance.HasBuffOfType(BuffType.Fear))
+                if (Main.Status_CheckBox(Main.Principial, "Fear") && Player.Instance.HasBuffOfType(BuffType.Fear))
                 { Core.DelayAction(() => Quicksilver.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Polymorph") && Player.Instance.HasBuffOfType(BuffType.Polymorph))
+                if (Main.Status_CheckBox(Main.Principial, "Polymorph") && Player.Instance.HasBuffOfType(BuffType.Polymorph))
                 { Core.DelayAction(() => Quicksilver.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Silence") && Player.Instance.HasBuffOfType(BuffType.Silence))
+                if (Main.Status_CheckBox(Main.Principial, "Silence") && Player.Instance.HasBuffOfType(BuffType.Silence))
                 { Core.DelayAction(() => Quicksilver.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Slow") && Player.Instance.HasBuffOfType(BuffType.Slow))
+                if (Main.Status_CheckBox(Main.Principial, "Slow") && Player.Instance.HasBuffOfType(BuffType.Slow))
                 { Core.DelayAction(() => Quicksilver.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Stun") && Player.Instance.HasBuffOfType(BuffType.Stun))
+                if (Main.Status_CheckBox(Main.Principial, "Stun") && Player.Instance.HasBuffOfType(BuffType.Stun))
                 { Core.DelayAction(() => Quicksilver.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Snare") && Player.Instance.HasBuffOfType(BuffType.Snare))
+                if (Main.Status_CheckBox(Main.Principial, "Snare") && Player.Instance.HasBuffOfType(BuffType.Snare))
                 { Core.DelayAction(() => Quicksilver.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Taunt") && Player.Instance.HasBuffOfType(BuffType.Taunt))
+                if (Main.Status_CheckBox(Main.Principial, "Taunt") && Player.Instance.HasBuffOfType(BuffType.Taunt))
                 { Core.DelayAction(() => Quicksilver.Cast(), Delay_Time); }
             }
 
-            if (Mercurial.IsOwned() && Mercurial.IsReady() && Main.Status_CheckBox(Main.ActivatorMenu, "Scimitar"))
+            if (Mercurial.IsOwned() && Mercurial.IsReady() && Main.Status_CheckBox(Main.Principial, "Scimitar"))
             {
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Poisons") && Player.Instance.HasBuffOfType(BuffType.Poison))
+                if (Main.Status_CheckBox(Main.Principial, "Poisons") && Player.Instance.HasBuffOfType(BuffType.Poison))
                 { Core.DelayAction(() => Mercurial.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Supression") && Player.Instance.HasBuffOfType(BuffType.Suppression))
+                if (Main.Status_CheckBox(Main.Principial, "Supression") && Player.Instance.HasBuffOfType(BuffType.Suppression))
                 { Core.DelayAction(() => Mercurial.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Blind") && Player.Instance.HasBuffOfType(BuffType.Blind))
+                if (Main.Status_CheckBox(Main.Principial, "Blind") && Player.Instance.HasBuffOfType(BuffType.Blind))
                 { Core.DelayAction(() => Mercurial.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Charm") && Player.Instance.HasBuffOfType(BuffType.Charm))
+                if (Main.Status_CheckBox(Main.Principial, "Charm") && Player.Instance.HasBuffOfType(BuffType.Charm))
                 { Core.DelayAction(() => Mercurial.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Fear") && Player.Instance.HasBuffOfType(BuffType.Fear))
+                if (Main.Status_CheckBox(Main.Principial, "Fear") && Player.Instance.HasBuffOfType(BuffType.Fear))
                 { Core.DelayAction(() => Mercurial.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Polymorph") && Player.Instance.HasBuffOfType(BuffType.Polymorph))
+                if (Main.Status_CheckBox(Main.Principial, "Polymorph") && Player.Instance.HasBuffOfType(BuffType.Polymorph))
                 { Core.DelayAction(() => Mercurial.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Silence") && Player.Instance.HasBuffOfType(BuffType.Silence))
+                if (Main.Status_CheckBox(Main.Principial, "Silence") && Player.Instance.HasBuffOfType(BuffType.Silence))
                 { Core.DelayAction(() => Mercurial.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Slow") && Player.Instance.HasBuffOfType(BuffType.Slow))
+                if (Main.Status_CheckBox(Main.Principial, "Slow") && Player.Instance.HasBuffOfType(BuffType.Slow))
                 { Core.DelayAction(() => Mercurial.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Stun") && Player.Instance.HasBuffOfType(BuffType.Stun))
+                if (Main.Status_CheckBox(Main.Principial, "Stun") && Player.Instance.HasBuffOfType(BuffType.Stun))
                 { Core.DelayAction(() => Mercurial.Cast(), Delay_Time); }
             
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Snare") && Player.Instance.HasBuffOfType(BuffType.Snare))
+                if (Main.Status_CheckBox(Main.Principial, "Snare") && Player.Instance.HasBuffOfType(BuffType.Snare))
                 { Core.DelayAction(() => Mercurial.Cast(), Delay_Time); }
 
-                if (Main.Status_CheckBox(Main.ActivatorMenu, "Taunt") && Player.Instance.HasBuffOfType(BuffType.Taunt))
+                if (Main.Status_CheckBox(Main.Principial, "Taunt") && Player.Instance.HasBuffOfType(BuffType.Taunt))
                 { Core.DelayAction(() => Mercurial.Cast(), Delay_Time); }
             }
         }   //End Active_Item

@@ -53,18 +53,18 @@ namespace HTTF_TopLane_Series.DataChampion
 
 
             ComboMenu = MainMenu.AddSubMenu("Combo");
-            ComboMenu.Add("Q", new CheckBox("Use Q"));
-            ComboMenu.Add("W", new CheckBox("Use W"));
-            ComboMenu.Add("E", new CheckBox("Use E"));
-            ComboMenu.Add("R", new CheckBox("Use R"));
+            ComboMenu.Add("useQ", new CheckBox("Use Q"));
+            ComboMenu.Add("useW", new CheckBox("Use W"));
+            ComboMenu.Add("useE", new CheckBox("Use E"));
+            ComboMenu.Add("useR", new CheckBox("Use R"));
             ComboMenu.AddLabel("Use Auto R on target.");
             foreach (var enemy in EntityManager.Heroes.Enemies)
             {
                 ComboMenu.Add("Use R " + enemy.ChampionName, new CheckBox("Use R " + enemy.ChampionName));
             }
                 ComboMenu.AddGroupLabel("Harass Setting");
-                ComboMenu.Add("Q", new CheckBox("Use Q"));
-                ComboMenu.Add("E", new CheckBox("Use E"));
+                ComboMenu.Add("useQ", new CheckBox("Use Q"));
+                ComboMenu.Add("useE", new CheckBox("Use E"));
                 ComboMenu.AddGroupLabel("Misc");
                 ComboMenu.Add("autoW", new CheckBox("Use Auto W"));
                 ComboMenu.Add("interruptq", new CheckBox("Use Q to Interrupt."));
@@ -183,7 +183,7 @@ namespace HTTF_TopLane_Series.DataChampion
 
 
 
-            if (ComboMenu["Q"].Cast<CheckBox>().CurrentValue)
+            if (ComboMenu["useQ"].Cast<CheckBox>().CurrentValue)
             {
                 if (target == null)
                 {
@@ -198,13 +198,13 @@ namespace HTTF_TopLane_Series.DataChampion
                 }
             }
 
-            if (ComboMenu["W"].Cast<CheckBox>().CurrentValue && W.IsReady() && _myHero.CountEnemiesInRange(E.Range) >
+            if (ComboMenu["useW"].Cast<CheckBox>().CurrentValue && W.IsReady() && _myHero.CountEnemiesInRange(E.Range) >
                 0)
             {
                 W.Cast();
             }
 
-            if (ComboMenu["E"].Cast<CheckBox>().CurrentValue)
+            if (ComboMenu["useE"].Cast<CheckBox>().CurrentValue)
             {
 
                 if (target == null)
@@ -219,7 +219,7 @@ namespace HTTF_TopLane_Series.DataChampion
             }
             foreach (var enemy in EntityManager.Heroes.Enemies)
             {
-                if (ComboMenu["R"].Cast<CheckBox>().CurrentValue)
+                if (ComboMenu["useR"].Cast<CheckBox>().CurrentValue)
                 {
                     if (target == null)
                     {

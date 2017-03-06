@@ -56,6 +56,10 @@ namespace HTTF_TopLane_Series
             {
                 DataChampion.Nautilus.NautilusLoad();
             }
+            if (Player.Instance.ChampionName == "Sion")
+            {
+                DataChampion.sion.SionLoad();
+            }
 
             HTTF_TopLane_Series.Main.Load();
             Chat.Print("HTTF Top Lane Series ", Color.LightSkyBlue);
