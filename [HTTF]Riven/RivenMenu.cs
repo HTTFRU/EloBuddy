@@ -138,6 +138,7 @@ namespace HTTF_Riven_v2
             ComboLogic.Add("EH", new CheckBox("E>Hydra or Tiamat"));
             ComboLogic.Add("ER1", new CheckBox("E>R1"));
             ComboLogic.Add("ER2", new CheckBox("E>R2"));
+            ComboLogic.Add("EQW", new CheckBox("E>Q>W"));
 
 
             ComboLogic.AddLabel("R1");

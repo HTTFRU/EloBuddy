@@ -22,3 +22,6 @@ C:\Users\Костя\Desktop\[HTTF]Riven\obj\Debug\HTTF Riven v2.pdb
 C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\bin\Debug\HTTF Riven v2.exe.config
 C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\obj\Debug\HTTF Riven v2.exe
 C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\obj\Debug\HTTF Riven v2.pdb
+F:\22\Legend\game\EB\addon\EloBuddy-master\[HTTF]Riven\bin\Debug\HTTF Riven v2.exe.config
+F:\22\Legend\game\EB\addon\EloBuddy-master\[HTTF]Riven\obj\Debug\HTTF Riven v2.exe
+F:\22\Legend\game\EB\addon\EloBuddy-master\[HTTF]Riven\obj\Debug\HTTF Riven v2.pdb

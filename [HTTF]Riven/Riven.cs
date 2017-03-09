@@ -562,6 +562,7 @@ namespace HTTF_Riven_v2
                         if (RivenMenu.CheckBox(RivenMenu.Misc, "Youmu"))
                         {
                             Youmu.Cast();
+                            Chat.Print("Youmu Cast");
                         }
                     }
 
