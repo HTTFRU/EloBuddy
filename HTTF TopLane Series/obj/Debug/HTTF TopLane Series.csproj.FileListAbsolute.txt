@@ -27,3 +27,6 @@ D:\Новая папка\EloBuddy-master\HTTF TopLane Series\bin\Debug\Newtonsof
 D:\Новая папка\EloBuddy-master\HTTF TopLane Series\bin\Debug\SharpDX.Direct3D9.dll
 D:\Новая папка\EloBuddy-master\HTTF TopLane Series\bin\Debug\SharpDX.dll
 D:\Новая папка\EloBuddy-master\HTTF TopLane Series\obj\Debug\HTTF TopLane Series.csprojResolveAssemblyReference.cache
+F:\22\Legend\game\EB\addon\EloBuddy-master\HTTF TopLane Series\bin\Debug\HTTF TopLane Series.exe.config
+F:\22\Legend\game\EB\addon\EloBuddy-master\HTTF TopLane Series\obj\Debug\HTTF TopLane Series.exe
+F:\22\Legend\game\EB\addon\EloBuddy-master\HTTF TopLane Series\obj\Debug\HTTF TopLane Series.pdb
