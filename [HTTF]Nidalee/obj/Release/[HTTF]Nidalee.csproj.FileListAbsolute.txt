@@ -1,0 +1,12 @@
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\[HTTF]Nidalee\[HTTF]Nidalee\bin\Release\[HTTF]Nidalee.exe.config
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\[HTTF]Nidalee\[HTTF]Nidalee\bin\Release\[HTTF]Nidalee.exe
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\[HTTF]Nidalee\[HTTF]Nidalee\bin\Release\[HTTF]Nidalee.pdb
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\[HTTF]Nidalee\[HTTF]Nidalee\bin\Release\EloBuddy.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\[HTTF]Nidalee\[HTTF]Nidalee\bin\Release\EloBuddy.Sandbox.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\[HTTF]Nidalee\[HTTF]Nidalee\bin\Release\EloBuddy.SDK.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\[HTTF]Nidalee\[HTTF]Nidalee\bin\Release\Newtonsoft.Json.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\[HTTF]Nidalee\[HTTF]Nidalee\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\[HTTF]Nidalee\[HTTF]Nidalee\bin\Release\SharpDX.dll
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\[HTTF]Nidalee\[HTTF]Nidalee\obj\Release\[HTTF]Nidalee.csprojResolveAssemblyReference.cache
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\[HTTF]Nidalee\[HTTF]Nidalee\obj\Release\[HTTF]Nidalee.exe
+C:\Users\Костя\Documents\Visual Studio 2015\Projects\[HTTF]Nidalee\[HTTF]Nidalee\obj\Release\[HTTF]Nidalee.pdb
