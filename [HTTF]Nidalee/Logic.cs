@@ -17,9 +17,6 @@ namespace _HTTF_Nidalee
         public static bool Q1Ready = true, Q2Ready = true, W1Ready = true, W2Ready = true, E2Ready = true;
         private static Spell.Targeted ignt { get; set; }
         private static Spell.Targeted smite { get; set; }
-        public static Item Potion { get; private set; }
-        public static Item Biscuit { get; private set; }
-        public static Item RPotion { get; private set; }
         public static void Load()
         {          
 
