@@ -1,0 +1,2 @@
+F:\22\Legend\game\EB\addon\[HTTF]Riven v3\bin\Debug\[HTTF]Riven.exe.config
+F:\22\Legend\game\EB\addon\[HTTF]Riven Reborn\bin\Debug\[HTTF]Riven.exe.config
