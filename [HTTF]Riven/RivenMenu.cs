@@ -116,9 +116,9 @@ namespace HTTF_Riven_v2
             AnimationCancle.Add("Spell4", new CheckBox("R"));
 
 
-            ComboLogic = Principal.AddSubMenu("ComboLogic", "ComboLogics");
+            ComboLogic = Principal.AddSubMenu("ComboLogic(UPDATE)", "ComboLogics");
             ComboLogic.Add("BrokenAnimon", new CheckBox("Use features?"));
-            ComboLogic.Add("moveback", new CheckBox("Use Combo HTTF Logic?", false));
+            ComboLogic.Add("moveback", new CheckBox("Use Combo HTTF Logic?(MOVEBACK)", false));
 
             ComboLogic.AddLabel("Q1,Q2,Q3");
             ComboLogic.Add("Q1Hydra", new CheckBox("Q>Hydra"));
@@ -153,8 +153,8 @@ namespace HTTF_Riven_v2
             ComboLogic.Add("R2E", new CheckBox("R2>E"));
 
 
-            ComboLogic.AddLabel("Combo Logic V2 SOON");
-
+            ComboLogic.AddLabel("Combo Logic V2 ");
+            ComboLogic.Add("SpeedCombo", new Slider("SpeedCombo(bugged)", 10, 10, 10));
 
 
 

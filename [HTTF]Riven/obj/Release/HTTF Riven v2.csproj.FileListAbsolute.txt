@@ -45,3 +45,15 @@ C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\bin\Release\SharpDX.dll
 C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\obj\Release\HTTF Riven v2.csprojResolveAssemblyReference.cache
 C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\obj\Release\HTTF Riven v2.exe
 C:\Users\Ев\Desktop\EloBuddy-master\[HTTF]Riven\obj\Release\HTTF Riven v2.pdb
+D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\bin\Release\HTTF Riven v2.exe.config
+D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\bin\Release\HTTF Riven v2.exe
+D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\bin\Release\HTTF Riven v2.pdb
+D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\bin\Release\EloBuddy.dll
+D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\bin\Release\EloBuddy.Sandbox.dll
+D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\bin\Release\EloBuddy.SDK.dll
+D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\bin\Release\Newtonsoft.Json.dll
+D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\bin\Release\SharpDX.Direct3D9.dll
+D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\bin\Release\SharpDX.dll
+D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\obj\Release\HTTF Riven v2.csprojResolveAssemblyReference.cache
+D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\obj\Release\HTTF Riven v2.exe
+D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\obj\Release\HTTF Riven v2.pdb

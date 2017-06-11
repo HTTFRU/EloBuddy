@@ -908,7 +908,7 @@ namespace HTTF_Riven_v2
 
         private static void AnimateCAnsl()
         {
-            Player.DoEmote(Emote.Joke);
+            Orbwalker.ResetAutoAttack();
 
         }
         private static void Reset(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
@@ -966,13 +966,13 @@ namespace HTTF_Riven_v2
             {
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
                 {
-                    Orbwalker.ResetAutoAttack();
+                    
                     Core.DelayAction(CancelAnimation, T - Game.Ping);
                     Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                 }
                 else if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
                 {
-                    Orbwalker.ResetAutoAttack();
+                   
                     Core.DelayAction(CancelAnimation, T - Game.Ping);
                     Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                 }
