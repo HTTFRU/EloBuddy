@@ -25,6 +25,7 @@ namespace HTTF_Riven_v2
             Riven.Load();
             ItemLogic.Init();
             if (Game.MapId == GameMapId.SummonersRift) WallJump.InitSpots();
+            
 
         }
 

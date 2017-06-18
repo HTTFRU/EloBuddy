@@ -74,7 +74,7 @@ namespace HTTF_Riven_v2
 
             Misc = Principal.AddSubMenu("Misc", "Misc");
             Misc.Add("Skin", new CheckBox("Skinhack ?", false));
-            Misc.Add("SkinID", new Slider("Skin ID: {0}", 4, 0, 11));
+            Misc.Add("SkinID", new Slider("Skin ID: {0}", 4, 0, 21));
             Misc.Add("Interrupter", new CheckBox("Interrupter ?"));
             Misc.Add("InterrupterW", new CheckBox("Interrupter with W ?"));
             Misc.Add("Gapcloser", new CheckBox("Gapcloser ?"));
@@ -154,7 +154,7 @@ namespace HTTF_Riven_v2
 
 
             ComboLogic.AddLabel("Combo Logic V2 ");
-            ComboLogic.Add("SpeedCombo", new Slider("SpeedCombo(bugged)", 10, 10, 10));
+            ComboLogic.Add("SpeedCombo", new Slider("SpeedCombo(bugged)", 50, 50, 10));
 
 
 
