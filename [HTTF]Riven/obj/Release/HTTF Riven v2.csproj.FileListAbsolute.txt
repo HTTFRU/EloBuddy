@@ -57,3 +57,18 @@ D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\bin\Release\Shar
 D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\obj\Release\HTTF Riven v2.csprojResolveAssemblyReference.cache
 D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\obj\Release\HTTF Riven v2.exe
 D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\obj\Release\HTTF Riven v2.pdb
+<<<<<<< HEAD
+F:\22\Legend\game\EB\myad\[HTTF]Riven\bin\Release\HTTF Riven v2.exe.config
+F:\22\Legend\game\EB\myad\[HTTF]Riven\bin\Release\HTTF Riven v2.exe
+F:\22\Legend\game\EB\myad\[HTTF]Riven\bin\Release\HTTF Riven v2.pdb
+F:\22\Legend\game\EB\myad\[HTTF]Riven\bin\Release\EloBuddy.dll
+F:\22\Legend\game\EB\myad\[HTTF]Riven\bin\Release\EloBuddy.Sandbox.dll
+F:\22\Legend\game\EB\myad\[HTTF]Riven\bin\Release\EloBuddy.SDK.dll
+F:\22\Legend\game\EB\myad\[HTTF]Riven\bin\Release\Newtonsoft.Json.dll
+F:\22\Legend\game\EB\myad\[HTTF]Riven\bin\Release\SharpDX.Direct3D9.dll
+F:\22\Legend\game\EB\myad\[HTTF]Riven\bin\Release\SharpDX.dll
+F:\22\Legend\game\EB\myad\[HTTF]Riven\obj\Release\HTTF Riven v2.csprojResolveAssemblyReference.cache
+F:\22\Legend\game\EB\myad\[HTTF]Riven\obj\Release\HTTF Riven v2.exe
+F:\22\Legend\game\EB\myad\[HTTF]Riven\obj\Release\HTTF Riven v2.pdb
+=======
+>>>>>>> origin/master

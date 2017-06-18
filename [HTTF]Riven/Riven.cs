@@ -913,17 +913,19 @@ namespace HTTF_Riven_v2
         }
         private static void Reset(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
         {
+
             if (!sender.IsMe)
                 return;
 
             var T = 0;
+            
 
             switch (args.Animation)
             {
                 case "Spell1a":
 
                     LastQ = Core.GameTickCount;
-                    CountQ = 1;
+                    CountQ = 0;
                     T = 291;
 
                     break;
@@ -931,7 +933,7 @@ namespace HTTF_Riven_v2
                 case "Spell1b":
 
                     LastQ = Core.GameTickCount;
-                    CountQ = 2;
+                    CountQ = 1;
                     T = 290;
 
                     break;
@@ -939,7 +941,7 @@ namespace HTTF_Riven_v2
                 case "Spell1c":
 
                     LastQ = 0;
-                    CountQ = 0;
+                    CountQ = 2;
                     T = 343;
 
                     break;
@@ -968,13 +970,13 @@ namespace HTTF_Riven_v2
                 {
                     
                     Core.DelayAction(CancelAnimation, T - Game.Ping);
-                    Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+                    
                 }
                 else if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
                 {
                    
                     Core.DelayAction(CancelAnimation, T - Game.Ping);
-                    Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+                    
                 }
             }
         }
@@ -997,7 +999,7 @@ namespace HTTF_Riven_v2
                     {
 
                         Q.Cast(target.Position);
-                        Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+                        Orbwalker.ResetAutoAttack();
 
                     }
 
@@ -1005,7 +1007,7 @@ namespace HTTF_Riven_v2
                     {
 
                         Q.Cast(target.Position);
-                        Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+                        Orbwalker.ResetAutoAttack();
 
                     }
 
@@ -1013,7 +1015,7 @@ namespace HTTF_Riven_v2
                     {
 
                         Q.Cast(target.Position);
-                        CancelAnimation();
+                        Orbwalker.ResetAutoAttack();
                     }
                 }
             }
@@ -1223,6 +1225,13 @@ namespace HTTF_Riven_v2
                 }
             
 
+        }
+            { 
+            if (!sender.IsMe) return;
+            if (args.Slot == SpellSlot.Q)
+            {
+                Orbwalker.ResetAutoAttack();
+            }
         }
 
             {

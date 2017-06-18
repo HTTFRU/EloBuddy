@@ -28,3 +28,9 @@ F:\22\Legend\game\EB\addon\EloBuddy-master\[HTTF]Riven\obj\Debug\HTTF Riven v2.p
 D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\bin\Debug\HTTF Riven v2.exe.config
 D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\obj\Debug\HTTF Riven v2.exe
 D:\Riot Games\СКАЧАЙ ИГРУ\EloBuddy-master\[HTTF]Riven\obj\Debug\HTTF Riven v2.pdb
+<<<<<<< HEAD
+F:\22\Legend\game\EB\myad\[HTTF]Riven\bin\Debug\HTTF Riven v2.exe.config
+F:\22\Legend\game\EB\myad\[HTTF]Riven\obj\Debug\HTTF Riven v2.exe
+F:\22\Legend\game\EB\myad\[HTTF]Riven\obj\Debug\HTTF Riven v2.pdb
+=======
+>>>>>>> origin/master
